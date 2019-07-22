@@ -11,11 +11,11 @@ export class SecureStoragePluginWeb extends WebPlugin {
     }
     set(options) {
         localStorage.setItem(options.key, options.value);
-        return Promise.resolve();
+        return Promise.resolve({ value: true });
     }
     remove(options) {
         localStorage.removeItem(options.key);
-        return Promise.resolve();
+        return Promise.resolve({ value: true });
     }
 }
 const SecureStoragePlugin = new SecureStoragePluginWeb();

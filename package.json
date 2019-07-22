@@ -1,6 +1,6 @@
 {
   "name": "capacitor-secure-storage-plugin",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information.",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

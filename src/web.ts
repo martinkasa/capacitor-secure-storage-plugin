@@ -12,13 +12,13 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
   get(options: { key: string }): Promise<{ value: string }> {
     return Promise.resolve({ value: localStorage.getItem(options.key) });
   }
-  set(options: { key: string; value: string }): Promise<void> {
+  set(options: { key: string; value: string }): Promise<{ value: boolean }> {
     localStorage.setItem(options.key, options.value);
-    return Promise.resolve();
+    return Promise.resolve({ value: true });
   }
-  remove(options: { key: string }): Promise<void> {
+  remove(options: { key: string }): Promise<{ value: boolean }> {
     localStorage.removeItem(options.key);
-    return Promise.resolve();
+    return Promise.resolve({ value: true });
   }
 }
 

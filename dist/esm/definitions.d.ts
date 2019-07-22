@@ -12,8 +12,12 @@ export interface SecureStoragePluginPlugin {
     set(options: {
         key: string;
         value: string;
-    }): Promise<void>;
+    }): Promise<{
+        value: boolean;
+    }>;
     remove(options: {
         key: string;
-    }): Promise<void>;
+    }): Promise<{
+        value: boolean;
+    }>;
 }

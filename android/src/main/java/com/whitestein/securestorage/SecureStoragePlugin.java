@@ -10,7 +10,13 @@ import java.nio.charset.Charset;
 
 @NativePlugin()
 public class SecureStoragePlugin extends Plugin {
-    private PasswordStorageHelper passwordStorageHelper = new PasswordStorageHelper(getContext());
+    private PasswordStorageHelper passwordStorageHelper;
+
+    @Override
+    public void load() {
+        super.load();
+        this.passwordStorageHelper = new PasswordStorageHelper(getContext());
+    }
 
     @PluginMethod()
     public void set(PluginCall call) {
