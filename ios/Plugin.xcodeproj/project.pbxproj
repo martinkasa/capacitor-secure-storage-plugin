@@ -13,8 +13,6 @@
 		4D40B1DB22E1DBDF004F1441 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D40B1D922E1DBDF004F1441 /* Main.storyboard */; };
 		4D40B1DD22E1DBE0004F1441 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D40B1DC22E1DBE0004F1441 /* Assets.xcassets */; };
 		4D40B1E022E1DBE0004F1441 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D40B1DE22E1DBE0004F1441 /* LaunchScreen.storyboard */; };
-		4DAD1C0322E5D837007B27DC /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAD1C0222E5D837007B27DC /* KeychainWrapper.swift */; };
-		4DAD1C0622E5D893007B27DC /* KeychainItemAccessability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DAD1C0522E5D893007B27DC /* KeychainItemAccessability.swift */; };
 		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
 		50ADFF97201F53D600D50D53 /* PluginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* PluginTests.swift */; };
 		50ADFF99201F53D600D50D53 /* Plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ADFF8B201F53D600D50D53 /* Plugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -50,9 +48,6 @@
 		4D40B1DF22E1DBE0004F1441 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4D40B1E122E1DBE0004F1441 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D40B1E522E1DBE7004F1441 /* TestApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp.entitlements; sourceTree = "<group>"; };
-		4DAD1C0222E5D837007B27DC /* KeychainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
-		4DAD1C0422E5D876007B27DC /* SwiftKeychainWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftKeychainWrapper.h; sourceTree = "<group>"; };
-		4DAD1C0522E5D893007B27DC /* KeychainItemAccessability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainItemAccessability.swift; sourceTree = "<group>"; };
 		4F00763DE0E1FE773015F665 /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF8B201F53D600D50D53 /* Plugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Plugin.h; sourceTree = "<group>"; };
@@ -142,9 +137,6 @@
 				50ADFF8B201F53D600D50D53 /* Plugin.h */,
 				50ADFFA72020EE4F00D50D53 /* Plugin.m */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
-				4DAD1C0222E5D837007B27DC /* KeychainWrapper.swift */,
-				4DAD1C0422E5D876007B27DC /* SwiftKeychainWrapper.h */,
-				4DAD1C0522E5D893007B27DC /* KeychainItemAccessability.swift */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -338,11 +330,13 @@
 				"${PODS_ROOT}/Target Support Files/Pods-PluginTests/Pods-PluginTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Capacitor/Capacitor.framework",
 				"${BUILT_PRODUCTS_DIR}/CapacitorCordova/Cordova.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftKeychainWrapper/SwiftKeychainWrapper.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Capacitor.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cordova.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftKeychainWrapper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -409,8 +403,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4DAD1C0322E5D837007B27DC /* KeychainWrapper.swift in Sources */,
-				4DAD1C0622E5D893007B27DC /* KeychainItemAccessability.swift in Sources */,
 				50E1A94820377CB70090CE1A /* Plugin.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* Plugin.m in Sources */,
 			);
