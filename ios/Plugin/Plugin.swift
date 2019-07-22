@@ -1,6 +1,5 @@
 import Foundation
 import Capacitor
-import SwiftKeychainWrapper
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide

@@ -37,7 +37,7 @@ public enum KeychainItemAccessibility {
      The data in the keychain item cannot be accessed after a restart until the device has been unlocked once by the user.
      
      After the first unlock, the data remains accessible until the next restart. This is recommended for items that need to be accessed by background applications. Items with this attribute migrate to a new device when using encrypted backups.
-    */
+     */
     @available(iOS 4, *)
     case afterFirstUnlock
     
@@ -112,7 +112,7 @@ private let keychainItemAccessibilityLookup: [KeychainItemAccessibility:CFString
         .whenUnlocked: kSecAttrAccessibleWhenUnlocked,
         .whenUnlockedThisDeviceOnly: kSecAttrAccessibleWhenUnlockedThisDeviceOnly
     ]
-
+    
     return lookup
 }()
 

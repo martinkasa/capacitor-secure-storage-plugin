@@ -1,6 +1,5 @@
 import XCTest
 import Capacitor
-import SwiftKeychainWrapper
 
 @testable import Plugin
 
