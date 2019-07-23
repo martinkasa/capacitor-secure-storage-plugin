@@ -64,4 +64,26 @@ class PluginTests: XCTestCase {
         
         plugin.remove(call!)
     }
+    
+    func testClear() {
+        let key = "key"
+        let value = "Hello, World!"
+        KeychainWrapper.standard.set(value, forKey: key)
+        KeychainWrapper.standard.set(value + "2", forKey: key + "2")
+        
+        let plugin = SecureStoragePlugin()
+        
+        let call = CAPPluginCall(callbackId: "test", options: [
+            "key": key
+            ], success: { (result, call) in
+                let resultValue = result!.data["value"] as? Bool
+                XCTAssertTrue(resultValue ?? false)
+                let maybeValue = KeychainWrapper.standard.string(forKey: key)
+                XCTAssertNil(maybeValue)
+        }, error: { (err) in
+            XCTFail("Error shouldn't have been called")
+        })
+        
+        plugin.clear(call!)
+    }
 }

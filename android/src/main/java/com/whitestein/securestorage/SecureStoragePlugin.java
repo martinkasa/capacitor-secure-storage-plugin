@@ -63,4 +63,17 @@ public class SecureStoragePlugin extends Plugin {
             call.error("error", exception);
         }
     }
+
+    @PluginMethod()
+    public void clear(PluginCall call) {
+        try {
+            this.passwordStorageHelper.clear();
+            JSObject ret = new JSObject();
+            ret.put("value", true);
+            call.success(ret);
+        }
+        catch ( Exception exception) {
+            call.error("error", exception);
+        }
+    }
 }

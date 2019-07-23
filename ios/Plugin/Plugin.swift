@@ -48,4 +48,16 @@ public class SecureStoragePlugin: CAPPlugin {
             call.error("error")
         }
     }
+    
+    @objc func clear(_ call: CAPPluginCall) {
+        let clearSuccessful: Bool = KeychainWrapper.standard.removeAllKeys()
+        if(clearSuccessful) {
+            call.success([
+                "value": clearSuccessful
+                ])
+        }
+        else {
+            call.error("error")
+        }
+    }
 }

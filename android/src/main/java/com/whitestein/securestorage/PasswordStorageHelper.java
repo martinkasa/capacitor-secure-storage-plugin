@@ -41,6 +41,7 @@ import javax.security.auth.x500.X500Principal;
 public class PasswordStorageHelper {
 
     private static final String LOG_TAG = PasswordStorageHelper.class.getSimpleName();
+    private static final String PREFERENCES_FILE = "cap_sec";
 
     private PasswordStorageImpl passwordStorage = null;
 
@@ -77,6 +78,10 @@ public class PasswordStorageHelper {
         passwordStorage.remove(key);
     }
 
+    public void clear() {
+        passwordStorage.clear();
+    }
+
     private interface PasswordStorageImpl {
         boolean init(Context context);
 
@@ -85,6 +90,8 @@ public class PasswordStorageHelper {
         byte[] getData(String key);
 
         void remove(String key);
+
+        void clear();
     }
 
     private static class PasswordStorageHelper_SDK16 implements PasswordStorageImpl {
@@ -92,7 +99,7 @@ public class PasswordStorageHelper {
 
         @Override
         public boolean init(Context context) {
-            preferences = context.getSharedPreferences(ApplicationPreferences.PREFERENCES_FILE, Context.MODE_PRIVATE);
+            preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
             return true;
         }
 
@@ -119,6 +126,13 @@ public class PasswordStorageHelper {
             editor.remove(key);
             editor.commit();
         }
+
+        @Override
+        public void clear() {
+            Editor editor = preferences.edit();
+            editor.clear();
+            editor.commit();
+        }
     }
 
     private static class PasswordStorageHelper_SDK18 implements PasswordStorageImpl {
@@ -135,7 +149,7 @@ public class PasswordStorageHelper {
         @SuppressLint({"NewApi", "TrulyRandom"})
         @Override
         public boolean init(Context context) {
-            preferences = context.getSharedPreferences(ApplicationPreferences.PREFERENCES_FILE, Context.MODE_PRIVATE);
+            preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
             alias = context.getPackageName() + "_cap_sec";
 
             KeyStore ks;
@@ -279,6 +293,13 @@ public class PasswordStorageHelper {
         public void remove(String key) {
             Editor editor = preferences.edit();
             editor.remove(key);
+            editor.commit();
+        }
+
+        @Override
+        public void clear() {
+            Editor editor = preferences.edit();
+            editor.clear();
             editor.commit();
         }
 
