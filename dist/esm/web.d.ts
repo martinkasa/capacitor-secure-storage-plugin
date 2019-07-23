@@ -18,6 +18,9 @@ export declare class SecureStoragePluginWeb extends WebPlugin implements SecureS
     }): Promise<{
         value: boolean;
     }>;
+    clear(): Promise<{
+        value: boolean;
+    }>;
 }
 declare const SecureStoragePlugin: SecureStoragePluginWeb;
 export { SecureStoragePlugin };

@@ -20,4 +20,7 @@ export interface SecureStoragePluginPlugin {
     }): Promise<{
         value: boolean;
     }>;
+    clear(): Promise<{
+        value: boolean;
+    }>;
 }
