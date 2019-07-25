@@ -2,6 +2,7 @@ import { WebPlugin } from '@capacitor/core';
 import { SecureStoragePluginPlugin } from './definitions';
 
 export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePluginPlugin {
+  PREFIX = 'cap_sec_';
   constructor() {
     super({
       name: 'SecureStoragePlugin',
@@ -10,20 +11,26 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
   }
 
   get(options: { key: string }): Promise<{ value: string }> {
-    return Promise.resolve({ value: atob(localStorage.getItem(options.key)) });
+    return Promise.resolve({ value: atob(localStorage.getItem(this.addPrefix(options.key))) });
   }
   set(options: { key: string; value: string }): Promise<{ value: boolean }> {
-    localStorage.setItem(options.key, btoa(options.value));
+    localStorage.setItem(this.addPrefix(options.key), btoa(options.value));
     return Promise.resolve({ value: true });
   }
   remove(options: { key: string }): Promise<{ value: boolean }> {
-    localStorage.removeItem(options.key);
+    localStorage.removeItem(this.addPrefix(options.key));
     return Promise.resolve({ value: true });
   }
   clear(): Promise<{ value: boolean }> {
-    localStorage.clear();
+    for (var key in localStorage) {
+      if (key.indexOf(this.PREFIX) === 0) {
+        localStorage.removeItem(key);
+      }
+    }
     return Promise.resolve({ value: true });
   }
+
+  private addPrefix = (key: string) => this.PREFIX + key;
 }
 
 const SecureStoragePlugin = new SecureStoragePluginWeb();
