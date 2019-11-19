@@ -11,6 +11,7 @@ import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
@@ -303,15 +304,38 @@ public class PasswordStorageHelper {
             editor.commit();
         }
 
+        private static int KEY_LENGTH = 2048;
+
         @SuppressLint("TrulyRandom")
         private static String encrypt(PublicKey encryptionKey, byte[] data) throws NoSuchAlgorithmException,
                 NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException,
                 NoSuchProviderException, InvalidKeySpecException {
 
-            Cipher cipher = Cipher.getInstance(RSA_ECB_PKCS1_PADDING);
-            cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
-            byte[] encrypted = cipher.doFinal(data);
-            return Base64.encodeToString(encrypted, Base64.DEFAULT);
+            if (data.length <= KEY_LENGTH) {
+                Cipher cipher = Cipher.getInstance(RSA_ECB_PKCS1_PADDING);
+                cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
+                byte[] encrypted = cipher.doFinal(data);
+                return Base64.encodeToString(encrypted, Base64.DEFAULT);
+            } else {
+                Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+                cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
+                int limit = KEY_LENGTH / 8 - 11;
+                int position = 0;
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                while (position < data.length) {
+                    if (data.length - position < limit)
+                        limit = data.length - position;
+                    byte[] tmpData = cipher.doFinal(data, position, limit);
+                    try {
+                        byteArrayOutputStream.write(tmpData);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    position += limit;
+                }
+
+                return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+            }
         }
 
         private static byte[] decrypt(PrivateKey decryptionKey, String encryptedData) throws NoSuchAlgorithmException,
@@ -320,9 +344,31 @@ public class PasswordStorageHelper {
             if (encryptedData == null)
                 return null;
             byte[] encryptedBuffer = Base64.decode(encryptedData, Base64.DEFAULT);
-            Cipher cipher = Cipher.getInstance(RSA_ECB_PKCS1_PADDING);
-            cipher.init(Cipher.DECRYPT_MODE, decryptionKey);
-            return cipher.doFinal(encryptedBuffer);
+
+            if (encryptedBuffer.length <= KEY_LENGTH) {
+                Cipher cipher = Cipher.getInstance(RSA_ECB_PKCS1_PADDING);
+                cipher.init(Cipher.DECRYPT_MODE, decryptionKey);
+                return cipher.doFinal(encryptedBuffer);
+            } else {
+                Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+                cipher.init(Cipher.DECRYPT_MODE, decryptionKey);
+                int limit = KEY_LENGTH / 8;
+                int position = 0;
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                while (position < encryptedBuffer.length) {
+                    if (encryptedBuffer.length - position < limit)
+                        limit = encryptedBuffer.length - position;
+                    byte[] tmpData = cipher.doFinal(encryptedBuffer, position, limit);
+                    try {
+                        byteArrayOutputStream.write(tmpData);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    position += limit;
+                }
+
+                return byteArrayOutputStream.toByteArray();
+            }
         }
     }
 }
