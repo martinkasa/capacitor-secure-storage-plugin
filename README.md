@@ -21,6 +21,12 @@ const { SecureStoragePlugin } = Plugins;
 
 First line is needed because of web part of the plugin (current behavior of Capacitor, this may change in future releases).
 
+### Android
+
+In Android you have to register plugins manually in MainActivity class of your app.
+
+https://capacitor.ionicframework.com/docs/plugins/android/#export-to-capacitor
+
 ## Methods
 
 - **get**(options: { key: string }): Promise<{ value: string }>
