@@ -39,7 +39,10 @@ public class SecureStoragePlugin extends Plugin {
         String key = call.getString("key");
 
         try {
-            String value = new String(this.passwordStorageHelper.getData(key), Charset.forName("UTF-8"));
+            byte[] data = this.passwordStorageHelper.getData(key);
+            String value = null;
+            if(data != null)
+                value = new String(this.passwordStorageHelper.getData(key), Charset.forName("UTF-8"));
             JSObject ret = new JSObject();
             ret.put("value", value);
             call.success(ret);
