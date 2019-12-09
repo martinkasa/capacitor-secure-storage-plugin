@@ -27,6 +27,26 @@ In Android you have to register plugins manually in MainActivity class of your a
 
 https://capacitor.ionicframework.com/docs/plugins/android/#export-to-capacitor
 
+```
+import com.whitestein.securestorage.SecureStoragePlugin;
+
+...
+
+public class MainActivity extends BridgeActivity {
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    // Initializes the Bridge
+    this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
+      // Additional plugins you've installed go here
+      // Ex: add(TotallyAwesomePlugin.class);
+      add(SecureStoragePlugin.class);
+    }});
+  }
+}
+```
+
 ## Methods
 
 - **get**(options: { key: string }): Promise<{ value: string }>
