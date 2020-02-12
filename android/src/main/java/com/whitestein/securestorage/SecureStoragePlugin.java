@@ -27,10 +27,10 @@ public class SecureStoragePlugin extends Plugin {
             this.passwordStorageHelper.setData(key, value.getBytes(Charset.forName("UTF-8")));
             JSObject ret = new JSObject();
             ret.put("value", true);
-            call.success(ret);
+            call.resolve(ret);
         }
         catch ( Exception exception) {
-            call.error("error", exception);
+            call.reject("error", exception);
         }
     }
 
@@ -39,13 +39,19 @@ public class SecureStoragePlugin extends Plugin {
         String key = call.getString("key");
 
         try {
-            String value = new String(this.passwordStorageHelper.getData(key), Charset.forName("UTF-8"));
-            JSObject ret = new JSObject();
-            ret.put("value", value);
-            call.success(ret);
+            byte[] buffer = this.passwordStorageHelper.getData(key);
+            if(buffer != null && buffer.length > 0) {
+                String value = new String(buffer, Charset.forName("UTF-8"));
+                JSObject ret = new JSObject();
+                ret.put("value", value);
+                call.resolve(ret);
+            }
+            else {
+                call.reject("Item with given key does not exist");
+            }
         }
         catch ( Exception exception) {
-            call.error("error", exception);
+            call.reject("error", exception);
         }
     }
 
@@ -57,10 +63,10 @@ public class SecureStoragePlugin extends Plugin {
             this.passwordStorageHelper.remove(key);
             JSObject ret = new JSObject();
             ret.put("value", true);
-            call.success(ret);
+            call.resolve(ret);
         }
         catch ( Exception exception) {
-            call.error("error", exception);
+            call.reject("error", exception);
         }
     }
 
@@ -70,10 +76,10 @@ public class SecureStoragePlugin extends Plugin {
             this.passwordStorageHelper.clear();
             JSObject ret = new JSObject();
             ret.put("value", true);
-            call.success(ret);
+            call.resolve(ret);
         }
         catch ( Exception exception) {
-            call.error("error", exception);
+            call.reject("error", exception);
         }
     }
 }

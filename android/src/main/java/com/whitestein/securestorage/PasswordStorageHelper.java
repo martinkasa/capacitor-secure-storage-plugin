@@ -209,12 +209,7 @@ public class PasswordStorageHelper {
                 // Generate private/public keys
                 kpGenerator.generateKeyPair();
             } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException | NoSuchProviderException e) {
-                try {
-                    if (ks != null)
-                        ks.deleteEntry(alias);
-                } catch (Exception e1) {
-                    // Just ignore any errors here
-                }
+                e.printStackTrace();
             }
 
             // Check if device support Hardware-backed keystore
@@ -260,12 +255,7 @@ public class PasswordStorageHelper {
             } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException
                     | IllegalBlockSizeException | BadPaddingException | NoSuchProviderException
                     | InvalidKeySpecException | KeyStoreException | CertificateException | IOException e) {
-                try {
-                    if (ks != null)
-                        ks.deleteEntry(alias);
-                } catch (Exception e1) {
-                    // Just ignore any errors here
-                }
+                e.printStackTrace();
             }
         }
 
@@ -280,12 +270,7 @@ public class PasswordStorageHelper {
             } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException
                     | UnrecoverableEntryException | InvalidKeyException | NoSuchPaddingException
                     | IllegalBlockSizeException | BadPaddingException | NoSuchProviderException e) {
-                try {
-                    if (ks != null)
-                        ks.deleteEntry(alias);
-                } catch (Exception e1) {
-                    // Just ignore any errors here
-                }
+               e.printStackTrace();
             }
             return null;
         }
@@ -311,13 +296,13 @@ public class PasswordStorageHelper {
                 NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException,
                 NoSuchProviderException, InvalidKeySpecException {
 
-            if (data.length <= KEY_LENGTH) {
+            if (data.length <= KEY_LENGTH / 8 - 11) {
                 Cipher cipher = Cipher.getInstance(RSA_ECB_PKCS1_PADDING);
                 cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
                 byte[] encrypted = cipher.doFinal(data);
                 return Base64.encodeToString(encrypted, Base64.DEFAULT);
             } else {
-                Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+                Cipher cipher = Cipher.getInstance(RSA_ECB_PKCS1_PADDING);
                 cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
                 int limit = KEY_LENGTH / 8 - 11;
                 int position = 0;
@@ -345,12 +330,12 @@ public class PasswordStorageHelper {
                 return null;
             byte[] encryptedBuffer = Base64.decode(encryptedData, Base64.DEFAULT);
 
-            if (encryptedBuffer.length <= KEY_LENGTH) {
+            if (encryptedBuffer.length <= KEY_LENGTH / 8) {
                 Cipher cipher = Cipher.getInstance(RSA_ECB_PKCS1_PADDING);
                 cipher.init(Cipher.DECRYPT_MODE, decryptionKey);
                 return cipher.doFinal(encryptedBuffer);
             } else {
-                Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+                Cipher cipher = Cipher.getInstance(RSA_ECB_PKCS1_PADDING);
                 cipher.init(Cipher.DECRYPT_MODE, decryptionKey);
                 int limit = KEY_LENGTH / 8;
                 int position = 0;
