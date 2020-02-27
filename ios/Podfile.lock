@@ -1,7 +1,7 @@
 PODS:
-  - Capacitor (1.1.0):
-    - CapacitorCordova (= 1.1.0)
-  - CapacitorCordova (1.1.0)
+  - Capacitor (1.5.0):
+    - CapacitorCordova (= 1.5.0)
+  - CapacitorCordova (1.5.0)
   - SwiftKeychainWrapper (3.4.0)
 
 DEPENDENCIES:
@@ -9,7 +9,7 @@ DEPENDENCIES:
   - SwiftKeychainWrapper
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - CapacitorCordova
     - SwiftKeychainWrapper
 
@@ -18,10 +18,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@capacitor/ios"
 
 SPEC CHECKSUMS:
-  Capacitor: 1e4b4f057fe6c727575a90cc640fbf6aa019a017
-  CapacitorCordova: 49e84a6ab0ff82f00667bd27bb3c0e98bafea445
+  Capacitor: 667658ab58e5a2e8465238eef7c6c5df46738688
+  CapacitorCordova: 5b03f0b903bf066a8f3187e848252227190b681a
   SwiftKeychainWrapper: 6fc49fbf7d4a6b0772917acb0e53a1639f6078d6
 
 PODFILE CHECKSUM: edc10c72bdeb1ceeee398cbcc928015baa19504f
 
-COCOAPODS: 1.7.2
+COCOAPODS: 1.9.0
