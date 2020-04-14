@@ -16,7 +16,7 @@ public class SecureStoragePlugin: CAPPlugin {
         if(saveSuccessful) {
             call.success([
                 "value": saveSuccessful
-                ])
+            ])
         }
         else {
             call.error("error")
@@ -25,14 +25,14 @@ public class SecureStoragePlugin: CAPPlugin {
     
     @objc func get(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
-        let maybeValue = KeychainWrapper.standard.string(forKey: key)
-        if let value = maybeValue {
+        let hasValue = KeychainWrapper.standard.hasValue(forKey: key)
+        if(hasValue) {
             call.success([
-                "value": value
-                ])
+                "value": KeychainWrapper.standard.string(forKey: key) ?? ""
+            ])
         }
         else {
-            call.error("error")
+            call.error("Item with given key does not exist")
         }
     }
     
@@ -42,7 +42,7 @@ public class SecureStoragePlugin: CAPPlugin {
         if(removeSuccessful) {
             call.success([
                 "value": removeSuccessful
-                ])
+            ])
         }
         else {
             call.error("error")
@@ -54,10 +54,16 @@ public class SecureStoragePlugin: CAPPlugin {
         if(clearSuccessful) {
             call.success([
                 "value": clearSuccessful
-                ])
+            ])
         }
         else {
             call.error("error")
         }
+    }
+    
+    @objc func getPlatform(_ call: CAPPluginCall) {
+        call.success([
+            "value": "ios"
+        ])
     }
 }

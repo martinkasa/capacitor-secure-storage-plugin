@@ -1,12 +1,12 @@
 {
   "name": "capacitor-secure-storage-plugin",
-  "version": "0.3.2",
-  "description": "Securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information.",
+  "version": "0.4.0-testing",
+  "description": "Securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information (strings) on iOS & Android",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
     "build": "npm run clean && tsc",
-    "clean": "rm -rf ./dist",
+    "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
@@ -16,9 +16,10 @@
     "@capacitor/core": "latest"
   },
   "devDependencies": {
-    "@capacitor/android": "1.5.0",
-    "@capacitor/ios": "1.5.0",
-    "typescript": "3.7.5"
+    "rimraf": "^3.0.0",
+    "typescript": "^3.2.4",
+    "@capacitor/ios": "latest",
+    "@capacitor/android": "latest"
   },
   "files": [
     "dist/",

@@ -44,6 +44,22 @@ class PluginTests: XCTestCase {
         plugin.get(call!)
     }
     
+    func testNonExistingGet() {
+        let key = "keyNonExisting"
+        
+        let plugin = SecureStoragePlugin()
+        
+        let call = CAPPluginCall(callbackId: "test", options: [
+            "key": key
+            ], success: { (result, call) in
+                XCTFail("Error shouldn't have been called")
+        }, error: { (err) in
+            XCTAssertNotNil(err)
+        })
+        
+        plugin.get(call!)
+    }
+    
     func testRemove() {
         let key = "key"
         let value = "Hello, World!"
@@ -80,10 +96,25 @@ class PluginTests: XCTestCase {
                 XCTAssertTrue(resultValue ?? false)
                 let maybeValue = KeychainWrapper.standard.string(forKey: key)
                 XCTAssertNil(maybeValue)
+                let maybeValue2 = KeychainWrapper.standard.string(forKey: key + "2")
+                XCTAssertNil(maybeValue2)
         }, error: { (err) in
             XCTFail("Error shouldn't have been called")
         })
         
         plugin.clear(call!)
+    }
+    
+    func testGetPlatform() {
+        let plugin = SecureStoragePlugin()
+        let call = CAPPluginCall(callbackId: "test",
+                                 success: { (result, call) in
+                let resultValue = result!.data["value"] as? String
+                XCTAssertEqual("ios", resultValue)
+        }, error: { (err) in
+            XCTFail("Error shouldn't have been called")
+        })
+        
+        plugin.getPlatform(call!)
     }
 }

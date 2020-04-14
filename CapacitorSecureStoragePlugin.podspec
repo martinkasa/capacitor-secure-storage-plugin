@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'CapacitorSecureStoragePlugin'
-  s.version = '0.3.2'
+  s.version = '0.4.0-testing'
   s.summary = 'securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information (strings) on iOS & Android'
   s.license = 'MIT'
   s.homepage = 'https://github.com/martinkasa/capacitor-secure-storage-plugin.git'

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1020"
+   LastUpgradeVersion = "1140"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4D40B1D222E1DBDF004F1441"
+               BlueprintIdentifier = "4D5E30E724435502000C11C2"
                BuildableName = "TestApp.app"
                BlueprintName = "TestApp"
                ReferencedContainer = "container:Plugin.xcodeproj">
@@ -28,18 +28,17 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "50ADFF90201F53D600D50D53"
+               BuildableName = "PluginTests.xctest"
+               BlueprintName = "PluginTests"
+               ReferencedContainer = "container:Plugin.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4D40B1D222E1DBDF004F1441"
-            BuildableName = "TestApp.app"
-            BlueprintName = "TestApp"
-            ReferencedContainer = "container:Plugin.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -55,14 +54,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4D40B1D222E1DBDF004F1441"
+            BlueprintIdentifier = "4D5E30E724435502000C11C2"
             BuildableName = "TestApp.app"
             BlueprintName = "TestApp"
             ReferencedContainer = "container:Plugin.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -74,7 +71,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "4D40B1D222E1DBDF004F1441"
+            BlueprintIdentifier = "4D5E30E724435502000C11C2"
             BuildableName = "TestApp.app"
             BlueprintName = "TestApp"
             ReferencedContainer = "container:Plugin.xcodeproj">

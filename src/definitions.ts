@@ -9,4 +9,5 @@ export interface SecureStoragePluginPlugin {
   set(options: { key: string; value: string }): Promise<{ value: boolean }>;
   remove(options: { key: string }): Promise<{ value: boolean }>;
   clear(): Promise<{ value: boolean }>;
+  getPlatform(): Promise<{ value: string }>;
 }
