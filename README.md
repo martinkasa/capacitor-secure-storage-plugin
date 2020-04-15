@@ -4,6 +4,12 @@ Capacitor plugin for storing string values securly on iOS and Android.
 
 ## How to install
 
+For Capacitor < 2.0.0
+```
+npm install capacitor-secure-storage-plugin@0.3.2
+```
+
+For Capacitor >= 2.0.0 (supported from 0.4.0)
 ```
 npm install capacitor-secure-storage-plugin
 ```
@@ -56,6 +62,9 @@ public class MainActivity extends BridgeActivity {
 * **remove**(options: { key: string }): Promise<{ value: boolean }>
 * **clear**(): Promise<{ value: boolean }>
   - set, remove and clear return true in case of success and false in case of error
+
+- **getPlatform**(): Promise<{ value: string }>
+  - returns which implementation is used - one of 'web', 'ios' or 'android'
 
 ## Example
 
