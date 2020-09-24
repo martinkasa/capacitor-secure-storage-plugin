@@ -13,7 +13,7 @@ export class SecureStoragePluginWeb extends WebPlugin {
             ? Promise.resolve({
                 value: decodeURIComponent(escape(atob(localStorage.getItem(this.addPrefix(options.key))))),
             })
-            : Promise.reject('Item with given key does not exist');
+            : Promise.resolve({ value: null });
     }
     set(options) {
         localStorage.setItem(this.addPrefix(options.key), btoa(unescape(encodeURIComponent(options.value))));
