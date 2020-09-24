@@ -13,12 +13,12 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
   get(options: { key: string }): Promise<{ value: string }> {
     return localStorage.getItem(this.addPrefix(options.key)) !== null
       ? Promise.resolve({
-          value: atob(localStorage.getItem(this.addPrefix(options.key))),
+          value: decodeURIComponent(escape(atob(localStorage.getItem(this.addPrefix(options.key))))),
         })
       : Promise.reject('Item with given key does not exist');
   }
   set(options: { key: string; value: string }): Promise<{ value: boolean }> {
-    localStorage.setItem(this.addPrefix(options.key), btoa(options.value));
+    localStorage.setItem(this.addPrefix(options.key), btoa(unescape(encodeURIComponent(options.value))));
     return Promise.resolve({ value: true });
   }
   remove(options: { key: string }): Promise<{ value: boolean }> {
