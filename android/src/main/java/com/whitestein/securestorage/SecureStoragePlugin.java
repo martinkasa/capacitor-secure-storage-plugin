@@ -78,14 +78,14 @@ public class SecureStoragePlugin extends Plugin {
 
     public JSObject _get(String key) throws Exception {
         byte[] buffer = this.passwordStorageHelper.getData(key);
+        JSObject ret = new JSObject();
         if (buffer != null && buffer.length > 0) {
             String value = new String(buffer, Charset.forName("UTF-8"));
-            JSObject ret = new JSObject();
             ret.put("value", value);
-            return ret;
         } else {
-            throw new Exception("Item with given key does not exist");
+            ret.put("value", null);
         }
+        return ret;
     }
 
     public JSObject _remove(String key) {

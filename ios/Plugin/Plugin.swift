@@ -26,6 +26,10 @@ public class SecureStoragePlugin: CAPPlugin {
     @objc func get(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
         let hasValue = KeychainWrapper.standard.hasValue(forKey: key)
+        call.success([
+            "value": KeychainWrapper.standard.string(forKey: key) ?? ""
+        ])
+        /*
         if(hasValue) {
             call.success([
                 "value": KeychainWrapper.standard.string(forKey: key) ?? ""
@@ -34,6 +38,7 @@ public class SecureStoragePlugin: CAPPlugin {
         else {
             call.error("Item with given key does not exist")
         }
+        */
     }
     
     @objc func remove(_ call: CAPPluginCall) {
