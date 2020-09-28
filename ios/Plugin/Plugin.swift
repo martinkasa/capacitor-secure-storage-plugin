@@ -27,7 +27,7 @@ public class SecureStoragePlugin: CAPPlugin {
         let key = call.getString("key") ?? ""
         let hasValue = KeychainWrapper.standard.hasValue(forKey: key)
         call.success([
-            "value": KeychainWrapper.standard.string(forKey: key) ?? ""
+            "value": KeychainWrapper.standard.string(forKey: key)
         ])
         /*
         if(hasValue) {
