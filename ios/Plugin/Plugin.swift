@@ -26,10 +26,13 @@ public class SecureStoragePlugin: CAPPlugin {
     
     @objc func get(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
-        let hasValue = keychainwrapper.hasValue(forKey: key)
-        if(hasValue) {
+        let hasValueDedicated = keychainwrapper.hasValue(forKey: key)
+        let hasValueStandard = KeychainWrapper.standard.hasValue(forKey: key)
+        if(hasValueDedicated || hasValueStandard) {
             call.success([
-                "value": keychainwrapper.string(forKey: key) ?? ""
+                "value": hasValueDedicated
+                    ? keychainwrapper.string(forKey: key) ?? ""
+                    : KeychainWrapper.standard.string(forKey: key) ?? ""
             ])
         }
         else {
