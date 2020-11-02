@@ -26,12 +26,16 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
     return Promise.resolve({ value: true });
   }
   clear(): Promise<{ value: boolean }> {
-    for (var key in localStorage) {
+    for (const key in localStorage) {
       if (key.indexOf(this.PREFIX) === 0) {
         localStorage.removeItem(key);
       }
     }
     return Promise.resolve({ value: true });
+  }
+  keys(): Promise<{ value: string[] }> {
+    const keys = Object.keys(localStorage).filter(k => k.indexOf(this.PREFIX) === 0);
+    return Promise.resolve({ value: keys });
   }
 
   getPlatform(): Promise<{ value: string }> {

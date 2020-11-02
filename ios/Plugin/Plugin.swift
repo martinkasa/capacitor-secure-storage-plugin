@@ -36,6 +36,13 @@ public class SecureStoragePlugin: CAPPlugin {
         }
     }
     
+    @objc func keys(_ call: CAPPluginCall) {
+        let keys = KeychainWrapper.standard.allKeys();
+        call.success([
+            "value": keys
+        ])
+    }
+    
     @objc func remove(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
         let removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: key)

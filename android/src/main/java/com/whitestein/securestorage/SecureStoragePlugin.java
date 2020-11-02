@@ -9,6 +9,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 
 import java.nio.charset.Charset;
+import java.util.Set;
 
 @NativePlugin()
 public class SecureStoragePlugin extends Plugin {
@@ -43,6 +44,11 @@ public class SecureStoragePlugin extends Plugin {
         } catch (Exception exception) {
             call.reject(exception.getMessage(), exception);
         }
+    }
+
+    @PluginMethod()
+    public void keys(PluginCall call) {
+        call.resolve(this._keys());
     }
 
     @PluginMethod()
@@ -86,6 +92,13 @@ public class SecureStoragePlugin extends Plugin {
         } else {
             throw new Exception("Item with given key does not exist");
         }
+    }
+
+    public JSObject _keys() {
+        String[] keys = this.passwordStorageHelper.keys();
+        JSObject ret = new JSObject();
+        ret.put("value", keys);
+        return ret;
     }
 
     public JSObject _remove(String key) {

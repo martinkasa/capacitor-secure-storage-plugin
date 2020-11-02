@@ -31,6 +31,7 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Set;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -75,6 +76,8 @@ public class PasswordStorageHelper {
         return passwordStorage.getData(key);
     }
 
+    public String[] keys() { return passwordStorage.keys(); }
+
     public void remove(String key) {
         passwordStorage.remove(key);
     }
@@ -89,6 +92,8 @@ public class PasswordStorageHelper {
         void setData(String key, byte[] data);
 
         byte[] getData(String key);
+
+        String[] keys();
 
         void remove(String key);
 
@@ -119,6 +124,12 @@ public class PasswordStorageHelper {
             if (res == null)
                 return null;
             return Base64.decode(res, Base64.DEFAULT);
+        }
+
+        @Override
+        public String[] keys() {
+            Set<String> keySet = preferences.getAll().keySet();
+            return keySet.toArray(new String[keySet.size()]);
         }
 
         @Override
@@ -273,6 +284,12 @@ public class PasswordStorageHelper {
                e.printStackTrace();
             }
             return null;
+        }
+
+        @Override
+        public String[] keys() {
+            Set<String> keySet = preferences.getAll().keySet();
+            return keySet.toArray(new String[keySet.size()]);
         }
 
         @Override

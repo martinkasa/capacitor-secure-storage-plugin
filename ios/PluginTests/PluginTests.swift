@@ -44,6 +44,36 @@ class PluginTests: XCTestCase {
         plugin.get(call!)
     }
     
+    func testKeys() {
+        let key = "key"
+        let value = "value"
+        
+        let plugin = SecureStoragePlugin()
+        
+        let call = CAPPluginCall(callbackId: "test", options: [
+            "key": key,
+            "value": value
+            ], success: { (result, call) in
+                let resultValue = result!.data["value"] as? Bool
+                XCTAssertTrue(resultValue ?? false)
+        }, error: { (err) in
+            XCTFail("Error shouldn't have been called")
+        })
+        plugin.set(call!)
+        
+        
+        let callOne = CAPPluginCall(callbackId: "testOne", options: [
+            "key": key
+            ], success: { (result, call) in
+                let resultValue = result!.data["value"] as? Set<String>
+                XCTAssertEqual(1, resultValue!.count)
+                XCTAssertEqual(key, resultValue!.first)
+        }, error: { (err) in
+            XCTFail("Error shouldn't have been called")
+        })
+        plugin.keys(callOne!)
+    }
+    
     func testNonExistingGet() {
         let key = "keyNonExisting"
         
