@@ -8,11 +8,12 @@ import SwiftKeychainWrapper
  */
 @objc(SecureStoragePlugin)
 public class SecureStoragePlugin: CAPPlugin {
+    var keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: "cap_sec")
     
     @objc func set(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
         let value = call.getString("value") ?? ""
-        let saveSuccessful: Bool = KeychainWrapper.standard.set(value, forKey: key)
+        let saveSuccessful: Bool = keychainwrapper.set(value, forKey: key)
         if(saveSuccessful) {
             call.success([
                 "value": saveSuccessful
@@ -25,10 +26,10 @@ public class SecureStoragePlugin: CAPPlugin {
     
     @objc func get(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
-        let hasValue = KeychainWrapper.standard.hasValue(forKey: key)
+        let hasValue = keychainwrapper.hasValue(forKey: key)
         if(hasValue) {
             call.success([
-                "value": KeychainWrapper.standard.string(forKey: key) ?? ""
+                "value": keychainwrapper.string(forKey: key) ?? ""
             ])
         }
         else {
@@ -37,7 +38,7 @@ public class SecureStoragePlugin: CAPPlugin {
     }
     
     @objc func keys(_ call: CAPPluginCall) {
-        let keys = KeychainWrapper.standard.allKeys();
+        let keys = keychainwrapper.allKeys();
         call.success([
             "value": keys
         ])
@@ -45,7 +46,7 @@ public class SecureStoragePlugin: CAPPlugin {
     
     @objc func remove(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
-        let removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: key)
+        let removeSuccessful: Bool = keychainwrapper.removeObject(forKey: key)
         if(removeSuccessful) {
             call.success([
                 "value": removeSuccessful
@@ -57,7 +58,7 @@ public class SecureStoragePlugin: CAPPlugin {
     }
     
     @objc func clear(_ call: CAPPluginCall) {
-        let clearSuccessful: Bool = KeychainWrapper.standard.removeAllKeys()
+        let clearSuccessful: Bool = keychainwrapper.removeAllKeys()
         if(clearSuccessful) {
             call.success([
                 "value": clearSuccessful
