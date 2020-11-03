@@ -5,11 +5,13 @@ Capacitor plugin for storing string values securly on iOS and Android.
 ## How to install
 
 For Capacitor < 2.0.0
+
 ```
 npm install capacitor-secure-storage-plugin@0.3.2
 ```
 
 For Capacitor >= 2.0.0 (supported from 0.4.0)
+
 ```
 npm install capacitor-secure-storage-plugin
 ```
@@ -57,7 +59,7 @@ public class MainActivity extends BridgeActivity {
 
 - **get**(options: { key: string }): Promise<{ value: string }>
   - if item with specified key does not exist, throws an Error
-  
+
 * **keys**(): Promise<{ value: string[] }>
 * **set**(options: { key: string; value: string }): Promise<{ value: boolean }>
 * **remove**(options: { key: string }): Promise<{ value: boolean }>
@@ -99,6 +101,10 @@ async getUsername(key: string) {
 ### iOS
 
 This plugin uses SwiftKeychainWrapper under the hood for iOS.
+
+##### Warning
+
+Up to version v0.4.0 there was standard keychain used. Since v0.5.0 there is separate keychain wrapper, so keys() method returns only keys set in v0.5.0 or higher version.
 
 ### Android
 
