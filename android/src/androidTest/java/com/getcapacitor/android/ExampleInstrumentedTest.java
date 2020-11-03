@@ -11,6 +11,7 @@ import com.getcapacitor.PluginCall;
 import com.whitestein.securestorage.PasswordStorageHelper;
 import com.whitestein.securestorage.SecureStoragePlugin;
 
+import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -50,6 +51,20 @@ public class ExampleInstrumentedTest {
         plugin._set("test", "test value");
         JSObject result = plugin._get("test");
         assertEquals("test value", result.getString("value"));
+    }
+
+    @Test
+    public void keysTest() throws Exception {
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
+        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        plugin.loadTextContext(appContext);
+        JSObject result = plugin._set("test", "test value");
+        assertTrue(result.getBoolean("value"));
+
+        result = plugin._keys();
+        String[] keys = (String[]) result.get("value");
+        assertEquals(1, keys.length);
+        assertEquals("test", keys[0]);
     }
 
     @Test(expected = Exception.class)

@@ -57,7 +57,8 @@ public class MainActivity extends BridgeActivity {
 
 - **get**(options: { key: string }): Promise<{ value: string }>
   - if item with specified key does not exist, throws an Error
-
+  
+* **keys**(): Promise<{ value: string[] }>
 * **set**(options: { key: string; value: string }): Promise<{ value: boolean }>
 * **remove**(options: { key: string }): Promise<{ value: boolean }>
 * **clear**(): Promise<{ value: boolean }>
