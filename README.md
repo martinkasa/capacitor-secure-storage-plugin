@@ -3,20 +3,31 @@
 Capacitor plugin for storing string values securly on iOS and Android.
 
 ## How to install
-
-For Capacitor < 2.0.0
-
-```
-npm install capacitor-secure-storage-plugin@0.3.2
-```
-
-For Capacitor >= 2.0.0 (supported from 0.4.0)
+For Capacitor v3
 
 ```
 npm install capacitor-secure-storage-plugin
 ```
 
+
+For Capacitor v2 - install with fixed version 0.5.1
+
+```
+npm install capacitor-secure-storage-plugin@0.5.1
+```
+
+
 ## Usage
+
+For Capacitor v3
+
+In a component where you want to use this plugin add to or modify imports:
+
+```
+import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
+```
+
+For Capacitor v2
 
 In a component where you want to use this plugin add to or modify imports:
 
