@@ -34,7 +34,7 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
     return Promise.resolve({ value: true });
   }
   keys(): Promise<{ value: string[] }> {
-    const keys = Object.keys(localStorage).filter(k => k.indexOf(this.PREFIX) === 0);
+    const keys = Object.keys(localStorage).filter((k) => k.indexOf(this.PREFIX) === 0);
     return Promise.resolve({ value: keys });
   }
 
@@ -48,6 +48,3 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
 const SecureStoragePlugin = new SecureStoragePluginWeb();
 
 export { SecureStoragePlugin };
-
-import { registerWebPlugin } from '@capacitor/core';
-registerWebPlugin(SecureStoragePlugin);
