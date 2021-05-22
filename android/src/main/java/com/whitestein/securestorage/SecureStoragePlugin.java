@@ -7,11 +7,12 @@ import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
 
 import java.nio.charset.Charset;
 import java.util.Set;
 
-@NativePlugin()
+@CapacitorPlugin()
 public class SecureStoragePlugin extends Plugin {
     private PasswordStorageHelper passwordStorageHelper;
 

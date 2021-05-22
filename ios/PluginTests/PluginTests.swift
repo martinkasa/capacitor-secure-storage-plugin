@@ -25,7 +25,7 @@ class PluginTests: XCTestCase {
             "key": key,
             "value": valueModified
             ], success: { (result, call) in
-                let resultValue = result!.data["value"] as? Bool
+                let resultValue = result!.data?["value"] as? Bool
                 XCTAssertTrue(resultValue ?? false)
                 // dedicated keychain wrapper
                 let dedicatedValue = keychainwrapper.string(forKey: key)
@@ -51,7 +51,7 @@ class PluginTests: XCTestCase {
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key
             ], success: { (result, call) in
-                let resultValue = result!.data["value"] as? String
+                let resultValue = result!.data?["value"] as? String
                 XCTAssertEqual(value, resultValue)
         }, error: { (err) in
             XCTFail("Error shouldn't have been called")
@@ -72,7 +72,7 @@ class PluginTests: XCTestCase {
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key
             ], success: { (result, call) in
-                let resultValue = result!.data["value"] as? String
+                let resultValue = result!.data?["value"] as? String
                 XCTAssertEqual(value, resultValue)
                 let dedicatedValue = keychainwrapper.string(forKey: key)
                 XCTAssertEqual(value, dedicatedValue)
@@ -98,7 +98,7 @@ class PluginTests: XCTestCase {
         let callOne = CAPPluginCall(callbackId: "testOne", options: [
             "key": key
             ], success: { (result, call) in
-                let resultValue = result!.data["value"] as? Set<String>
+                let resultValue = result!.data?["value"] as? Set<String>
                 XCTAssertEqual(1, resultValue!.count)
                 XCTAssertEqual(key, resultValue!.first)
         }, error: { (err) in
@@ -153,7 +153,7 @@ class PluginTests: XCTestCase {
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key
             ], success: { (result, call) in
-                let resultValue = result!.data["value"] as? Bool
+                let resultValue = result!.data?["value"] as? Bool
                 XCTAssertTrue(resultValue ?? false)
                 // dedicated keychain wrapper
                 let dedicatedValue = keychainwrapper.string(forKey: key)
@@ -181,7 +181,7 @@ class PluginTests: XCTestCase {
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key
             ], success: { (result, call) in
-                let resultValue = result!.data["value"] as? Bool
+                let resultValue = result!.data?["value"] as? Bool
                 XCTAssertTrue(resultValue ?? false)
                 // dedicated keychain wrapper
                 let dedicatedValue = keychainwrapper.string(forKey: key)
@@ -211,7 +211,7 @@ class PluginTests: XCTestCase {
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key
             ], success: { (result, call) in
-                let resultValue = result!.data["value"] as? Bool
+                let resultValue = result!.data?["value"] as? Bool
                 XCTAssertTrue(resultValue ?? false)
                 // key present in dedicated and standard wrapper removed
                 let dedicatedValue = keychainwrapper.string(forKey: key)
@@ -234,7 +234,7 @@ class PluginTests: XCTestCase {
         let plugin = SecureStoragePlugin()
         let call = CAPPluginCall(callbackId: "test",
                                  success: { (result, call) in
-                let resultValue = result!.data["value"] as? String
+                let resultValue = result!.data?["value"] as? String
                 XCTAssertEqual("ios", resultValue)
         }, error: { (err) in
             XCTFail("Error shouldn't have been called")

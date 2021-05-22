@@ -15,12 +15,12 @@ public class SecureStoragePlugin: CAPPlugin {
         let value = call.getString("value") ?? ""
         let saveSuccessful: Bool = keychainwrapper.set(value, forKey: key)
         if(saveSuccessful) {
-            call.success([
+            call.resolve([
                 "value": saveSuccessful
             ])
         }
         else {
-            call.error("error")
+            call.reject("error")
         }
     }
     
@@ -37,23 +37,23 @@ public class SecureStoragePlugin: CAPPlugin {
             )
             let removeValueSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: key)
             if (!syncValueSuccessful || !removeValueSuccessful) {
-                call.error("error")
+                call.reject("error")
             }
         }
         
         if(hasValueDedicated || hasValueStandard) {
-            call.success([
+            call.resolve([
                 "value": keychainwrapper.string(forKey: key) ?? ""
             ])
         }
         else {
-            call.error("Item with given key does not exist")
+            call.reject("Item with given key does not exist")
         }
     }
     
     @objc func keys(_ call: CAPPluginCall) {
         let keys = keychainwrapper.allKeys();
-        call.success([
+        call.resolve([
             "value": keys
         ])
     }
@@ -63,12 +63,12 @@ public class SecureStoragePlugin: CAPPlugin {
         KeychainWrapper.standard.removeObject(forKey: key);
         let removeDedicatedSuccessful: Bool = keychainwrapper.removeObject(forKey: key)
         if(removeDedicatedSuccessful) {
-            call.success([
+            call.resolve([
                 "value": removeDedicatedSuccessful
             ])
         }
         else {
-            call.error("error")
+            call.reject("error")
         }
     }
     
@@ -80,24 +80,24 @@ public class SecureStoragePlugin: CAPPlugin {
             if (hasValueStandard) {
                 let removeStandardSuccessful = KeychainWrapper.standard.removeObject(forKey: key)
                 if (!removeStandardSuccessful) {
-                    call.error("error")
+                    call.reject("error")
                 }
             }
         }
         
         let clearSuccessful: Bool = keychainwrapper.removeAllKeys()
         if(clearSuccessful) {
-            call.success([
+            call.resolve([
                 "value": clearSuccessful
             ])
         }
         else {
-            call.error("error")
+            call.reject("error")
         }
     }
     
     @objc func getPlatform(_ call: CAPPluginCall) {
-        call.success([
+        call.resolve([
             "value": "ios"
         ])
     }

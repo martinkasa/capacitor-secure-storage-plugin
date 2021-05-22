@@ -1,5 +1,5 @@
 framework module Cordova {
-  umbrella header "CapacitorCordova-umbrella.h"
+  umbrella header "CapacitorCordova.h"
 
   export *
   module * { export * }
