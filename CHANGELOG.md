@@ -1,3 +1,9 @@
+## v0.6.0
+
+- migrate to capacitor 3.0
+- for Capacitor 2.X.X install vesrion v0.5.1
+  - `npm install capacitor-secure-storage-plugin@0.5.1`
+
 ## v0.5.1
 
 - fix Capacitor version to 2.X.X
