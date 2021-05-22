@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.author = 'martinkasa'
   s.source = { :git => 'https://github.com/martinkasa/capacitor-secure-storage-plugin.git', :tag => s.version.to_s }
   s.source_files = 'ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}'
-  s.ios.deployment_target  = '11.0'
+  s.ios.deployment_target  = '12.0'
   s.dependency 'Capacitor'
   s.dependency 'SwiftKeychainWrapper'
 end 
