@@ -1,3 +1,7 @@
+## v0.5.1
+
+- fix Capacitor version to 2.X.X
+
 ## v0.5.0
 
 - added keys() method - warning: returns just keys saved from this version up
