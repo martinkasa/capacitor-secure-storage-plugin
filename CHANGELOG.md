@@ -1,7 +1,12 @@
+## v0.6.1
+
+- fix keys() serializable error on iOS
+
 ## v0.6.0
 
 - migrate to capacitor 3.0
 - for Capacitor 2.X.X install vesrion v0.5.1
+
   - `npm install capacitor-secure-storage-plugin@0.5.1`
 
 - import plugin in web project in Capacitor v3 is `import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';` directly, instead of import of Plugins from capacitor/core
