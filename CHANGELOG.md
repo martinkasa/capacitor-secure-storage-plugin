@@ -1,3 +1,7 @@
+## v0.6.2
+
+- fix keys() serialization error on Android
+
 ## v0.6.1
 
 - fix keys() serializable error on iOS
