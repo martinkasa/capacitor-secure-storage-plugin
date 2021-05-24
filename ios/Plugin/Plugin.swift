@@ -54,7 +54,7 @@ public class SecureStoragePlugin: CAPPlugin {
     @objc func keys(_ call: CAPPluginCall) {
         let keys = keychainwrapper.allKeys();
         call.resolve([
-            "value": keys
+            "value": Array(keys)
         ])
     }
     
