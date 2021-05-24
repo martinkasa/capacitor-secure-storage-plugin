@@ -2,6 +2,7 @@ package com.whitestein.securestorage;
 
 import android.content.Context;
 
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.NativePlugin;
 import com.getcapacitor.Plugin;
@@ -98,7 +99,7 @@ public class SecureStoragePlugin extends Plugin {
     public JSObject _keys() {
         String[] keys = this.passwordStorageHelper.keys();
         JSObject ret = new JSObject();
-        ret.put("value", keys);
+        ret.put("value", JSArray.from(keys));
         return ret;
     }
 
