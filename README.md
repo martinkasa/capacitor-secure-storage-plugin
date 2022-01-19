@@ -42,9 +42,9 @@ First line is needed because of web part of the plugin (current behavior of Capa
 
 ### Android
 
-In Android you have to register plugins manually in MainActivity class of your app.
+In Android with Capacitor v2 you have to register plugins manually in MainActivity class of your app.
 
-https://capacitor.ionicframework.com/docs/plugins/android/#export-to-capacitor
+https://capacitorjs.com/docs/v2/plugins/android#export-to-capacitor
 
 ```
 import com.whitestein.securestorage.SecureStoragePlugin;
