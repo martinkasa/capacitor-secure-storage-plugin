@@ -1,6 +1,5 @@
 import Foundation
 import Capacitor
-import SwiftKeychainWrapper
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -8,92 +7,75 @@ import SwiftKeychainWrapper
  */
 @objc(SecureStoragePlugin)
 public class SecureStoragePlugin: CAPPlugin {
-    var keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: "cap_sec")
     
+    // Sets a value in secure storage w/ requirement for a biometric check to read that value in the future
     @objc func set(_ call: CAPPluginCall) {
-        let key = call.getString("key") ?? ""
+        let key = call.getStrin("key") ?? ""
         let value = call.getString("value") ?? ""
-        let saveSuccessful: Bool = keychainwrapper.set(value, forKey: key)
-        if(saveSuccessful) {
-            call.resolve([
-                "value": saveSuccessful
-            ])
-        }
-        else {
-            call.reject("error")
-        }
+        
+        // Create access control rules for new keychain item
+        let accessControl = SecAccessControlCreateWithFlags(
+            nil,
+            kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, // requires device to have passcode, becomes inaccessible if passcode removed
+            .userPresence, // requires biometric auth, or fallback to passcode
+            // TODO: What does biometryCurrentSet / .touchIdCurrentSet do here?
+            nil) // TODO: catch errors?
+        
+        // Create a query dict for executing the add to keychain
+        // TODO: note what all of these args do
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecReturnData as String: kCFBooleanTrue,
+            kSecAttrAccessControl as String: accessControl,
+            kSecValueData as String: value
+        ]
+        
+        // Execute the query & catch errors
+        let status = SecItemAdd(query as CFDictionary, nil)
+        guard status == errSecSuccess else { throw KeychainError(status: status) }
     }
     
     @objc func get(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
-        let hasValueDedicated = keychainwrapper.hasValue(forKey: key)
-        let hasValueStandard = KeychainWrapper.standard.hasValue(forKey: key)
+        let prompt = call.getString("prompt") ?? ""
         
-        // copy standard value to dedicated and remove standard key
-        if (hasValueStandard && !hasValueDedicated) {
-            let syncValueSuccessful: Bool = keychainwrapper.set(
-                KeychainWrapper.standard.string(forKey: key) ?? "",
-                forKey: key
-            )
-            let removeValueSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: key)
-            if (!syncValueSuccessful || !removeValueSuccessful) {
-                call.reject("error")
-            }
-        }
+        // Create a query dict for fetching our keychain item, including biometric prompt
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+            kSecReturnAttributes as String: true,
+            kSecUseOperationPrompt as String: prompt,
+            kSecReturnData as String: true
+        ]
         
-        if(hasValueDedicated || hasValueStandard) {
-            call.resolve([
-                "value": keychainwrapper.string(forKey: key) ?? ""
-            ])
-        }
-        else {
-            call.reject("Item with given key does not exist")
-        }
-    }
-    
-    @objc func keys(_ call: CAPPluginCall) {
-        let keys = keychainwrapper.allKeys();
-        call.resolve([
-            "value": Array(keys)
-        ])
+        // Execute query, assign result to pointer, catch errors
+        let result: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        guard status == errSecSuccess else { throw KeychainError(status: status) }
+
+        // Extract string from result data, throw error if its not a string
+        guard let secretData = result as? Data,
+            let secret = String(data: secretData, encoding: String.Encoding.utf8)
+            else { throw KeychainError(status: errSecInternalError )}
+        
+        return secret
     }
     
     @objc func remove(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
-        KeychainWrapper.standard.removeObject(forKey: key);
-        let removeDedicatedSuccessful: Bool = keychainwrapper.removeObject(forKey: key)
-        if(removeDedicatedSuccessful) {
-            call.resolve([
-                "value": removeDedicatedSuccessful
-            ])
-        }
-        else {
-            call.reject("error")
-        }
-    }
-    
-    @objc func clear(_ call: CAPPluginCall) {
-        let keys = keychainwrapper.allKeys();
-        // cleanup standard keychain wrapper keys
-        for key in keys {
-            let hasValueStandard = KeychainWrapper.standard.hasValue(forKey: key)
-            if (hasValueStandard) {
-                let removeStandardSuccessful = KeychainWrapper.standard.removeObject(forKey: key)
-                if (!removeStandardSuccessful) {
-                    call.reject("error")
-                }
-            }
-        }
         
-        let clearSuccessful: Bool = keychainwrapper.removeAllKeys()
-        if(clearSuccessful) {
-            call.resolve([
-                "value": clearSuccessful
-            ])
-        }
-        else {
-            call.reject("error")
-        }
+        // Create a query dict for deleting our keychain item
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key
+        ]
+        
+        // Execute query, catch errors
+        let status = SecItemDelete(query as CFDictionary)
+        guard status == errSecSuccess else { throw KeychainError(status: status) }
     }
     
     @objc func getPlatform(_ call: CAPPluginCall) {
