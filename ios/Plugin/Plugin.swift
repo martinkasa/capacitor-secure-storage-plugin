@@ -16,8 +16,7 @@ public class SecureStoragePlugin: CAPPlugin {
         let accessControl = SecAccessControlCreateWithFlags(
             nil,
             kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly, // requires device to have passcode, becomes inaccessible if passcode removed
-            .userPresence, // requires biometric auth, or fallback to passcode
-            // TODO: What does biometryCurrentSet / .touchIdCurrentSet do here?
+            .biometryCurrentSet, // requires biometric auth, is invalidated if the user's biometry changes (re-enrol faceID, remove/add fingers to TouchID)
             nil) // TODO: catch errors?
         
         // Create a query dict for executing the add to keychain
