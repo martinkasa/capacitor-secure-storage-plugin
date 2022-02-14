@@ -10,7 +10,7 @@ public class SecureStoragePlugin: CAPPlugin {
     
     // Sets a value in secure storage w/ requirement for a biometric check to read that value in the future
     @objc func set(_ call: CAPPluginCall) {
-        let key = call.getStrin("key") ?? ""
+        let key = call.getString("key") ?? ""
         let value = call.getString("value") ?? ""
         
         // Create access control rules for new keychain item
