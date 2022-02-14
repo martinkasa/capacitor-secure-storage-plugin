@@ -48,11 +48,7 @@ public class PasswordStorageHelper {
     private PasswordStorageImpl passwordStorage = null;
 
     public PasswordStorageHelper(Context context) {
-        if (android.os.Build.VERSION.SDK_INT < 18) {
-            passwordStorage = new PasswordStorageHelper_SDK16();
-        } else {
-            passwordStorage = new PasswordStorageHelper_SDK18();
-        }
+        passwordStorage = new PasswordStorageHelper_SDK18();
 
         boolean isInitialized = false;
 
@@ -98,53 +94,6 @@ public class PasswordStorageHelper {
         void remove(String key);
 
         void clear();
-    }
-
-    private static class PasswordStorageHelper_SDK16 implements PasswordStorageImpl {
-        private SharedPreferences preferences;
-
-        @Override
-        public boolean init(Context context) {
-            preferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-            return true;
-        }
-
-        @Override
-        public void setData(String key, byte[] data) {
-            if (data == null)
-                return;
-            Editor editor = preferences.edit();
-            editor.putString(key, Base64.encodeToString(data, Base64.DEFAULT));
-            editor.commit();
-        }
-
-        @Override
-        public byte[] getData(String key) {
-            String res = preferences.getString(key, null);
-            if (res == null)
-                return null;
-            return Base64.decode(res, Base64.DEFAULT);
-        }
-
-        @Override
-        public String[] keys() {
-            Set<String> keySet = preferences.getAll().keySet();
-            return keySet.toArray(new String[keySet.size()]);
-        }
-
-        @Override
-        public void remove(String key) {
-            Editor editor = preferences.edit();
-            editor.remove(key);
-            editor.commit();
-        }
-
-        @Override
-        public void clear() {
-            Editor editor = preferences.edit();
-            editor.clear();
-            editor.commit();
-        }
     }
 
     private static class PasswordStorageHelper_SDK18 implements PasswordStorageImpl {
@@ -193,6 +142,7 @@ public class PasswordStorageHelper {
 
             // Specify the parameters object which will be passed to KeyPairGenerator
             AlgorithmParameterSpec spec;
+            // TODO: should we raise our minSDKVersion to 23? >= 23 covers 96% of active devices
             if (android.os.Build.VERSION.SDK_INT < 23) {
                 spec = new android.security.KeyPairGeneratorSpec.Builder(context)
                         // Alias - is a key for your KeyPair, to obtain it from Keystore in future.
@@ -243,6 +193,7 @@ public class PasswordStorageHelper {
         }
 
         @Override
+        // TODO: add biometrics
         public void setData(String key, byte[] data) {
             KeyStore ks = null;
             try {
@@ -271,6 +222,7 @@ public class PasswordStorageHelper {
         }
 
         @Override
+        // TODO: add biometrics
         public byte[] getData(String key) {
             KeyStore ks = null;
             try {
@@ -287,22 +239,10 @@ public class PasswordStorageHelper {
         }
 
         @Override
-        public String[] keys() {
-            Set<String> keySet = preferences.getAll().keySet();
-            return keySet.toArray(new String[keySet.size()]);
-        }
-
-        @Override
+        // TODO: adjust for biometrics
         public void remove(String key) {
             Editor editor = preferences.edit();
             editor.remove(key);
-            editor.commit();
-        }
-
-        @Override
-        public void clear() {
-            Editor editor = preferences.edit();
-            editor.clear();
             editor.commit();
         }
 

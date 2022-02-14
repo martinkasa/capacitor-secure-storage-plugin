@@ -49,24 +49,10 @@ public class SecureStoragePlugin extends Plugin {
     }
 
     @PluginMethod()
-    public void keys(PluginCall call) {
-        call.resolve(this._keys());
-    }
-
-    @PluginMethod()
     public void remove(PluginCall call) {
         String key = call.getString("key");
         try {
             call.resolve(this._remove(key));
-        } catch (Exception exception) {
-            call.reject(exception.getMessage(), exception);
-        }
-    }
-
-    @PluginMethod()
-    public void clear(PluginCall call) {
-        try {
-            call.resolve(this._clear());
         } catch (Exception exception) {
             call.reject(exception.getMessage(), exception);
         }
@@ -96,22 +82,8 @@ public class SecureStoragePlugin extends Plugin {
         }
     }
 
-    public JSObject _keys() {
-        String[] keys = this.passwordStorageHelper.keys();
-        JSObject ret = new JSObject();
-        ret.put("value", JSArray.from(keys));
-        return ret;
-    }
-
     public JSObject _remove(String key) {
         this.passwordStorageHelper.remove(key);
-        JSObject ret = new JSObject();
-        ret.put("value", true);
-        return ret;
-    }
-
-    public JSObject _clear() {
-        this.passwordStorageHelper.clear();
         JSObject ret = new JSObject();
         ret.put("value", true);
         return ret;

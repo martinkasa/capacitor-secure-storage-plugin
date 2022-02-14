@@ -53,20 +53,6 @@ public class ExampleInstrumentedTest {
         assertEquals("test value", result.getString("value"));
     }
 
-    @Test
-    public void keysTest() throws Exception {
-        SecureStoragePlugin plugin = new SecureStoragePlugin();
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        plugin.loadTextContext(appContext);
-        JSObject result = plugin._set("test", "test value");
-        assertTrue(result.getBoolean("value"));
-
-        result = plugin._keys();
-        String[] keys = (String[]) result.get("value");
-        assertEquals(1, keys.length);
-        assertEquals("test", keys[0]);
-    }
-
     @Test(expected = Exception.class)
     public void getNonExistingKeyTest() throws Exception {
         SecureStoragePlugin plugin = new SecureStoragePlugin();
@@ -86,28 +72,6 @@ public class ExampleInstrumentedTest {
         assertTrue(result.getBoolean("value"));
 
         plugin._get("test");
-    }
-
-    @Test(expected = Exception.class)
-    public void clearTest() throws Exception {
-        SecureStoragePlugin plugin = new SecureStoragePlugin();
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        plugin.loadTextContext(appContext);
-        plugin._set("test", "test value");
-        plugin._set("test2", "test value");
-        plugin._clear();
-        plugin._get("test");
-    }
-
-    @Test(expected = Exception.class)
-    public void clearTest2() throws Exception {
-        SecureStoragePlugin plugin = new SecureStoragePlugin();
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        plugin.loadTextContext(appContext);
-        plugin._set("test", "test value");
-        plugin._set("test2", "test value");
-        plugin._clear();
-        plugin._get("test2");
     }
 
     @Test

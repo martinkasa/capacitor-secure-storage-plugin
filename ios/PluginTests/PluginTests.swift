@@ -4,6 +4,8 @@ import SwiftKeychainWrapper
 
 @testable import Plugin
 
+// TODO: update tests
+
 class PluginTests: XCTestCase {
     
     func setupDedicatedWrapper() -> KeychainWrapper {
