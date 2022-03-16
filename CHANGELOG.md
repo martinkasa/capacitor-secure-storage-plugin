@@ -1,3 +1,7 @@
+## v1.0.0
+- add visibility and accessibility props for iOS
+- add docgen documentation
+
 ## v0.6.2
 
 - fix keys() serialization error on Android

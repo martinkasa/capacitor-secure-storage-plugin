@@ -6,14 +6,30 @@ import SwiftKeychainWrapper
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitor.ionicframework.com/docs/plugins/ios
  */
+
+let keychainAccessibilityModeLookup = [
+    "afterFirstUnlock": KeychainItemAccessibility.afterFirstUnlock,
+    "afterFirstUnlockThisDeviceOnly": KeychainItemAccessibility.afterFirstUnlockThisDeviceOnly,
+    "whenUnlocked": KeychainItemAccessibility.whenUnlocked,
+    "whenUnlockedThisDeviceOnly": KeychainItemAccessibility.whenUnlockedThisDeviceOnly,
+    "always": KeychainItemAccessibility.always,
+    "alwaysThisDeviceOnly": KeychainItemAccessibility.alwaysThisDeviceOnly,
+    "whenPasscodeSetThisDeviceOnly": KeychainItemAccessibility.whenPasscodeSetThisDeviceOnly
+]
+
+
 @objc(SecureStoragePlugin)
 public class SecureStoragePlugin: CAPPlugin {
     var keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: "cap_sec")
     
+    
     @objc func set(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
         let value = call.getString("value") ?? ""
-        let saveSuccessful: Bool = keychainwrapper.set(value, forKey: key)
+        // KeychainWrapper sets whenUnlocked as default, so we keep it for compatibility
+        let accessibility = call.getString("accessibility") ?? "whenUnlocked"
+        
+        let saveSuccessful: Bool = keychainwrapper.set(value, forKey: key, withAccessibility: keychainAccessibilityModeLookup[accessibility])
         if(saveSuccessful) {
             call.resolve([
                 "value": saveSuccessful

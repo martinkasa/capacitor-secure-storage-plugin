@@ -2,110 +2,45 @@
 
 Capacitor plugin for storing string values securly on iOS and Android.
 
+This plugin only supports Capacitor 3.
+
 ## How to install
-For Capacitor v3
 
 ```
-npm install capacitor-secure-storage-plugin
+npm install @atroo/capacitor-secure-storage-plugin
 ```
-
-
-For Capacitor v2 - install with fixed version 0.5.1
-
-```
-npm install capacitor-secure-storage-plugin@0.5.1
-```
-
 
 ## Usage
 
-For Capacitor v3
-
 In a component where you want to use this plugin add to or modify imports:
 
 ```
-import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
+import { SecureStoragePlugin } from '@atroo/capacitor-secure-storage-plugin';
 ```
-
-For Capacitor v2
-
-In a component where you want to use this plugin add to or modify imports:
-
-```
-import 'capacitor-secure-storage-plugin';
-import { Plugins } from '@capacitor/core';
-
-const { SecureStoragePlugin } = Plugins;
-```
-
-First line is needed because of web part of the plugin (current behavior of Capacitor, this may change in future releases).
-
-### Android
-
-In Android you have to register plugins manually in MainActivity class of your app.
-
-https://capacitor.ionicframework.com/docs/plugins/android/#export-to-capacitor
-
-```
-import com.whitestein.securestorage.SecureStoragePlugin;
-
-...
-
-public class MainActivity extends BridgeActivity {
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    // Initializes the Bridge
-    this.init(savedInstanceState, new ArrayList<Class<? extends Plugin>>() {{
-      // Additional plugins you've installed go here
-      // Ex: add(TotallyAwesomePlugin.class);
-      add(SecureStoragePlugin.class);
-    }});
-  }
-}
-```
-
-## Methods
-
-- **get**(options: { key: string }): Promise<{ value: string }>
-  - if item with specified key does not exist, throws an Error
-
-* **keys**(): Promise<{ value: string[] }>
-* **set**(options: { key: string; value: string }): Promise<{ value: boolean }>
-* **remove**(options: { key: string }): Promise<{ value: boolean }>
-* **clear**(): Promise<{ value: boolean }>
-  - set, remove and clear return true in case of success and false in case of error
-
-- **getPlatform**(): Promise<{ value: string }>
-  - returns which implementation is used - one of 'web', 'ios' or 'android'
-
 ## Example
 
+Write data
 ```
 const key = 'username';
 const value = 'hellokitty2';
 
-SecureStoragePlugin.set({ key, value })
-  .then(success => console.log(success))
-```
+const storeData = async () => {
+  const success = await SecureStoragePlugin.set({ key, value })
+  console.log(success)
+}
 
 ```
-const key = 'username';
-SecureStoragePlugin.get({ key })
-  .then(value => {
-    console.log(value);
-  })
-  .catch(error => {
-    console.log('Item with specified key does not exist.');
-  });
-```
 
+Read data
 ```
 async getUsername(key: string) {
   return await SecureStoragePlugin.get({ key });
 }
 ```
+
+## API
+
+Full API docs can be found [here](./DOCS.md)
 
 ## Platform specific information
 

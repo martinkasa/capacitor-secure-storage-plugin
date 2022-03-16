@@ -1,14 +1,9 @@
 import { WebPlugin } from '@capacitor/core';
+import { SetDataOptions } from '.';
 import { SecureStoragePluginPlugin } from './definitions';
 
 export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePluginPlugin {
   PREFIX = 'cap_sec_';
-  constructor() {
-    super({
-      name: 'SecureStoragePlugin',
-      platforms: ['web'],
-    });
-  }
 
   get(options: { key: string }): Promise<{ value: string }> {
     return localStorage.getItem(this.addPrefix(options.key)) !== null
@@ -17,7 +12,7 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
         })
       : Promise.reject('Item with given key does not exist');
   }
-  set(options: { key: string; value: string }): Promise<{ value: boolean }> {
+  set(options: SetDataOptions): Promise<{ value: boolean }> {
     localStorage.setItem(this.addPrefix(options.key), btoa(options.value));
     return Promise.resolve({ value: true });
   }
