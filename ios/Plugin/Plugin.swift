@@ -13,7 +13,7 @@ public class SecureStoragePlugin: CAPPlugin {
     @objc func set(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
         let value = call.getString("value") ?? ""
-        let saveSuccessful: Bool = keychainwrapper.set(value, forKey: key)
+        let saveSuccessful: Bool = keychainwrapper.set(value, forKey: key, withAccessibility: .always)
         if(saveSuccessful) {
             call.resolve([
                 "value": saveSuccessful
