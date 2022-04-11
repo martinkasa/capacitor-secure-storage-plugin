@@ -33,7 +33,8 @@ public class SecureStoragePlugin: CAPPlugin {
         if (hasValueStandard && !hasValueDedicated) {
             let syncValueSuccessful: Bool = keychainwrapper.set(
                 KeychainWrapper.standard.string(forKey: key) ?? "",
-                forKey: key
+                forKey: key,
+                withAccessibility: .always
             )
             let removeValueSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: key)
             if (!syncValueSuccessful || !removeValueSuccessful) {
