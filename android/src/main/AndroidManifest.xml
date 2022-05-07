@@ -1,5 +1,3 @@
-
-  <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.whitestein.securestorage.capacitorsecurestorageplugin">
-  </manifest>
-  
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.whitestein.securestorage">
+</manifest>

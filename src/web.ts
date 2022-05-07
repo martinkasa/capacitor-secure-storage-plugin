@@ -1,19 +1,16 @@
 import { WebPlugin } from '@capacitor/core';
-import { SecureStoragePluginPlugin } from './definitions';
+import type { SecureStoragePluginPlugin } from './definitions';
 
-export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePluginPlugin {
+export class SecureStoragePluginWeb
+  extends WebPlugin
+  implements SecureStoragePluginPlugin {
   PREFIX = 'cap_sec_';
-  constructor() {
-    super({
-      name: 'SecureStoragePlugin',
-      platforms: ['web'],
-    });
-  }
 
   get(options: { key: string }): Promise<{ value: string }> {
-    return localStorage.getItem(this.addPrefix(options.key)) !== null
+    const value = localStorage.getItem(this.addPrefix(options.key));
+    return value !== null
       ? Promise.resolve({
-          value: atob(localStorage.getItem(this.addPrefix(options.key))),
+          value: atob(value),
         })
       : Promise.reject('Item with given key does not exist');
   }
@@ -22,8 +19,12 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
     return Promise.resolve({ value: true });
   }
   remove(options: { key: string }): Promise<{ value: boolean }> {
-    localStorage.removeItem(this.addPrefix(options.key));
-    return Promise.resolve({ value: true });
+    if (localStorage.getItem(this.addPrefix(options.key))) {
+      localStorage.removeItem(this.addPrefix(options.key));
+      return Promise.resolve({ value: true });
+    } else {
+      return Promise.reject('Item with given key does not exist');
+    }
   }
   clear(): Promise<{ value: boolean }> {
     for (const key in localStorage) {
@@ -34,7 +35,9 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
     return Promise.resolve({ value: true });
   }
   keys(): Promise<{ value: string[] }> {
-    const keys = Object.keys(localStorage).filter((k) => k.indexOf(this.PREFIX) === 0).map(this.removePrefix);
+    const keys = Object.keys(localStorage)
+      .filter(k => k.indexOf(this.PREFIX) === 0)
+      .map(this.removePrefix);
     return Promise.resolve({ value: keys });
   }
 
@@ -45,7 +48,3 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
   private addPrefix = (key: string) => this.PREFIX + key;
   private removePrefix = (key: string) => key.replace(this.PREFIX, '');
 }
-
-const SecureStoragePlugin = new SecureStoragePluginWeb();
-
-export { SecureStoragePlugin };

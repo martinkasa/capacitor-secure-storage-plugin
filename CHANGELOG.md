@@ -1,3 +1,9 @@
+## v0.7.0
+
+- based on current Capacitor 3.5.1 plugin template
+- iOS - access when a device is locked
+- fixed keys() on Web
+
 ## v0.6.2
 
 - fix keys() serialization error on Android

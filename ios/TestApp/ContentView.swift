@@ -2,15 +2,16 @@
 //  ContentView.swift
 //  TestApp
 //
-//  Created by mka on 12/04/2020.
-//  Copyright © 2020 Max Lynch. All rights reserved.
+//  Created by Martin Kaša on 07/05/2022.
+//  Copyright © 2022 Max Lynch. All rights reserved.
 //
 
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Hello, World!")
+        Text("Hello, world!")
+            .padding()
     }
 }
 
