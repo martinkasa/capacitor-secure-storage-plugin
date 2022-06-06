@@ -1,3 +1,7 @@
+## v0.7.1
+
+- iOS - access when a device is locked, but after first unlock of device
+
 ## v0.7.0
 
 - based on current Capacitor 3.5.1 plugin template
