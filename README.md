@@ -4,6 +4,10 @@ Capacitor plugin for storing string values securly on iOS and Android.
 
 This plugin only supports Capacitor 3.
 
+## Why a fork?
+The original plugin is not flexible enough for our purposes and the repo seems to be abandoned. Our goal for this fork is to make it as flexible as possible to configure the secure storage without assumptions.
+
+
 ## How to install
 
 ```
