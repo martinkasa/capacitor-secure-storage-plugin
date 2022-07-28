@@ -1,3 +1,9 @@
+## v0.8.0
+- migrate to capacitor 4.0
+- for Capacitor 3.X.X install version v0.7.1
+
+  - `npm install capacitor-secure-storage-plugin@0.7.1`
+
 ## v0.7.1
 
 - iOS - access when a device is locked, but after first unlock of device
@@ -19,7 +25,7 @@
 ## v0.6.0
 
 - migrate to capacitor 3.0
-- for Capacitor 2.X.X install vesrion v0.5.1
+- for Capacitor 2.X.X install version v0.5.1
 
   - `npm install capacitor-secure-storage-plugin@0.5.1`
 
