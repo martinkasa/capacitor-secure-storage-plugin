@@ -1,12 +1,12 @@
 {
   "name": "Capacitor",
-  "version": "3.5.1",
+  "version": "4.0.0",
   "summary": "Capacitor for iOS",
   "social_media_url": "https://twitter.com/capacitorjs",
   "license": "MIT",
   "homepage": "https://capacitorjs.com/",
   "platforms": {
-    "ios": "12.0"
+    "ios": "13.0"
   },
   "authors": {
     "Ionic Team": "hi@ionicframework.com"
