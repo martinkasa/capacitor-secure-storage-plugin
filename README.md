@@ -4,33 +4,39 @@ Capacitor plugin for storing string values securly on iOS and Android.
 
 ## How to install
 
-For Capacitor v3
+For Capacitor v4
 
-```
+```bash
 npm install capacitor-secure-storage-plugin
+```
+
+For Capacitor v3 - install with fixed version 0.7.1
+
+```bash
+npm install capacitor-secure-storage-plugin@0.7.1
 ```
 
 For Capacitor v2 - install with fixed version 0.5.1
 
-```
+```bash
 npm install capacitor-secure-storage-plugin@0.5.1
 ```
 
 ## Usage
 
-For Capacitor v3
+### For Capacitor v3 & v4
 
 In a component where you want to use this plugin add to or modify imports:
 
-```
+```jsx
 import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 ```
 
-For Capacitor v2
+### For Capacitor v2
 
 In a component where you want to use this plugin add to or modify imports:
 
-```
+```jsx
 import 'capacitor-secure-storage-plugin';
 import { Plugins } from '@capacitor/core';
 
@@ -39,13 +45,13 @@ const { SecureStoragePlugin } = Plugins;
 
 First line is needed because of web part of the plugin (current behavior of Capacitor, this may change in future releases).
 
-### Android
+#### Capacitor V2 - Android
 
 In Android with Capacitor v2 you have to register plugins manually in MainActivity class of your app.
 
-https://capacitorjs.com/docs/v2/plugins/android#export-to-capacitor
+[How to register plugins for Capacitor V2](https://capacitorjs.com/docs/v2/plugins/android#export-to-capacitor)
 
-```
+```ts
 import com.whitestein.securestorage.SecureStoragePlugin;
 
 ...
@@ -67,23 +73,68 @@ public class MainActivity extends BridgeActivity {
 
 ## Methods
 
-- **get**(options: { key: string }): Promise<{ value: string }>
-  - if item with specified key does not exist, throws an Error
+  ```ts
 
-* **keys**(): Promise<{ value: string[] }>
-* **set**(options: { key: string; value: string }): Promise<{ value: boolean }>
-  - return true in case of success otherwise throws an error
-* **remove**(options: { key: string }): Promise<{ value: boolean }>
-  - return true in case of success otherwise throws an error
-* **clear**(): Promise<{ value: boolean }>
-  - return true in case of success otherwise throws an error
+  get(options: { key: string }): Promise<{ value: string }>
 
-- **getPlatform**(): Promise<{ value: string }>
-  - returns which implementation is used - one of 'web', 'ios' or 'android'
+  ```
+
+  > **Note**
+  > if item with specified key does not exist, throws an Error
+
+  ---
+
+  ```ts
+
+  set(options: { key: string; value: string }): Promise<{ value: boolean }>
+
+  ```
+
+  > **Note**
+  > return true in case of success otherwise throws an error
+
+  ---
+
+  ```ts
+
+  remove(options: { key: string }): Promise<{ value: boolean }>
+
+  ```
+
+  > **Note**
+  > return true in case of success otherwise throws an error
+
+  ---
+
+```ts
+keys(): Promise<{ value: string[] }>
+```
+
+---
+
+```ts
+
+  clear(): Promise<{ value: boolean }>
+
+  ```
+
+  > **Note**
+  > return true in case of success otherwise throws an error
+
+  ---
+
+  ```ts
+
+  getPlatform(): Promise<{ value: string }>
+
+  ```
+
+  > **Note**
+  > return returns which implementation is used - one of 'web', 'ios' or 'android'
 
 ## Example
 
-```
+```ts
 const key = 'username';
 const value = 'hellokitty2';
 
@@ -91,7 +142,7 @@ SecureStoragePlugin.set({ key, value })
   .then(success => console.log(success))
 ```
 
-```
+```ts
 const key = 'username';
 SecureStoragePlugin.get({ key })
   .then(value => {
@@ -102,7 +153,7 @@ SecureStoragePlugin.get({ key })
   });
 ```
 
-```
+```ts
 async getUsername(key: string) {
   return await SecureStoragePlugin.get({ key });
 }
@@ -114,17 +165,15 @@ async getUsername(key: string) {
 
 This plugin uses SwiftKeychainWrapper under the hood for iOS.
 
-##### Warning
-
-Up to version v0.4.0 there was standard keychain used. Since v0.5.0 there is separate keychain wrapper, so keys() method returns only keys set in v0.5.0 or higher version.
+> **Warning**
+> Up to version v0.4.0 there was standard keychain used. Since v0.5.0 there is separate keychain wrapper, so keys() method returns only keys set in v0.5.0 or higher version.
 
 ### Android
 
 On Android it is implemented by AndroidKeyStore and SharedPreferences. Source: [Apriorit](https://www.apriorit.com/dev-blog/432-using-androidkeystore)
 
-##### Warning
-
-For Android API < 18 values are stored as simple base64 encoded strings.
+> **Warning**
+> For Android API < 18 values are stored as simple base64 encoded strings.
 
 ### Web
 
