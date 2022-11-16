@@ -1,3 +1,6 @@
+## v0.8.1
+- iOS - calling clear if storage if empty is not throwing an error
+
 ## v0.8.0
 - migrate to capacitor 4.0
 - for Capacitor 3.X.X install version v0.7.1
