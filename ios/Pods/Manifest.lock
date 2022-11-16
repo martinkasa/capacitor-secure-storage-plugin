@@ -1,7 +1,7 @@
 PODS:
-  - Capacitor (4.0.0):
+  - Capacitor (4.4.0):
     - CapacitorCordova
-  - CapacitorCordova (4.0.0)
+  - CapacitorCordova (4.4.0)
   - SwiftKeychainWrapper (4.0.1)
 
 DEPENDENCIES:
@@ -20,8 +20,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@capacitor/ios"
 
 SPEC CHECKSUMS:
-  Capacitor: 08e6774024514685a1541ec173e808f363979208
-  CapacitorCordova: a3341ba0bfb9949d43499cb1b2fbebc5d3448e6f
+  Capacitor: 868367fcfeb3ba6bfabaefc63c072e6478bd046d
+  CapacitorCordova: 0c0b4edc7ce94fd560eadc3a6d36d5ee6453ada6
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
 PODFILE CHECKSUM: 8a4ab85828710c77c83c62937da31d8743da5c04
