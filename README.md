@@ -4,10 +4,16 @@ Capacitor plugin for storing string values securly on iOS and Android.
 
 ## How to install
 
-For Capacitor v4
+For Capacitor v5
 
 ```bash
 npm install capacitor-secure-storage-plugin
+```
+
+For Capacitor v4 - install with fixed version 0.8.1
+
+```bash
+npm install capacitor-secure-storage-plugin@0.8.1
 ```
 
 For Capacitor v3 - install with fixed version 0.7.1
@@ -73,38 +79,38 @@ public class MainActivity extends BridgeActivity {
 
 ## Methods
 
-  ```ts
+```ts
 
-  get(options: { key: string }): Promise<{ value: string }>
+get(options: { key: string }): Promise<{ value: string }>
 
-  ```
+```
 
-  > **Note**
-  > if item with specified key does not exist, throws an Error
+> **Note**
+> if item with specified key does not exist, throws an Error
 
-  ---
+---
 
-  ```ts
+```ts
 
-  set(options: { key: string; value: string }): Promise<{ value: boolean }>
+set(options: { key: string; value: string }): Promise<{ value: boolean }>
 
-  ```
+```
 
-  > **Note**
-  > return true in case of success otherwise throws an error
+> **Note**
+> return true in case of success otherwise throws an error
 
-  ---
+---
 
-  ```ts
+```ts
 
-  remove(options: { key: string }): Promise<{ value: boolean }>
+remove(options: { key: string }): Promise<{ value: boolean }>
 
-  ```
+```
 
-  > **Note**
-  > return true in case of success otherwise throws an error
+> **Note**
+> return true in case of success otherwise throws an error
 
-  ---
+---
 
 ```ts
 keys(): Promise<{ value: string[] }>
@@ -116,21 +122,21 @@ keys(): Promise<{ value: string[] }>
 
   clear(): Promise<{ value: boolean }>
 
-  ```
+```
 
-  > **Note**
-  > return true in case of success otherwise throws an error
+> **Note**
+> return true in case of success otherwise throws an error
 
-  ---
+---
 
-  ```ts
+```ts
 
-  getPlatform(): Promise<{ value: string }>
+getPlatform(): Promise<{ value: string }>
 
-  ```
+```
 
-  > **Note**
-  > return returns which implementation is used - one of 'web', 'ios' or 'android'
+> **Note**
+> return returns which implementation is used - one of 'web', 'ios' or 'android'
 
 ## Example
 
@@ -138,8 +144,7 @@ keys(): Promise<{ value: string[] }>
 const key = 'username';
 const value = 'hellokitty2';
 
-SecureStoragePlugin.set({ key, value })
-  .then(success => console.log(success))
+SecureStoragePlugin.set({ key, value }).then(success => console.log(success));
 ```
 
 ```ts
