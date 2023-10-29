@@ -1,0 +1,17 @@
+// import { registerPlugin } from '@capacitor/core';
+// import type { SecureStoragePluginPlugin } from './definitions';
+// const SecureStoragePlugin = registerPlugin<SecureStoragePluginPlugin>(
+//   'SecureStoragePlugin',
+//   {
+//     web: () => import('./web').then(m => new m.SecureStoragePluginWeb()),
+//   },
+// );
+// export * from './definitions';
+// export { SecureStoragePlugin };
+import { registerPlugin } from '@capacitor/core';
+const SecureStoragePlugin = registerPlugin('SecureStoragePlugin', {
+    web: () => import('./web').then((m) => new m.SecureStoragePluginWeb()),
+});
+export * from './definitions';
+export { SecureStoragePlugin };
+//# sourceMappingURL=index.js.map

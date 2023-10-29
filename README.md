@@ -1,69 +1,163 @@
-# capacitor-secure-storage-plugin
+# @atroo/capacitor-secure-storage-plugin
 
-Capacitor plugin for storing string values securly on iOS and Android.
+Securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information (strings) on iOS & Android
 
-This plugin only supports Capacitor 3.
+## Install
 
-## Why a fork?
-The original plugin is not flexible enough for our purposes and the repo seems to be abandoned. Our goal for this fork is to make it as flexible as possible to configure the secure storage without assumptions.
-
-
-## How to install
-
-```
+```bash
 npm install @atroo/capacitor-secure-storage-plugin
-```
-
-## Usage
-
-In a component where you want to use this plugin add to or modify imports:
-
-```
-import { SecureStoragePlugin } from '@atroo/capacitor-secure-storage-plugin';
-```
-## Example
-
-Write data
-```
-const key = 'username';
-const value = 'hellokitty2';
-
-const storeData = async () => {
-  const success = await SecureStoragePlugin.set({ key, value })
-  console.log(success)
-}
-
-```
-
-Read data
-```
-async getUsername(key: string) {
-  return await SecureStoragePlugin.get({ key });
-}
+npx cap sync
 ```
 
 ## API
 
-Full API docs can be found [here](./DOCS.md)
+<docgen-index>
 
-## Platform specific information
+* [`get(...)`](#get)
+* [`getAccessibility(...)`](#getaccessibility)
+* [`set(...)`](#set)
+* [`remove(...)`](#remove)
+* [`clear()`](#clear)
+* [`keys()`](#keys)
+* [`getPlatform()`](#getplatform)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
-### iOS
+</docgen-index>
 
-This plugin uses SwiftKeychainWrapper under the hood for iOS.
+<docgen-api>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-##### Warning
+The SecureStoragePlugin plugin interface
 
-Up to version v0.4.0 there was standard keychain used. Since v0.5.0 there is separate keychain wrapper, so keys() method returns only keys set in v0.5.0 or higher version.
+### get(...)
 
-### Android
+```typescript
+get(options: { key: string; }) => Promise<{ value: string; }>
+```
 
-On Android it is implemented by AndroidKeyStore and SharedPreferences. Source: [Apriorit](https://www.apriorit.com/dev-blog/432-using-androidkeystore)
+gets the value for the given key
 
-##### Warning
+| Param         | Type                          | Description          |
+| ------------- | ----------------------------- | -------------------- |
+| **`options`** | <code>{ key: string; }</code> | key to get value for |
 
-For Android API < 18 values are stored as simple base64 encoded strings.
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 
-### Web
+--------------------
 
-There is no secure storage in browser (not because it is not implemented by this plugin, but it does not exist at all). Values are stored in LocalStorage, but they are at least base64 encoded. Plugin adds 'cap*sec*' prefix to keys to avoid conflicts with other data stored in LocalStorage.
+
+### getAccessibility(...)
+
+```typescript
+getAccessibility(options: { key: string; }) => Promise<{ value: string | undefined; }>
+```
+
+gets the accessibility for the given key
+
+| Param         | Type                          | Description                  |
+| ------------- | ----------------------------- | ---------------------------- |
+| **`options`** | <code>{ key: string; }</code> | key to get accessibility for |
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### set(...)
+
+```typescript
+set(options: SetDataOptions) => Promise<{ value: boolean; }>
+```
+
+sets the value for the given key
+
+| Param         | Type                                                      | Description          |
+| ------------- | --------------------------------------------------------- | -------------------- |
+| **`options`** | <code><a href="#setdataoptions">SetDataOptions</a></code> | key and value to set |
+
+**Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
+
+--------------------
+
+
+### remove(...)
+
+```typescript
+remove(options: { key: string; }) => Promise<{ value: boolean; }>
+```
+
+removes the value for the given key
+
+| Param         | Type                          | Description             |
+| ------------- | ----------------------------- | ----------------------- |
+| **`options`** | <code>{ key: string; }</code> | key to remove value for |
+
+**Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
+
+--------------------
+
+
+### clear()
+
+```typescript
+clear() => Promise<{ value: boolean; }>
+```
+
+clears all values
+
+**Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
+
+--------------------
+
+
+### keys()
+
+```typescript
+keys() => Promise<{ value: string[]; }>
+```
+
+gets all keys
+
+**Returns:** <code>Promise&lt;{ value: string[]; }&gt;</code>
+
+--------------------
+
+
+### getPlatform()
+
+```typescript
+getPlatform() => Promise<{ value: string; }>
+```
+
+gets the platform
+
+**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+--------------------
+
+
+### Interfaces
+
+
+#### SetDataOptions
+
+allows to define how properties can be accessed on iOS
+
+| Prop                | Type                                                    |
+| ------------------- | ------------------------------------------------------- |
+| **`key`**           | <code>string</code>                                     |
+| **`value`**         | <code>string</code>                                     |
+| **`accessibility`** | <code><a href="#accessibility">Accessibility</a></code> |
+
+
+### Type Aliases
+
+
+#### Accessibility
+
+allows to define how properties can be accessed on iOS
+
+<code>'afterFirstUnlock' | 'afterFirstUnlockThisDeviceOnly' | 'whenUnlocked' | 'whenUnlockedThisDeviceOnly' | 'always' | 'alwaysThisDeviceOnly' | 'whenPasscodeSetThisDeviceOnly'</code>
+
+</docgen-api>
