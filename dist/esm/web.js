@@ -18,7 +18,7 @@ export class SecureStoragePluginWeb extends WebPlugin {
     }
     getAccessibility(_options) {
         // Always rejects on web
-        return Promise.reject('Item with given key does not exist');
+        return Promise.reject('not implemented on web');
     }
     set(options) {
         localStorage.setItem(this.addPrefix(options.key), btoa(options.value));

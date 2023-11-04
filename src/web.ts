@@ -1,8 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
 import { SetDataOptions } from '.';
-import { Accessibility, SecureStoragePluginPlugin } from './definitions';
+import { Accessibility, SecureStoragePlugin } from './definitions';
 
-export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePluginPlugin {
+export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePlugin {
   PREFIX = 'cap_sec_';
 
   get(options: { key: string }): Promise<{ value: string }> {
@@ -18,7 +18,7 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
 
   getAccessibility(_options: { key: string }): Promise<{ value: Accessibility|undefined }> {
     // Always rejects on web
-    return Promise.reject('Item with given key does not exist');
+    return Promise.reject('not implemented on web');
   }
 
   set(options: SetDataOptions): Promise<{ value: boolean }> {

@@ -24,7 +24,7 @@ export interface SetDataOptions {
 /**
  * The SecureStoragePlugin plugin interface
  */
-export interface SecureStoragePluginPlugin {
+export interface SecureStoragePlugin {
   /**
    * gets the value for the given key
    * 

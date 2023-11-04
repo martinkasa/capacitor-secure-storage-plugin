@@ -14,7 +14,6 @@ const accessibilityOptions = [
     'whenPasscodeSetThisDeviceOnly'
 ];
 
-// import { registerPlugin } from '@capacitor/core';
 const SecureStoragePlugin$1 = core.registerPlugin('SecureStoragePlugin', {
     web: () => Promise.resolve().then(function () { return web; }).then((m) => new m.SecureStoragePluginWeb()),
 });
@@ -38,7 +37,7 @@ class SecureStoragePluginWeb extends core.WebPlugin {
     }
     getAccessibility(_options) {
         // Always rejects on web
-        return Promise.reject('Item with given key does not exist');
+        return Promise.reject('not implemented on web');
     }
     set(options) {
         localStorage.setItem(this.addPrefix(options.key), btoa(options.value));

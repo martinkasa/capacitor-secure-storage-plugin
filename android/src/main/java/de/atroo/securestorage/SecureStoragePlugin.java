@@ -1,4 +1,4 @@
-package com.atroo.securestorage;
+package de.atroo.securestorage;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -6,10 +6,10 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
-@CapacitorPlugin(name = "SecureStoragePlugin")
-public class SecureStoragePluginPlugin extends Plugin {
+@CapacitorPlugin(name = "SecureStoragePluginImpl")
+public class SecureStoragePlugin extends Plugin {
 
-    private SecureStoragePlugin implementation = new SecureStoragePlugin();
+    private SecureStoragePluginImpl implementation = new SecureStoragePluginImpl();
 
     @PluginMethod
     public void echo(PluginCall call) {

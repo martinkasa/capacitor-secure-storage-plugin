@@ -1,8 +1,8 @@
-package com.atroo.securestorage;
+package de.atroo.securestorage;
 
 import android.util.Log;
 
-public class SecureStoragePlugin {
+public class SecureStoragePluginImpl {
 
     public String echo(String value) {
         Log.i("Echo", value);

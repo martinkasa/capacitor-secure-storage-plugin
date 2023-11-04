@@ -1,7 +1,7 @@
 {
   "api": {
-    "name": "SecureStoragePluginPlugin",
-    "slug": "securestoragepluginplugin",
+    "name": "SecureStoragePlugin",
+    "slug": "securestorageplugin",
     "docs": "The SecureStoragePlugin plugin interface",
     "tags": [],
     "methods": [

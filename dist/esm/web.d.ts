@@ -1,7 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 import { SetDataOptions } from '.';
-import { Accessibility, SecureStoragePluginPlugin } from './definitions';
-export declare class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePluginPlugin {
+import { Accessibility, SecureStoragePlugin } from './definitions';
+export declare class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePlugin {
     PREFIX: string;
     get(options: {
         key: string;
