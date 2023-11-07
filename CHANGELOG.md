@@ -1,3 +1,8 @@
+## v1.1.0
+- rewrite using KeychainAccess for iOS
+- migrate to capacitor v5
+- add docgen documentation
+
 ## v1.0.0
 - add visibility and accessibility props for iOS
 - add docgen documentation

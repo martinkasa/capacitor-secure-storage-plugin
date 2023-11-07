@@ -8,15 +8,15 @@
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "50ADFF87201F53D600D50D53"
-               BuildableName = "Plugin.framework"
-               BlueprintName = "Plugin"
+               BlueprintIdentifier = "50ADFF90201F53D600D50D53"
+               BuildableName = "PluginTests.xctest"
+               BlueprintName = "PluginTests"
                ReferencedContainer = "container:Plugin.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -57,15 +57,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "50ADFF87201F53D600D50D53"
-            BuildableName = "Plugin.framework"
-            BlueprintName = "Plugin"
-            ReferencedContainer = "container:Plugin.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
