@@ -2,14 +2,16 @@ package de.atroo.securestorage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.security.crypto.EncryptedSharedPreferences;
-import androidx.security.crypto.MasterKey;
+import androidx.security.crypto.MasterKeys;
 
 import java.util.Map;
 import java.util.Set;
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class EncryptedPreferencesImpl implements SecureStorageInterface {
     private static final String TAG = "EncryptedPrefsImpl";
     private SharedPreferences sharedPreferences;
@@ -17,17 +19,26 @@ public class EncryptedPreferencesImpl implements SecureStorageInterface {
     @Override
     public boolean init(Context context, String preferencesName) {
         try {
-            MasterKey masterKey = new MasterKey.Builder(context)
-                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                    .build();
-            Log.d(TAG, "init: " + preferencesName);
+            String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+
             sharedPreferences = EncryptedSharedPreferences.create(
-                    context,
                     preferencesName,
-                    masterKey,
+                    masterKeyAlias,
+                    context,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
+//            MasterKey masterKey = new MasterKey.Builder(context)
+//                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+//                    .build();
+//            Log.d(TAG, "init: " + preferencesName);
+//            sharedPreferences = EncryptedSharedPreferences.create(
+//                    context,
+//                    preferencesName,
+//                    masterKey,
+//                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+//                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+//            );
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize EncryptedSharedPreferences", e);
         }
