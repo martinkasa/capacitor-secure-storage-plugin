@@ -28,17 +28,6 @@ public class EncryptedPreferencesImpl implements SecureStorageInterface {
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
-//            MasterKey masterKey = new MasterKey.Builder(context)
-//                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-//                    .build();
-//            Log.d(TAG, "init: " + preferencesName);
-//            sharedPreferences = EncryptedSharedPreferences.create(
-//                    context,
-//                    preferencesName,
-//                    masterKey,
-//                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-//                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-//            );
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize EncryptedSharedPreferences", e);
         }

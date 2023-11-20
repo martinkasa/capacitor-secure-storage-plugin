@@ -9,6 +9,11 @@ npm install @atroo/capacitor-secure-storage-plugin
 npx cap sync
 ```
 
+## Notes
+### Android
+To stay secure you need to handle the Auto Backup rules in Android.
+Please refer to [this document](https://developer.android.com/guide/topics/data/autobackup#IncludingFiles).
+
 ## API
 
 <docgen-index>
