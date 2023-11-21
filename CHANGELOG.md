@@ -1,6 +1,7 @@
 ## v5.0.0
 - migrate to capacitor v5
 - add docgen documentation
+- align version with capacitor releases
 
 ### iOS Changes
 - rewrite using KeychainAccess for iOS
