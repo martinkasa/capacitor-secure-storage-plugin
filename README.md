@@ -11,8 +11,16 @@ npx cap sync
 
 ## Notes
 ### Android
+#### AutoBackup
 To stay secure you need to handle the Auto Backup rules in Android.
 Please refer to [this document](https://developer.android.com/guide/topics/data/autobackup#IncludingFiles).
+#### Java 17
+The plugin requires Java 17 to run.
+You can set it using the following options:
+- changing the IDE settings.
+- changing the JAVA_HOME environment variable.
+- changing `org.gradle.java.home` in `gradle.properties`.
+
 
 ## API
 
