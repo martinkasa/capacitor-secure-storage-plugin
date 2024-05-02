@@ -8,7 +8,7 @@ PODS:
     - Capacitor
   - CapacitorKeyboard (5.0.2):
     - Capacitor
-  - CapacitorSecureStoragePlugin (0.8.1):
+  - CapacitorSecureStoragePlugin (0.9.0):
     - Capacitor
     - SwiftKeychainWrapper
   - CapacitorStatusBar (5.0.2):
@@ -50,10 +50,10 @@ SPEC CHECKSUMS:
   CapacitorCordova: def732a63679698df6fb392bbe6d269a0b61e937
   CapacitorHaptics: 864585542a435bd41eaabf7f30d9ff5ec03024d3
   CapacitorKeyboard: e628d4e66d621c69e449945ebabded17c5b9c2e8
-  CapacitorSecureStoragePlugin: e616d090177dfbf9754dd1bdb515a8f23855bf4e
+  CapacitorSecureStoragePlugin: e91d7df060f2495a1acff9583641a6953e3aacba
   CapacitorStatusBar: 48f2899f6846cc7d8431b251ebfc58e1c10e3d58
   SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
 PODFILE CHECKSUM: 53a893f470c90adbebe5ab3ccd0710e1648936ac
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2
