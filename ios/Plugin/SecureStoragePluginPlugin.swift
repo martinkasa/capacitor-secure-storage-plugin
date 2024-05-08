@@ -7,14 +7,20 @@ import SwiftKeychainWrapper
  * here: https://capacitor.ionicframework.com/docs/plugins/ios
  */
 @objc(SecureStoragePlugin)
-public class SecureStoragePlugin: CAPPlugin {
-    var keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: "cap_sec")
-    
+public class SecureStoragePlugin: CAPPlugin {    
+
+    struct Constants {
+        static let serviceName = "cap_sec"
+    }
+
     @objc func set(_ call: CAPPluginCall) {
+        let serviceName = call.getString("serviceName") ?? Constants.serviceName
+        let keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: serviceName)
+
         let key = call.getString("key") ?? ""
         let value = call.getString("value") ?? ""
         let saveSuccessful: Bool = keychainwrapper.set(value, forKey: key, withAccessibility: .afterFirstUnlock)
-        if(saveSuccessful) {
+        if(saveSuccessful) {    
             call.resolve([
                 "value": saveSuccessful
             ])
@@ -25,6 +31,9 @@ public class SecureStoragePlugin: CAPPlugin {
     }
     
     @objc func get(_ call: CAPPluginCall) {
+        let serviceName = call.getString("serviceName") ?? Constants.serviceName
+        let keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: serviceName)
+
         let key = call.getString("key") ?? ""
         let hasValueDedicated = keychainwrapper.hasValue(forKey: key)
         let hasValueStandard = KeychainWrapper.standard.hasValue(forKey: key)
@@ -53,6 +62,9 @@ public class SecureStoragePlugin: CAPPlugin {
     }
     
     @objc func keys(_ call: CAPPluginCall) {
+        let serviceName = call.getString("serviceName") ?? Constants.serviceName
+        let keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: serviceName)
+
         let keys = keychainwrapper.allKeys();
         call.resolve([
             "value": Array(keys)
@@ -60,6 +72,9 @@ public class SecureStoragePlugin: CAPPlugin {
     }
     
     @objc func remove(_ call: CAPPluginCall) {
+        let serviceName = call.getString("serviceName") ?? Constants.serviceName
+        let keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: serviceName)
+
         let key = call.getString("key") ?? ""
         let hasValueDedicated = keychainwrapper.hasValue(forKey: key)
         let hasValueStandard = KeychainWrapper.standard.hasValue(forKey: key)
@@ -82,6 +97,9 @@ public class SecureStoragePlugin: CAPPlugin {
     }
     
     @objc func clear(_ call: CAPPluginCall) {
+        let serviceName = call.getString("serviceName") ?? Constants.serviceName
+        let keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: serviceName)
+        
         let keys = keychainwrapper.allKeys();
         // cleanup standard keychain wrapper keys
         

@@ -87,7 +87,7 @@ public class MainActivity extends BridgeActivity {
 
 ```ts
 
-get(options: { key: string }): Promise<{ value: string }>
+get(options: { serviceName?: string, key: string }): Promise<{ value: string }>
 
 ```
 
@@ -98,7 +98,7 @@ get(options: { key: string }): Promise<{ value: string }>
 
 ```ts
 
-set(options: { key: string; value: string }): Promise<{ value: boolean }>
+set(options: { serviceName?: string, key: string; value: string }): Promise<{ value: boolean }>
 
 ```
 
@@ -109,7 +109,7 @@ set(options: { key: string; value: string }): Promise<{ value: boolean }>
 
 ```ts
 
-remove(options: { key: string }): Promise<{ value: boolean }>
+remove(options: { serviceName?: string, key: string }): Promise<{ value: boolean }>
 
 ```
 
@@ -119,14 +119,16 @@ remove(options: { key: string }): Promise<{ value: boolean }>
 ---
 
 ```ts
-keys(): Promise<{ value: string[] }>
+
+keys(options: { serviceName?: string }): Promise<{ value: string[] }>
+
 ```
 
 ---
 
 ```ts
 
-  clear(): Promise<{ value: boolean }>
+clear(options: { serviceName?: string }): Promise<{ value: boolean }>
 
 ```
 
