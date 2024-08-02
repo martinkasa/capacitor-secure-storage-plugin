@@ -1,15 +1,7 @@
-## v5.0.0
+## v1.1.0
+- rewrite using KeychainAccess for iOS
 - migrate to capacitor v5
 - add docgen documentation
-- align version with capacitor releases
-
-### iOS Changes
-- rewrite using KeychainAccess for iOS
-- allow to change visibility prop on the fly
-
-### Android Changes
-- use EncryptedSharedPreferences, if supported
-- automigrate from old encryption
 
 ## v1.0.0
 - add visibility and accessibility props for iOS

@@ -3,10 +3,11 @@ package de.atroo.securestorage;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.security.crypto.EncryptedSharedPreferences;
-import androidx.security.crypto.MasterKeys;
+import androidx.security.crypto.MasterKey;
 
 import java.util.Map;
 import java.util.Set;
@@ -19,16 +20,19 @@ public class EncryptedPreferencesImpl implements SecureStorageInterface {
     @Override
     public boolean init(Context context, String preferencesName) {
         try {
-            String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+            MasterKey masterKeyAlias = new MasterKey.Builder(context)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
 
             sharedPreferences = EncryptedSharedPreferences.create(
+                    context,
                     preferencesName,
                     masterKeyAlias,
-                    context,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             );
         } catch (Exception e) {
+            Log.d(TAG, "Failed to initialize EncryptedSharedPreferences", e);
             throw new RuntimeException("Failed to initialize EncryptedSharedPreferences", e);
         }
 
@@ -37,7 +41,7 @@ public class EncryptedPreferencesImpl implements SecureStorageInterface {
 
     @Override
     public void setData(String key, String value) {
-        sharedPreferences.edit().putString(key, value).commit();
+        sharedPreferences.edit().putString(key, value).apply();
     }
 
     @Override
@@ -58,13 +62,13 @@ public class EncryptedPreferencesImpl implements SecureStorageInterface {
     public void remove(String key) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(key);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
     public void clear() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
-        editor.commit();
+        editor.apply();
     }
 }
