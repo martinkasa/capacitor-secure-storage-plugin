@@ -2,6 +2,9 @@
 
 Securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information (strings) on iOS & Android
 
+## Compatibility
+Since v5 we follow the versioning of Capacitor, which means v5 of this plugin can be used with Capacitor 5, while v6 can be used with Capacitor 6.
+
 ## Install
 
 ```bash
