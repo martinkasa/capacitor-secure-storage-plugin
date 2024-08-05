@@ -9,6 +9,13 @@ npm install @atroo/capacitor-secure-storage-plugin
 npx cap sync
 ```
 
+## Features
+### Android
+This plugin uses EncryptedSharedPreferences to store sensitive information securely on any Android device. It will automigrate data from older versions after update.
+
+### iOS
+When using `set()` you can specify a different accessibility modifier of the keychain to control, when access to a key should be allowed. Providing a different accessibility modifier on consecutive calls of `set()` for the same key, will remove the old key and create it new under the hood to prevent keychain errors.
+
 ## Notes
 ### Android
 #### AutoBackup
