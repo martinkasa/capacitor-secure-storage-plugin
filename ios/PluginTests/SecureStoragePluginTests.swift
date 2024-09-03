@@ -1,247 +1,194 @@
-import XCTest
 import Capacitor
-import SwiftKeychainWrapper
+import SimpleKeychain
+import XCTest
 
 @testable import Plugin
 
 class PluginTests: XCTestCase {
-    
-    func setupDedicatedWrapper() -> KeychainWrapper {
-        let wrapper = KeychainWrapper.init(serviceName: "cap_sec")
-        wrapper.removeAllKeys()
-        return wrapper
+
+    func setupDedicatedKeychain(_ service: String) -> SimpleKeychain {
+        let keychain = SimpleKeychain(service: service)
+        try? keychain.deleteAll()
+        return keychain
     }
-    
+
     func testSet() {
         let key = "key"
-        let value = "Hello, World!"
-        let valueModified = "Modified"
-        let keychainwrapper = setupDedicatedWrapper()
-        KeychainWrapper.standard.set(value, forKey: key)
-        
+        let value = "Modified"
+
+        let keychain = self.setupDedicatedKeychain("cap_sec")
+
         let plugin = SecureStoragePlugin()
-        
+
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key,
-            "value": valueModified
-            ], success: { (result, call) in
-                let resultValue = result!.data?["value"] as? Bool
-                XCTAssertTrue(resultValue ?? false)
-                // dedicated keychain wrapper
-                let dedicatedValue = keychainwrapper.string(forKey: key)
-                XCTAssertEqual(valueModified, dedicatedValue)
-                // standard keychain wrapper should not be modified
-                let standardValue = KeychainWrapper.standard.string(forKey: key)
-                XCTAssertEqual(value, standardValue)
-        }, error: { (err) in
+            "value": value,
+        ], success: { result, _ in
+            let resultValue = result!.data?["value"] as? String
+            XCTAssertEqual(resultValue, value)
+        }, error: { _ in
             XCTFail("Error shouldn't have been called")
         })
-        
+
         plugin.set(call!)
     }
-    
+
     func testGet() {
         let key = "key"
         let value = "Hello, World!"
-        let keychainwrapper = setupDedicatedWrapper()
-        keychainwrapper.set(value, forKey: key)
-        
+
+        let keychain = self.setupDedicatedKeychain("cap_sec")
+        try? keychain.set(value, forKey: key)
+
         let plugin = SecureStoragePlugin()
-        
+
         let call = CAPPluginCall(callbackId: "test", options: [
-            "key": key
-            ], success: { (result, call) in
-                let resultValue = result!.data?["value"] as? String
-                XCTAssertEqual(value, resultValue)
-        }, error: { (err) in
+            "key": key,
+        ], success: { result, _ in
+            let resultValue = result!.data?["value"] as? String
+            XCTAssertEqual(value, resultValue)
+        }, error: { _ in
             XCTFail("Error shouldn't have been called")
         })
-        
+
         plugin.get(call!)
     }
-    
-    func testGetCopy() {
-        let key = "key"
-        let value = "Hello, World!"
-        let keychainwrapper = setupDedicatedWrapper()
-        
-        KeychainWrapper.standard.set(value, forKey: key)
-        
-        let plugin = SecureStoragePlugin()
-        
-        let call = CAPPluginCall(callbackId: "test", options: [
-            "key": key
-            ], success: { (result, call) in
-                let resultValue = result!.data?["value"] as? String
-                XCTAssertEqual(value, resultValue)
-                let dedicatedValue = keychainwrapper.string(forKey: key)
-                XCTAssertEqual(value, dedicatedValue)
-                let standardValue = KeychainWrapper.standard.string(forKey: key)
-                XCTAssertNil(standardValue)
-        }, error: { (err) in
-            XCTFail("Error shouldn't have been called")
-        })
-        
-        plugin.get(call!)
-    }
-    
+
     func testKeys() {
         let key = "key"
         let key2 = "key2"
         let value = "value"
 
+        let keychain = self.setupDedicatedKeychain("cap_sec")
+        try? keychain.set(value, forKey: key)
+        try? keychain.set(value, forKey: key2)
+
         let plugin = SecureStoragePlugin()
 
-        let keychainwrapper = setupDedicatedWrapper()
-        keychainwrapper.set(value, forKey: key)
-        keychainwrapper.set(value, forKey: key2)
-
-
-        let callOne = CAPPluginCall(callbackId: "test", options: [:],
-                                    success: { (result, call) in
-                let resultValue = result!.data?["value"] as? Array<String>
+        let callOne = CAPPluginCall(
+            callbackId: "test",
+            options: [:],
+            success: { result, _ in
+                let resultValue = result!.data?["value"] as? [String]
                 XCTAssertEqual(2, resultValue!.count)
-            XCTAssertTrue(resultValue!.contains(key))
-            XCTAssertTrue(resultValue!.contains(key2))
-        }, error: { (err) in
-            XCTFail("Error shouldn't have been called")
-        })
+                XCTAssertTrue(resultValue!.contains(key))
+                XCTAssertTrue(resultValue!.contains(key2))
+            },
+            error: { _ in
+                XCTFail("Error shouldn't have been called")
+            }
+        )
         plugin.keys(callOne!)
     }
-    
+
     func testNonExistingGet() {
         let key = "keyNonExisting"
-        
+
+        let keychain = self.setupDedicatedKeychain("cap_sec")
+        try? keychain.deleteAll()
+
         let plugin = SecureStoragePlugin()
-        
+
         let call = CAPPluginCall(callbackId: "test", options: [
-            "key": key
-            ], success: { (result, call) in
-                XCTFail("Error shouldn't have been called")
-        }, error: { (err) in
+            "key": key,
+        ], success: { _, _ in
+            XCTFail("Error shouldn't have been called")
+        }, error: { err in
             XCTAssertNotNil(err)
         })
-        
+
         plugin.get(call!)
     }
-    
-    func testNonExistingRemoveBoth() {
+
+    func testNonExistingRemove() {
         let key = "keyNonExisting"
-        
+
+        let keychain = self.setupDedicatedKeychain("cap_sec")
+        try? keychain.deleteAll()
+
         let plugin = SecureStoragePlugin()
-        
+
         let call = CAPPluginCall(callbackId: "test", options: [
-            "key": key
-        ], success: { (result, call) in
+            "key": key,
+        ], success: { _, _ in
             XCTFail("Error shouldn't have been called")
-        }, error: { (err) in
+        }, error: { err in
             XCTAssertNotNil(err)
         })
-        
+
         plugin.remove(call!)
     }
-    
-    func testRemoveBoth() {
-        let key = "key"
-        let value = "Hello, World!"
-        // prefill dedicated keychain wrapper
-        let keychainwrapper = setupDedicatedWrapper()
-        keychainwrapper.set(value, forKey: key)
-        // prefill standard keychain wrapper
-        KeychainWrapper.standard.set(value, forKey: key)
-        
-        let plugin = SecureStoragePlugin()
-        
-        let call = CAPPluginCall(callbackId: "test", options: [
-            "key": key
-            ], success: { (result, call) in
-                let resultValue = result!.data?["value"] as? Bool
-                XCTAssertTrue(resultValue ?? false)
-                // dedicated keychain wrapper
-                let dedicatedValue = keychainwrapper.string(forKey: key)
-                XCTAssertNil(dedicatedValue)
-                // standard keychain wrapper
-                let standardValueRemoved = KeychainWrapper.standard.string(forKey: key)
-                XCTAssertNil(standardValueRemoved)
-        }, error: { (err) in
-            XCTFail("Error shouldn't have been called")
-        })
-        
-        plugin.remove(call!)
-    }
-    
-    // same as testRemoveBoth, but don't prefill standard wrapper
+
     func testRemove() {
         let key = "key"
         let value = "Hello, World!"
-        // prefill dedicated keychain wrapper
-        let keychainwrapper = setupDedicatedWrapper()
-        keychainwrapper.set(value, forKey: key)
-        
+
+        let keychain = self.setupDedicatedKeychain("cap_sec")
+        try? keychain.set(value, forKey: key)
+
         let plugin = SecureStoragePlugin()
-        
-        let call = CAPPluginCall(callbackId: "test", options: [
-            "key": key
-            ], success: { (result, call) in
-                let resultValue = result!.data?["value"] as? Bool
-                XCTAssertTrue(resultValue ?? false)
-                // dedicated keychain wrapper
-                let dedicatedValue = keychainwrapper.string(forKey: key)
-                XCTAssertNil(dedicatedValue)
-        }, error: { (err) in
+
+        // Remove key after setting
+        var call = CAPPluginCall(callbackId: "test", options: [
+            "key": key,
+        ], success: { result, _ in
+            XCTAssertNotNil(result)
+        }, error: { _ in
             XCTFail("Error shouldn't have been called")
         })
-        
+
+        plugin.remove(call!)
+
+        // Remove already removed key
+        call = CAPPluginCall(callbackId: "test", options: [
+            "key": key,
+        ], success: { _, _ in
+            XCTFail("Error shouldn't have been called")
+        }, error: { err in
+            XCTAssertNotNil(err)
+        })
+
         plugin.remove(call!)
     }
-    
+
     func testClear() {
         let key = "key"
         let value = "Hello, World!"
-        let standardOnlyKey = "standard key"
-        let standardOnlyValue = "standard value"
-        // prefill dedicated keychain wrapper
-        let keychainwrapper = setupDedicatedWrapper()
-        keychainwrapper.set(value, forKey: key)
-        keychainwrapper.set(value + "2", forKey: key + "2")
-        // prefill standard keychain wrapper
-        KeychainWrapper.standard.set(value, forKey: key)
-        KeychainWrapper.standard.set(standardOnlyValue, forKey: standardOnlyKey)
-        
+
+        let keychain = self.setupDedicatedKeychain("cap_sec")
+        try? keychain.set(value, forKey: key)
+        try? keychain.set(value + "2", forKey: key + "2")
+
         let plugin = SecureStoragePlugin()
-        
+
         let call = CAPPluginCall(callbackId: "test", options: [
-            "key": key
-            ], success: { (result, call) in
-                let resultValue = result!.data?["value"] as? Bool
-                XCTAssertTrue(resultValue ?? false)
-                // key present in dedicated and standard wrapper removed
-                let dedicatedValue = keychainwrapper.string(forKey: key)
-                XCTAssertNil(dedicatedValue)
-                let dedicatedValue2 = keychainwrapper.string(forKey: key + "2")
-                XCTAssertNil(dedicatedValue2)
-                let standardValue = KeychainWrapper.standard.string(forKey: key)
-                XCTAssertNil(standardValue)
-                // key only defined in standard wrapper still present
-                let standardValue2 = KeychainWrapper.standard.string(forKey: standardOnlyKey)
-                XCTAssertEqual(standardOnlyValue, standardValue2)
-        }, error: { (err) in
+            "key": key,
+        ], success: { _, _ in
+            let dedicatedValue = try? keychain.string(forKey: key)
+            XCTAssertNil(dedicatedValue)
+
+            let dedicatedValue2 = try? keychain.string(forKey: key + "2")
+            XCTAssertNil(dedicatedValue2)
+        }, error: { _ in
             XCTFail("Error shouldn't have been called")
         })
-        
+
         plugin.clear(call!)
     }
-    
+
     func testGetPlatform() {
         let plugin = SecureStoragePlugin()
-        let call = CAPPluginCall(callbackId: "test",
-                                 success: { (result, call) in
+        let call = CAPPluginCall(
+            callbackId: "test",
+            success: { result, _ in
                 let resultValue = result!.data?["value"] as? String
                 XCTAssertEqual("ios", resultValue)
-        }, error: { (err) in
-            XCTFail("Error shouldn't have been called")
-        })
-        
+            },
+            error: { _ in
+                XCTFail("Error shouldn't have been called")
+            }
+        )
+
         plugin.getPlatform(call!)
     }
 }

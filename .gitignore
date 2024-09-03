@@ -18,10 +18,8 @@ npm-debug.log*
 .sass-cache/
 .tmp/
 .versions/
-dist/
 coverage/
 www/
-node_modules/
 tmp/
 temp/
 platforms/
@@ -30,9 +28,29 @@ plugins/android.json
 plugins/ios.json
 $RECYCLE.BIN/
 
+android/.gradle
+
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
 
+# node files
+dist/
+node_modules/
+
+# iOS files
+Pods
+Build
+xcuserdata
+
+# Gradle files
+.gradle/
+build/
+
 # Firebase hosting directory
 .firebase/
+
+# Build
+# dist/
+
+*.tgz

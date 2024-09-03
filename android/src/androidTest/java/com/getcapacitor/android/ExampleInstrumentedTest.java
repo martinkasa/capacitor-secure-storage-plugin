@@ -1,14 +1,16 @@
 package com.getcapacitor.android;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
+
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.evva.capacitor_secure_storage.SecureStoragePlugin;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
-import com.whitestein.securestorage.SecureStoragePluginPlugin;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,26 +25,26 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void useAppContext() throws Exception {
-        // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-        assertEquals("com.whitestein.securestorage.test", appContext.getPackageName());
+        assertEquals("com.evva.capacitor_secure_storage.test", appContext.getPackageName());
     }
 
     @Test
     public void setTest() throws Exception {
-        SecureStoragePluginPlugin plugin = new SecureStoragePluginPlugin();
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         plugin.loadTextContext(appContext);
+
         JSObject result = plugin._set("test", "test value");
         assertTrue(result.getBoolean("value"));
     }
 
     @Test
     public void getTest() throws Exception {
-        SecureStoragePluginPlugin plugin = new SecureStoragePluginPlugin();
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         plugin.loadTextContext(appContext);
+
         plugin._set("test", "test value");
         JSObject result = plugin._get("test");
         assertEquals("test value", result.getString("value"));
@@ -50,9 +52,10 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void keysTest() throws Exception {
-        SecureStoragePluginPlugin plugin = new SecureStoragePluginPlugin();
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         plugin.loadTextContext(appContext);
+
         JSObject result = plugin._set("test", "test value");
         assertTrue(result.getBoolean("value"));
         result = plugin._set("test2", "test value");
@@ -67,30 +70,32 @@ public class ExampleInstrumentedTest {
 
     @Test(expected = Exception.class)
     public void getNonExistingKeyTest() throws Exception {
-        SecureStoragePluginPlugin plugin = new SecureStoragePluginPlugin();
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         plugin.loadTextContext(appContext);
+
         plugin._get("testNonExisting");
     }
 
     @Test(expected = Exception.class)
     public void removeTest() throws Exception {
-        SecureStoragePluginPlugin plugin = new SecureStoragePluginPlugin();
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         plugin.loadTextContext(appContext);
         plugin._set("test", "test value");
         plugin._get("test");
+
         JSObject result = plugin._remove("test");
         assertTrue(result.getBoolean("value"));
-
         plugin._get("test");
     }
 
     @Test(expected = Exception.class)
     public void clearTest() throws Exception {
-        SecureStoragePluginPlugin plugin = new SecureStoragePluginPlugin();
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         plugin.loadTextContext(appContext);
+
         plugin._set("test", "test value");
         plugin._set("test2", "test value");
         plugin._clear();
@@ -99,9 +104,10 @@ public class ExampleInstrumentedTest {
 
     @Test(expected = Exception.class)
     public void clearTest2() throws Exception {
-        SecureStoragePluginPlugin plugin = new SecureStoragePluginPlugin();
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         plugin.loadTextContext(appContext);
+
         plugin._set("test", "test value");
         plugin._set("test2", "test value");
         plugin._clear();
@@ -110,9 +116,10 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void getPlatformTest() throws Exception {
-        SecureStoragePluginPlugin plugin = new SecureStoragePluginPlugin();
+        SecureStoragePlugin plugin = new SecureStoragePlugin();
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         plugin.loadTextContext(appContext);
+
         JSObject result = plugin._getPlatform();
         assertEquals("android", result.getString("value"));
     }

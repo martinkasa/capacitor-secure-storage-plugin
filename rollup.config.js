@@ -1,22 +1,22 @@
 export default {
-  input: 'dist/esm/index.js',
+  input: "dist/esm/index.js",
   output: [
     {
-      file: 'dist/plugin.js',
-      format: 'iife',
-      name: 'capacitorSecureStoragePlugin',
+      file: "dist/plugin.js",
+      format: "iife",
+      name: "capacitorSecureStoragePlugin",
       globals: {
-        '@capacitor/core': 'capacitorExports',
+        "@capacitor/core": "capacitorExports",
       },
       sourcemap: true,
       inlineDynamicImports: true,
     },
     {
-      file: 'dist/plugin.cjs.js',
-      format: 'cjs',
+      file: "dist/plugin.cjs.js",
+      format: "cjs",
       sourcemap: true,
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: ["@capacitor/core"],
 };

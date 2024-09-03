@@ -1,0 +1,114 @@
+## File options
+
+--exclude Carthage, Pods
+
+## Enabled rules
+
+--enable anyObjectProtocol
+--enable applicationMain
+--enable blankLineAfterImports
+--enable blankLinesAroundMark
+--enable blankLinesAtEndOfScope
+--enable blankLinesBetweenChainedFunctions
+--enable blankLinesBetweenScopes
+--enable braces
+--enable consecutiveBlankLines
+--enable consecutiveSpaces
+--enable docComments
+--enable duplicateimports
+--enable elseOnSameLine
+--enable emptybraces
+--enable enumnamespaces
+--enable fileHeader
+--enable hoistAwait
+--enable hoistTry
+--enable indent
+--enable initcoderunavailable
+--enable isempty
+--enable leadingdelimiters
+--enable linebreakAtEndOfFile
+--enable marktypes
+--enable modifierOrder
+--enable noExplicitOwnership
+--enable numberFormatting
+--enable redundantBackticks
+--enable redundantBreak
+--enable redundantClosure
+--enable redundantExtensionACL
+--enable redundantlet
+--enable redundantLetError
+--enable redundantNilInit
+--enable redundantObjc
+--enable redundantParens
+--enable redundantSelf
+--enable redundantVoidReturnType
+--enable semicolons
+--enable sortimports
+--enable spaceAroundBraces
+--enable spaceAroundBrackets
+--enable spaceAroundComments
+--enable spaceAroundGenerics
+--enable spaceAroundOperators
+--enable spaceAroundParens
+--enable strongOutlets
+--enable strongifiedSelf
+--enable todos
+--enable trailingClosures
+--enable trailingCommas
+--enable trailingSpace
+--enable typeSugar
+--enable unusedArguments
+--enable wrap
+--enable wrapArguments
+--enable wrapAttributes
+--enable wrapEnumCases
+--enable wrapLoopBodies
+--enable wrapMultilineConditionalAssignment
+--enable wrapSingleLineComments
+--enable yodaConditions
+
+### Indent
+--indent 4
+--ifdef noindent
+
+### Semicolons
+--semicolons never
+
+### Else
+--elseposition same-line
+--guardelse same-line
+
+### Number formatting
+--decimalgrouping 3
+--hexgrouping 4, 8
+--binarygrouping 4
+
+### Redundant
+--self insert
+--closurevoid preserve
+
+### Wrapping
+--maxwidth 120
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--funcattributes prev-line
+--typeattributes prev-line
+--varattributes preserve
+
+### MARK
+--marktypes never
+
+### Others
+--voidtype void
+
+## Disabled rules
+
+### SwiftFormat also removes from funcs, so let's let SwiftLint takes care of it.
+--disable redundantReturn
+
+### SwiftFormat also removes from end of scope, which is against our empty line guidelines.
+--disable blankLinesAtEndOfScope
+
+### SwiftFormat also removes from start of scope, which is against our empty line guidelines.
+--disable blankLinesAtStartOfScope

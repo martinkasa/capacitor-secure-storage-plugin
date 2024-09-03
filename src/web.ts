@@ -1,50 +1,53 @@
 import { WebPlugin } from '@capacitor/core';
-import type { SecureStoragePluginPlugin } from './definitions';
 
-export class SecureStoragePluginWeb
-  extends WebPlugin
-  implements SecureStoragePluginPlugin {
+import type { SecureStoragePluginInterface } from './definitions';
+
+export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePluginInterface {
   PREFIX = 'cap_sec_';
 
-  get(options: { key: string }): Promise<{ value: string }> {
+  async get(options: { key: string }): Promise<{ value: string }> {
     const value = localStorage.getItem(this.addPrefix(options.key));
     return value !== null
-      ? Promise.resolve({
+      ? {
           value: atob(value),
-        })
-      : Promise.reject('Item with given key does not exist');
+        }
+      : await Promise.reject(new Error('Item with given key does not exist'));
   }
-  set(options: { key: string; value: string }): Promise<{ value: boolean }> {
+
+  async set(options: { key: string; value: string }): Promise<{ value: boolean }> {
     localStorage.setItem(this.addPrefix(options.key), btoa(options.value));
-    return Promise.resolve({ value: true });
+    return { value: true };
   }
-  remove(options: { key: string }): Promise<{ value: boolean }> {
-    if (localStorage.getItem(this.addPrefix(options.key))) {
+
+  async remove(options: { key: string }): Promise<{ value: boolean }> {
+    if (localStorage.getItem(this.addPrefix(options.key)) != null) {
       localStorage.removeItem(this.addPrefix(options.key));
-      return Promise.resolve({ value: true });
+      return { value: true };
     } else {
-      return Promise.reject('Item with given key does not exist');
+      throw new Error('Item with given key does not exist');
     }
   }
-  clear(): Promise<{ value: boolean }> {
+
+  async clear(): Promise<{ value: boolean }> {
     for (const key in localStorage) {
       if (key.indexOf(this.PREFIX) === 0) {
         localStorage.removeItem(key);
       }
     }
-    return Promise.resolve({ value: true });
+    return { value: true };
   }
-  keys(): Promise<{ value: string[] }> {
+
+  async keys(): Promise<{ value: string[] }> {
     const keys = Object.keys(localStorage)
-      .filter(k => k.indexOf(this.PREFIX) === 0)
+      .filter((k) => k.indexOf(this.PREFIX) === 0)
       .map(this.removePrefix);
-    return Promise.resolve({ value: keys });
+    return { value: keys };
   }
 
-  getPlatform(): Promise<{ value: string }> {
-    return Promise.resolve({ value: 'web' });
+  async getPlatform(): Promise<{ value: string }> {
+    return { value: 'web' };
   }
 
-  private addPrefix = (key: string) => this.PREFIX + key;
-  private removePrefix = (key: string) => key.replace(this.PREFIX, '');
+  private readonly addPrefix = (key: string): string => this.PREFIX + key;
+  private readonly removePrefix = (key: string): string => key.replace(this.PREFIX, '');
 }

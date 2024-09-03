@@ -1,0 +1,22 @@
+disabled_rules:
+  - identifier_name
+  - force_try
+  - type_body_length
+  - file_length
+  - opening_brace
+  - function_parameter_count
+  - for_where
+  - trailing_comma
+  - function_body_length
+  - type_name
+  - line_length
+  - large_tuple
+  - todo
+  - no_space_in_method_call
+  - legacy_hashing
+  - inclusive_language
+  - force_cast
+
+excluded:
+  - Carthage
+  - Pods

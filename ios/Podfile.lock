@@ -1,17 +1,23 @@
 PODS:
-  - Capacitor (6.0.0):
+  - Capacitor (5.7.8):
     - CapacitorCordova
-  - CapacitorCordova (6.0.0)
-  - SwiftKeychainWrapper (4.0.1)
+  - CapacitorCordova (5.7.8)
+  - SimpleKeychain (1.1.0)
+  - SwiftFormat/CLI (0.54.3)
+  - SwiftLint (0.54.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../node_modules/@capacitor/ios`)"
-  - SwiftKeychainWrapper
+  - SimpleKeychain (~> 1.1.0)
+  - SwiftFormat/CLI (~> 0.49)
+  - SwiftLint (~> 0.54.0)
 
 SPEC REPOS:
   trunk:
-    - SwiftKeychainWrapper
+    - SimpleKeychain
+    - SwiftFormat
+    - SwiftLint
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -20,10 +26,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@capacitor/ios"
 
 SPEC CHECKSUMS:
-  Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
-  CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
-  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
+  Capacitor: 747aadb4fa786f460d8cd9d0557cb81440a13747
+  CapacitorCordova: 31ab98dca2ddcee051027a1afe7e8c85c82f7297
+  SimpleKeychain: f8707c8e97b38c6a6e687b17732afc9bcef06439
+  SwiftFormat: 0e575b1d412d27cd5906c59fab64a806ba8f2b8e
+  SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
 
-PODFILE CHECKSUM: 8a4ab85828710c77c83c62937da31d8743da5c04
+PODFILE CHECKSUM: 4faeb00846cf8bc9ebac57459cb6b0816f2b5908
 
 COCOAPODS: 1.15.2

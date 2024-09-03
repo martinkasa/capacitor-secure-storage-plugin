@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
+import { SecureStoragePlugin } from '@evva-sfw/capacitor-secure-storage-plugin';
 
 @Component({
   selector: 'app-home',
