@@ -17,6 +17,8 @@
         "eslint-plugin-prettier"
     ],
     "rules": {
+        "@typescript-eslint/prefer-nullish-coalescing": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off",
         "no-void": "off",
         "max-len": "off",
         "no-console": "off",
@@ -40,5 +42,9 @@
                 "useTabs": false
             }
         ]
-    }
+    },
+    "ignorePatterns": [
+        "node_modules/*",
+        "dist/*"
+    ]
 }

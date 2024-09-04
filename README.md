@@ -14,6 +14,11 @@ npm install @evva-sfw/capacitor-secure-storage-plugin
 
 For version lower than 5 please refer to https://github.com/martinkasa/capacitor-secure-storage-plugin
 
+## Compatibility
+
+### iOS 15.0+
+### Android API Level 29+
+
 ## Usage
 
 ```typescript
@@ -112,14 +117,11 @@ async getUsername(key: string) {
 
 ### iOS
 
-This plugin uses SimpleKeyChain under the hood for iOS.
+This plugin uses the SimpleKeychain Swift library for iOS.
 
 ### Android
 
 On Android it is implemented by AndroidKeyStore and SharedPreferences. Source: [Apriorit](https://www.apriorit.com/dev-blog/432-using-androidkeystore)
-
-> **Warning**
-> For Android API < 18 values are stored as simple base64 encoded strings.
 
 ### Web
 

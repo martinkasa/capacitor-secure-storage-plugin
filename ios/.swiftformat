@@ -1,6 +1,6 @@
 ## File options
 
---exclude Carthage, Pods
+--exclude Carthage, Pods, node_modules
 
 ## Enabled rules
 

@@ -18,5 +18,7 @@ disabled_rules:
   - force_cast
 
 excluded:
-  - Carthage
-  - Pods
+  - ios/Pods
+  - node_modules
+  - test-app/ios/App/Pods
+  - test-app/node_modules

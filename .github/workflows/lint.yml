@@ -1,0 +1,43 @@
+name: Lint
+on:
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+permissions:
+  id-token: write
+  attestations: write
+jobs:
+  All:
+    runs-on: macos-latest
+    permissions:
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install swiftlint
+        run: brew install swiftlint
+      - name: Cache node_modules
+        id: node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            test-app/node_modules
+          key: node-modules
+      - run: npm i
+      - run: npm run lint
+      - run: npm pack
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: package
+          path: '${{ github.workspace }}/*.tgz'
+      - name: Attest
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: '${{ github.workspace }}/*.tgz'

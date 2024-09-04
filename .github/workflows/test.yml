@@ -1,0 +1,139 @@
+name: Test
+on:
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+jobs:
+  Web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Cache node_modules
+        id: node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            test-app/node_modules
+          key: node-modules
+      - name: NPM Install
+        run: npm i
+      - name: Test Web
+        run: npm run verify:web
+  iOS:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+      - uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: '5.10.0'
+      - name: Get Swift Version
+        run: swift --version
+      - name: Get Xcode version
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_15.4.app
+        run: xcodebuild -version
+      - name: Cache Pods
+        id: pods
+        uses: actions/cache@v4
+        with:
+          path: |
+            ios/Pods
+            test-app/ios/App/Pods
+          key: pods
+      - name: Cache Xcode DerivedData
+        uses: irgaly/xcode-cache@v1.7.2
+        with:
+          key: xcode-deriveddata
+          restore-keys: xcode-deriveddata
+      - name: Install Cocoapods
+        run: gem install cocoapods
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Cache node_modules
+        id: node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            test-app/node_modules
+          key: node-modules
+      - name: Pod Install
+        run: cd ios; pod install; cd -
+      - name: NPM Install
+        run: npm i
+      - name: Test iOS
+        env:
+          DEVELOPER_DIR: /Applications/Xcode_15.4.app
+        run: |
+          cd ios
+          xcodebuild \
+          -quiet \
+          -workspace Plugin.xcworkspace \
+          -scheme Plugin \
+          -sdk iphonesimulator \
+          -destination 'platform=iOS Simulator,name=iPhone 15,OS=17.4' \
+          test || exit 1
+  Android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            android/.gradle
+            test-app/android/.gradle
+            ~/.gradle/caches
+          key: gradle
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Cache AVD
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-29
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Cache node_modules
+        id: node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            test-app/node_modules
+          key: node-modules
+      - name: NPM Install
+        run: npm i
+      - name: Test Android
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          working-directory: android/
+          script: ./gradlew clean build test connectedAndroidTest

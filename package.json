@@ -15,8 +15,8 @@
         "verify:web": "npm run build",
         "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
         "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
-        "eslint": "eslint . --ext ts",
-        "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+        "eslint": "npx eslint . --ext ts",
+        "prettier": "prettier \"**/*.{css,html,java}\"",
         "swiftlint": "node-swiftlint",
         "docgen": "docgen --api SecureStoragePluginInterface --output-readme README.md --output-json dist/docs.json",
         "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
@@ -46,12 +46,12 @@
         "eslint-plugin-simple-import-sort": "^12.1.1",
         "eslint-plugin-unused-imports": "^3.2.0",
         "prettier": "^3.3.3",
-        "prettier-plugin-java": "2.1.0",
+        "prettier-plugin-java": "^2.6.4",
         "release-it": "^17.6.0",
         "rimraf": "5.0.1",
         "rollup": "3.25.3",
         "swiftlint": "1.0.2",
-        "typescript": "^5.5.4"
+        "typescript": "5.3.3"
     },
     "peerDependencies": {
         "@capacitor/core": "^5.0.0"

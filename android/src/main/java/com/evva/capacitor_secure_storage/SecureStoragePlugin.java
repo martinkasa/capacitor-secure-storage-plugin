@@ -1,137 +1,138 @@
 package com.evva.capacitor_secure_storage;
 
 import android.content.Context;
-
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-
 import java.nio.charset.StandardCharsets;
 
 @CapacitorPlugin(name = "SecureStoragePlugin")
 public class SecureStoragePlugin extends Plugin {
 
-    private PasswordStorageHelper passwordStorageHelper;
+  private PasswordStorageHelper passwordStorageHelper;
 
-    @Override
-    public void load() {
-        super.load();
-        this.passwordStorageHelper = new PasswordStorageHelper(getContext());
+  @Override
+  public void load() {
+    super.load();
+    this.passwordStorageHelper = new PasswordStorageHelper(getContext());
+  }
+
+  public void loadTextContext(Context context) {
+    this.passwordStorageHelper = new PasswordStorageHelper(context);
+  }
+
+  @PluginMethod
+  public void set(PluginCall call) {
+    String key = call.getString("key");
+    String value = call.getString("value");
+    if (value == null) {
+      value = "";
     }
 
-    public void loadTextContext(Context context) {
-        this.passwordStorageHelper = new PasswordStorageHelper(context);
+    try {
+      call.resolve(this._set(key, value));
+    } catch (Exception exception) {
+      call.reject(exception.getMessage(), exception);
     }
+  }
 
-    @PluginMethod
-    public void set(PluginCall call) {
-        String key = call.getString("key");
-        String value = call.getString("value");
-        if (value == null) {
-            value = "";
-        }
-
-        try {
-            call.resolve(this._set(key, value));
-        } catch (Exception exception) {
-            call.reject(exception.getMessage(), exception);
-        }
+  @PluginMethod
+  public void get(PluginCall call) {
+    String key = call.getString("key");
+    try {
+      call.resolve(this._get(key));
+    } catch (Exception exception) {
+      call.reject(exception.getMessage(), exception);
     }
+  }
 
-    @PluginMethod
-    public void get(PluginCall call) {
-        String key = call.getString("key");
-        try {
-            call.resolve(this._get(key));
-        } catch (Exception exception) {
-            call.reject(exception.getMessage(), exception);
-        }
-    }
+  @PluginMethod
+  public void keys(PluginCall call) {
+    call.resolve(this._keys());
+  }
 
-    @PluginMethod
-    public void keys(PluginCall call) {
-        call.resolve(this._keys());
+  @PluginMethod
+  public void remove(PluginCall call) {
+    String key = call.getString("key");
+    try {
+      if (this.has(key)) {
+        call.resolve(this._remove(key));
+      } else {
+        call.reject("Item with given key does not exist");
+      }
+    } catch (Exception exception) {
+      call.reject(exception.getMessage(), exception);
     }
+  }
 
-    @PluginMethod
-    public void remove(PluginCall call) {
-        String key = call.getString("key");
-        try {
-            if (this.has(key)) {
-                call.resolve(this._remove(key));
-            } else {
-                call.reject("Item with given key does not exist");
-            }
-        } catch (Exception exception) {
-            call.reject(exception.getMessage(), exception);
-        }
+  @PluginMethod
+  public void clear(PluginCall call) {
+    try {
+      call.resolve(this._clear());
+    } catch (Exception exception) {
+      call.reject(exception.getMessage(), exception);
     }
+  }
 
-    @PluginMethod
-    public void clear(PluginCall call) {
-        try {
-            call.resolve(this._clear());
-        } catch (Exception exception) {
-            call.reject(exception.getMessage(), exception);
-        }
-    }
+  @PluginMethod
+  public void getPlatform(PluginCall call) {
+    call.resolve(this._getPlatform());
+  }
 
-    @PluginMethod
-    public void getPlatform(PluginCall call) {
-        call.resolve(this._getPlatform());
-    }
+  public JSObject _set(String key, String value) {
+    this.passwordStorageHelper.setData(
+        key,
+        value.getBytes(StandardCharsets.UTF_8)
+      );
+    JSObject ret = new JSObject();
+    ret.put("value", true);
+    return ret;
+  }
 
-    public JSObject _set(String key, String value) {
-        this.passwordStorageHelper.setData(key, value.getBytes(StandardCharsets.UTF_8));
-        JSObject ret = new JSObject();
-        ret.put("value", true);
-        return ret;
-    }
+  public boolean has(String key) {
+    byte[] buffer = this.passwordStorageHelper.getData(key);
+    return buffer != null;
+  }
 
-    public boolean has(String key) {
-        byte[] buffer = this.passwordStorageHelper.getData(key);
-        return buffer != null;
+  public JSObject _get(String key) throws Exception {
+    byte[] buffer = this.passwordStorageHelper.getData(key);
+    if (buffer != null) {
+      String value = new String(buffer, StandardCharsets.UTF_8);
+      JSObject ret = new JSObject();
+      ret.put("value", value);
+      return ret;
+    } else {
+      throw new Exception("Item with given key does not exist");
     }
+  }
 
-    public JSObject _get(String key) throws Exception {
-        byte[] buffer = this.passwordStorageHelper.getData(key);
-        if (buffer != null) {
-            String value = new String(buffer, StandardCharsets.UTF_8);
-            JSObject ret = new JSObject();
-            ret.put("value", value);
-            return ret;
-        } else {
-            throw new Exception("Item with given key does not exist");
-        }
-    }
+  public JSObject _keys() {
+    String[] keys = this.passwordStorageHelper.keys();
+    JSObject ret = new JSObject();
+    ret.put("value", JSArray.from(keys));
+    return ret;
+  }
 
-    public JSObject _keys() {
-        String[] keys = this.passwordStorageHelper.keys();
-        JSObject ret = new JSObject();
-        ret.put("value", JSArray.from(keys));
-        return ret;
-    }
+  public JSObject _remove(String key) {
+    this.passwordStorageHelper.remove(key);
+    JSObject ret = new JSObject();
+    ret.put("value", true);
+    return ret;
+  }
 
-    public JSObject _remove(String key) {
-        this.passwordStorageHelper.remove(key);
-        JSObject ret = new JSObject();
-        ret.put("value", true);
-        return ret;
-    }
+  public JSObject _clear() {
+    this.passwordStorageHelper.clear();
+    JSObject ret = new JSObject();
+    ret.put("value", true);
+    return ret;
+  }
 
-    public JSObject _clear() {
-        this.passwordStorageHelper.clear();
-        JSObject ret = new JSObject();
-        ret.put("value", true);
-        return ret;
-    }
-
-    public JSObject _getPlatform() {
-        JSObject ret = new JSObject();
-        ret.put("value", "android");
-        return ret;
-    }
+  public JSObject _getPlatform() {
+    JSObject ret = new JSObject();
+    ret.put("value", "android");
+    return ret;
+  }
 }

@@ -1,8 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title> Blank </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -17,16 +15,15 @@
     <ion-button (click)="showPlatform()">Show platform</ion-button>
   </div>
   <div class="row">
-    Key: <input type="text" #getKey>
+    Key: <input type="text" #getKey />
     <ion-button (click)="get(getKey.value)">Get</ion-button>
   </div>
   <div class="row">
-    Key: <input type="text" #setKey>
-    Value: <input type="text" #setValue>
+    Key: <input type="text" #setKey /> Value: <input type="text" #setValue />
     <ion-button (click)="set(setKey.value, setValue.value)">Set</ion-button>
   </div>
   <div class="row">
-    Key: <input type="text" #removeKey>
+    Key: <input type="text" #removeKey />
     <ion-button (click)="remove(removeKey.value)">Remove</ion-button>
   </div>
   <div class="row">
