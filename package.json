@@ -1,6 +1,6 @@
 {
     "name": "@evva-sfw/capacitor-secure-storage-plugin",
-    "version": "1.0.2",
+    "version": "1.0.1",
     "description": "Securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information (strings) on iOS & Android",
     "main": "dist/plugin.cjs.js",
     "type": "module",
