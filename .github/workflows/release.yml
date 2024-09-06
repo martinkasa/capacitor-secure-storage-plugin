@@ -38,7 +38,7 @@ jobs:
         with:
           path: |
             node_modules
-            example/node_modules
+            test-app/node_modules
             .yarn/cache
           key: node-modules
       - name: Import GPG key
@@ -62,7 +62,7 @@ jobs:
           git config user.email "${{ steps.import-gpg.outputs.email }}"
 
       - name: Install dependencies
-        run: corepack enable && yarn install
+        run: npm i
 
       - name: Authenticate with registry
         run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
