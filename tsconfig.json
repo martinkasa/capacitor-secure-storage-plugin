@@ -6,9 +6,9 @@
         "inlineSources": true,
         "lib": [
             "dom",
-            "ESNext"
+            "ES2022"
         ],
-        "module": "ESNext",
+        "module": "ES2022",
         "moduleResolution": "node",
         "noFallthroughCasesInSwitch": true,
         "noUnusedLocals": true,
@@ -17,7 +17,7 @@
         "pretty": true,
         "sourceMap": true,
         "strict": true,
-        "target": "ESNext"
+        "target": "ES2022"
     },
     "files": [
         "src/index.ts"

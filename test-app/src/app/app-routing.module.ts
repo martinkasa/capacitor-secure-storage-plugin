@@ -1,15 +1,17 @@
-import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, type Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { PreloadAllModules, RouterModule, type Routes } from "@angular/router";
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: async () => (await import('./home/home.module')).HomePageModule,
+    path: "home",
+    loadChildren: async () => {
+      return (await import("./home/home.module")).HomePageModule;
+    },
   },
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
+    path: "**",
+    redirectTo: "home",
+    pathMatch: "full",
   },
 ];
 

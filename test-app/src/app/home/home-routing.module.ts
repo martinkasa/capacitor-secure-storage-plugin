@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, type Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule, type Routes } from "@angular/router";
 
-import { HomePage } from './home.page';
+import { HomePageComponent } from "./home.page";
 
 const routes: Routes = [
   {
-    path: '',
-    component: HomePage,
+    path: "",
+    component: HomePageComponent,
   },
 ];
 
@@ -14,4 +14,6 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class HomePageRoutingModule {}
+export class HomePageRoutingModule {
+  constructor() {}
+}
