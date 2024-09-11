@@ -1,9 +1,9 @@
-import { WebPlugin } from '@capacitor/core';
+import { WebPlugin } from "@capacitor/core";
 
-import type { SecureStoragePluginInterface } from './definitions';
+import type { SecureStoragePluginInterface } from "./definitions";
 
 export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePluginInterface {
-  PREFIX = 'cap_sec_';
+  PREFIX = "cap_sec_";
 
   async get(options: { key: string }): Promise<{ value: string }> {
     const value = localStorage.getItem(this.addPrefix(options.key));
@@ -11,7 +11,7 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
       ? {
           value: atob(value),
         }
-      : await Promise.reject(new Error('Item with given key does not exist'));
+      : await Promise.reject(new Error("Item with given key does not exist"));
   }
 
   async set(options: { key: string; value: string }): Promise<{ value: boolean }> {
@@ -24,7 +24,7 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
       localStorage.removeItem(this.addPrefix(options.key));
       return { value: true };
     } else {
-      throw new Error('Item with given key does not exist');
+      throw new Error("Item with given key does not exist");
     }
   }
 
@@ -45,9 +45,9 @@ export class SecureStoragePluginWeb extends WebPlugin implements SecureStoragePl
   }
 
   async getPlatform(): Promise<{ value: string }> {
-    return { value: 'web' };
+    return { value: "web" };
   }
 
   private readonly addPrefix = (key: string): string => this.PREFIX + key;
-  private readonly removePrefix = (key: string): string => key.replace(this.PREFIX, '');
+  private readonly removePrefix = (key: string): string => key.replace(this.PREFIX, "");
 }

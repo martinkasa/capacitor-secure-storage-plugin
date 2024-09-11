@@ -9,7 +9,7 @@ end
 
 target 'Plugin' do
   capacitor_pods
-  
+
   pod 'SwiftLint', '~> 0.54.0'
   pod 'SwiftFormat/CLI', '~> 0.49'
   pod 'SimpleKeychain', '~> 1.1.0'
@@ -17,4 +17,12 @@ end
 
 target 'PluginTests' do
   capacitor_pods
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "15.0"
+    end
+  end
 end

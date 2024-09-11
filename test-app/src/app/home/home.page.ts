@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
-import { SecureStoragePlugin } from '@evva-sfw/capacitor-secure-storage-plugin';
-import { type AlertController } from '@ionic/angular';
+import { Component } from "@angular/core";
+import { SecureStoragePlugin } from "@evva-sfw/capacitor-secure-storage-plugin";
+import { AlertController } from "@ionic/angular";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: "app-home",
+  templateUrl: "home.page.html",
+  styleUrls: ["home.page.scss"],
 })
-export class HomePage {
+export class HomePageComponent {
   constructor(private readonly alertController: AlertController) {}
 
   async showPlatform(): Promise<void> {
@@ -39,9 +39,9 @@ export class HomePage {
 
   async showResult(message): Promise<void> {
     const a = await this.alertController.create({
-      header: 'Result',
+      header: "Result",
       message: JSON.stringify(message),
-      buttons: ['OK'],
+      buttons: ["OK"],
     });
     await a.present();
   }
@@ -75,9 +75,9 @@ export class HomePage {
 
   async showError(error): Promise<void> {
     const a = await this.alertController.create({
-      header: 'Error',
+      header: "Error",
       message: error,
-      buttons: ['OK'],
+      buttons: ["OK"],
     });
     await a.present();
   }

@@ -1,19 +1,19 @@
 PODS:
-  - Capacitor (5.0.3):
+  - Capacitor (6.1.2):
     - CapacitorCordova
-  - CapacitorApp (5.0.2):
+  - CapacitorApp (6.0.1):
     - Capacitor
-  - CapacitorCordova (5.0.3)
-  - CapacitorHaptics (5.0.2):
+  - CapacitorCordova (6.1.2)
+  - CapacitorHaptics (6.0.1):
     - Capacitor
-  - CapacitorKeyboard (5.0.2):
+  - CapacitorKeyboard (6.0.2):
     - Capacitor
-  - CapacitorSecureStoragePlugin (0.8.1):
+  - CapacitorStatusBar (6.0.1):
     - Capacitor
-    - SwiftKeychainWrapper
-  - CapacitorStatusBar (5.0.2):
+  - EvvaSfwCapacitorSecureStoragePlugin (1.0.2):
     - Capacitor
-  - SwiftKeychainWrapper (4.0.1)
+    - SimpleKeychain
+  - SimpleKeychain (1.1.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -21,12 +21,12 @@ DEPENDENCIES:
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
-  - CapacitorSecureStoragePlugin (from `../../..`)
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
+  - EvvaSfwCapacitorSecureStoragePlugin (from `../../..`)
 
 SPEC REPOS:
   trunk:
-    - SwiftKeychainWrapper
+    - SimpleKeychain
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -39,21 +39,21 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
     :path: "../../node_modules/@capacitor/keyboard"
-  CapacitorSecureStoragePlugin:
-    :path: "../../.."
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
+  EvvaSfwCapacitorSecureStoragePlugin:
+    :path: "../../.."
 
 SPEC CHECKSUMS:
-  Capacitor: 304a960e431f9e6f78556554ca71c41c1b2b9680
-  CapacitorApp: 28fef1fd75b2b3686e875216806fb8416d421097
-  CapacitorCordova: def732a63679698df6fb392bbe6d269a0b61e937
-  CapacitorHaptics: 864585542a435bd41eaabf7f30d9ff5ec03024d3
-  CapacitorKeyboard: e628d4e66d621c69e449945ebabded17c5b9c2e8
-  CapacitorSecureStoragePlugin: e616d090177dfbf9754dd1bdb515a8f23855bf4e
-  CapacitorStatusBar: 48f2899f6846cc7d8431b251ebfc58e1c10e3d58
-  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
+  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
+  CapacitorApp: 0bc633b4eae40a1f32cd2834788fad3bc42da6a1
+  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
+  CapacitorHaptics: fe689ade56ef20ec9b041a753c6da70c5d8ec9a9
+  CapacitorKeyboard: 2700f9b18687be021e28b5a09b59eb151a46d5e0
+  CapacitorStatusBar: b81d4fb5d4e0064c712018071b3ab4b810b39a63
+  EvvaSfwCapacitorSecureStoragePlugin: a03103b6447399c38c57750851ce5fc877814d7c
+  SimpleKeychain: f8707c8e97b38c6a6e687b17732afc9bcef06439
 
-PODFILE CHECKSUM: 53a893f470c90adbebe5ab3ccd0710e1648936ac
+PODFILE CHECKSUM: d799b97a1682457908b180ad71026b4c210a08aa
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2
