@@ -4,7 +4,7 @@
         "after:bump": [
             "rm -f *.tgz",
             "yarn pack --out '%s_%v.tgz'",
-            "npx auto-changelog -p"
+            "npx auto-changelog -c .auto-changelog"
         ]
     },
     "git": {
