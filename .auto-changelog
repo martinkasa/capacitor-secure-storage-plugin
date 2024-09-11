@@ -1,0 +1,9 @@
+{
+  "package": true,
+  "output": "CHANGELOG.md",
+  "template": "compact",
+  "unreleased": false,
+  "commitLimit": false,
+  "ignoreCommitPattern": "^(?!.*\\(\\#\\d+\\)$).*",
+  "releaseSummary": false
+}
