@@ -48,15 +48,12 @@ jobs:
         with:
           path: |
             ios/Pods
-            test-app/ios/App/Pods
           key: pods
       - name: Cache Xcode DerivedData
         uses: irgaly/xcode-cache@v1.7.2
         with:
           key: xcode-deriveddata
           restore-keys: xcode-deriveddata
-      - name: Install Cocoapods
-        run: gem install cocoapods
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
@@ -67,7 +64,6 @@ jobs:
         with:
           path: |
             node_modules
-            test-app/node_modules
           key: node-modules
       - name: Pod Install
         run: cd ios; pod install; cd -
@@ -127,7 +123,6 @@ jobs:
         with:
           path: |
             node_modules
-            test-app/node_modules
           key: node-modules
       - name: NPM Install
         run: npm i
