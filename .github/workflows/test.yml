@@ -73,8 +73,6 @@ jobs:
         run: cd ios; pod install; cd -
       - name: NPM Install
         run: npm i
-      - name: Capacitor Sync
-        run: npm run build && npx cap sync ios
       - name: Test iOS
         env:
           DEVELOPER_DIR: /Applications/Xcode_15.4.app
@@ -133,8 +131,6 @@ jobs:
           key: node-modules
       - name: NPM Install
         run: npm i
-      - name: Capacitor Sync
-        run: npm run build && npx cap sync android
       - name: Test Android
         uses: reactivecircus/android-emulator-runner@v2
         with:

@@ -16,8 +16,6 @@ class PluginTests: XCTestCase {
         let key = "key"
         let value = "Modified"
 
-        let keychain = self.setupDedicatedKeychain("cap_sec")
-
         let plugin = SecureStoragePlugin()
 
         let call = CAPPluginCall(callbackId: "test", options: [
