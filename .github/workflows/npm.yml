@@ -1,0 +1,29 @@
+name: npm
+on:
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+jobs:
+  npm_check-package-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Cache node_modules
+        id: node-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            test-app/node_modules
+          key: node-modules
+      - name: NPM Install
+        run: npm i
+      - name: Check if git is clean
+        uses: CatChen/check-git-status-action@v1
+        with:
+          fail-if-not-clean: true
