@@ -62,9 +62,11 @@
     "files": [
         "android/src/main/",
         "android/build.gradle",
+        "android/variables.gradle",
         "dist/",
         "ios/Plugin/",
-        "EvvaSfwCapacitorSecureStoragePlugin.podspec"
+        "EvvaSfwCapacitorSecureStoragePlugin.podspec",
+        "LICENSE"
     ],
     "keywords": [
         "capacitor",
