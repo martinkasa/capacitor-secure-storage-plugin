@@ -65,10 +65,10 @@ jobs:
           path: |
             node_modules
           key: node-modules
-      - name: Pod Install
-        run: cd ios; pod install; cd -
       - name: NPM Install
         run: npm i
+      - name: Pod Install
+        run: cd ios; pod install; cd -
       - name: Test iOS
         env:
           DEVELOPER_DIR: /Applications/Xcode_15.4.app

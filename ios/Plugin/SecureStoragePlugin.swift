@@ -11,45 +11,70 @@ public class SecureStoragePlugin: CAPPlugin {
 
     @objc
     func set(_ call: CAPPluginCall) {
-        let key = call.getString("key") ?? ""
-        let value = call.getString("value") ?? ""
-        let accessibility = self.getAccessibility(a: call.getValue("accessibility") as? String)
+        let key = call.getString("key")
+        let value = call.getString("value")
 
-        let simpleKeychain = SimpleKeychain(service: "cap_sec", accessibility: accessibility)
-
-        do {
-            try simpleKeychain.set(value, forKey: key)
-        } catch {
-            call.reject("Error setting value for key: '\(key)'")
+        if key == nil || value == nil {
+            return call.reject("Invalid key or value")
         }
 
-        call.resolve(["value": value])
+        let accessibility = self.getAccessibility(a: call.getValue("accessibility") as? String)
+        let group = call.getString("group")
+        let synchronizable = call.getBool("isSynchronizable") ?? false
+
+        let simpleKeychain = SimpleKeychain(
+            service: "cap_sec",
+            accessGroup: group,
+            accessibility: accessibility,
+            synchronizable: synchronizable
+        )
+
+        do {
+            try simpleKeychain.set(value!, forKey: key!)
+        } catch {
+            call.reject("Error setting value for key: '\(key!)'")
+        }
+
+        call.resolve(["value": true])
     }
 
     @objc
     func get(_ call: CAPPluginCall) {
-        let key = call.getString("key") ?? ""
+        let key = call.getString("key")
+
+        if key == nil {
+            return call.reject("Invalid key")
+        }
+
         let accessibility = self.getAccessibility(a: call.getValue("accessibility") as? String)
+        let group = call.getString("group")
+        let synchronizable = call.getBool("isSynchronizable") ?? false
 
-        let simpleKeychain = SimpleKeychain(service: "cap_sec", accessibility: accessibility)
+        let simpleKeychain = SimpleKeychain(
+            service: "cap_sec",
+            accessGroup: group,
+            accessibility: accessibility,
+            synchronizable: synchronizable
+        )
 
-        if let hasItem = try? simpleKeychain.hasItem(forKey: key), hasItem {
-            let value = try? simpleKeychain.string(forKey: key)
+        if let hasItem = try? simpleKeychain.hasItem(forKey: key!), hasItem {
+            let value = try? simpleKeychain.string(forKey: key!)
             if let val = value, val != "" {
                 call.resolve(["value": val])
             } else {
-                call.reject("Error getting value for key: '\(key)'")
+                call.reject("Error getting value for key: '\(key!)'")
             }
         } else {
-            call.reject("Error key doesn't exist: '\(key)'")
+            call.reject("Error key doesn't exist: '\(key!)'")
         }
     }
 
     @objc
     func keys(_ call: CAPPluginCall) {
         let accessibility = self.getAccessibility(a: call.getValue("accessibility") as? String)
+        let group = call.getString("group")
 
-        let simpleKeychain = SimpleKeychain(service: "cap_sec", accessibility: accessibility)
+        let simpleKeychain = SimpleKeychain(service: "cap_sec", accessGroup: group, accessibility: accessibility)
 
         if let keys = try? simpleKeychain.keys() {
             call.resolve([
@@ -62,32 +87,55 @@ public class SecureStoragePlugin: CAPPlugin {
 
     @objc
     func remove(_ call: CAPPluginCall) {
-        let key = call.getString("key") ?? ""
+        let key = call.getString("key")
+
+        if key == nil {
+            return call.reject("Invalid key")
+        }
+
         let accessibility = self.getAccessibility(a: call.getValue("accessibility") as? String)
+        let group = call.getString("group")
+        let synchronizable = call.getBool("isSynchronizable") ?? false
 
-        let simpleKeychain = SimpleKeychain(service: "cap_sec", accessibility: accessibility)
+        let simpleKeychain = SimpleKeychain(
+            service: "cap_sec",
+            accessGroup: group,
+            accessibility: accessibility,
+            synchronizable: synchronizable
+        )
 
-        if let hasItem = try? simpleKeychain.hasItem(forKey: key), hasItem {
+        if let hasItem = try? simpleKeychain.hasItem(forKey: key!), hasItem {
             do {
-                try simpleKeychain.deleteItem(forKey: key)
-                call.resolve()
+                try simpleKeychain.deleteItem(forKey: key!)
+                call.resolve([
+                    "value": true,
+                ])
             } catch {
-                call.reject("Error removing key: \(key)")
+                call.reject("Error removing key: \(key!)")
             }
         } else {
-            call.reject("Error key doesn't exist: '\(key)'")
+            call.reject("Error key doesn't exist: '\(key!)'")
         }
     }
 
     @objc
     func clear(_ call: CAPPluginCall) {
         let accessibility = self.getAccessibility(a: call.getValue("accessibility") as? String)
+        let group = call.getString("group")
+        let synchronizable = call.getBool("isSynchronizable") ?? false
 
-        let simpleKeychain = SimpleKeychain(service: "cap_sec", accessibility: accessibility)
+        let simpleKeychain = SimpleKeychain(
+            service: "cap_sec",
+            accessGroup: group,
+            accessibility: accessibility,
+            synchronizable: synchronizable
+        )
 
         do {
             try simpleKeychain.deleteAll()
-            call.resolve()
+            call.resolve([
+                "value": true,
+            ])
         } catch {
             call.reject("Error removing all keys")
         }
