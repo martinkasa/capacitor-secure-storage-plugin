@@ -19,6 +19,6 @@ export interface SecureStoragePluginInterface {
     isSynchronizable?: boolean;
   }) => Promise<{ value: boolean }>;
   clear: () => Promise<{ value: boolean }>;
-  keys: () => Promise<{ value: string[] }>;
+  keys: (options: { accessibility?: string; group?: string }) => Promise<{ value: string[] }>;
   getPlatform: () => Promise<{ value: string }>;
 }
