@@ -35,7 +35,7 @@ public class SecureStoragePlugin: CAPPlugin {
             call.reject("Error setting value for key: '\(key!)'")
         }
 
-        call.resolve(["value": value!])
+        call.resolve(["value": true])
     }
 
     @objc
@@ -107,7 +107,9 @@ public class SecureStoragePlugin: CAPPlugin {
         if let hasItem = try? simpleKeychain.hasItem(forKey: key!), hasItem {
             do {
                 try simpleKeychain.deleteItem(forKey: key!)
-                call.resolve()
+                call.resolve([
+                    "value": true,
+                ])
             } catch {
                 call.reject("Error removing key: \(key!)")
             }
@@ -131,7 +133,9 @@ public class SecureStoragePlugin: CAPPlugin {
 
         do {
             try simpleKeychain.deleteAll()
-            call.resolve()
+            call.resolve([
+                "value": true,
+            ])
         } catch {
             call.reject("Error removing all keys")
         }
