@@ -22,8 +22,8 @@ class PluginTests: XCTestCase {
             "key": key,
             "value": value,
         ], success: { result, _ in
-            let resultValue = result!.data?["value"] as? String
-            XCTAssertEqual(resultValue, value)
+            let resultValue = result!.data?["value"] as? Bool
+            XCTAssertEqual(resultValue, true)
         }, error: { _ in
             XCTFail("Error shouldn't have been called")
         })

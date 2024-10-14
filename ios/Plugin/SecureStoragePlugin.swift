@@ -108,7 +108,7 @@ public class SecureStoragePlugin: CAPPlugin {
             do {
                 try simpleKeychain.deleteItem(forKey: key!)
                 call.resolve([
-                    "value": true
+                    "value": true,
                 ])
             } catch {
                 call.reject("Error removing key: \(key!)")
@@ -134,7 +134,7 @@ public class SecureStoragePlugin: CAPPlugin {
         do {
             try simpleKeychain.deleteAll()
             call.resolve([
-                "value": true
+                "value": true,
             ])
         } catch {
             call.reject("Error removing all keys")
