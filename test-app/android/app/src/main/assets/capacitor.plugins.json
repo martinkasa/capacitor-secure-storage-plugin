@@ -16,7 +16,7 @@
 		"classpath": "com.capacitorjs.plugins.statusbar.StatusBarPlugin"
 	},
 	{
-		"pkg": "@evva-sfw/capacitor-secure-storage-plugin",
+		"pkg": "@evva/capacitor-secure-storage-plugin",
 		"classpath": "com.evva.capacitor_secure_storage.SecureStoragePlugin"
 	}
 ]
