@@ -37,7 +37,7 @@ export class HomePageComponent {
     }
   }
 
-  async showResult(message): Promise<void> {
+  async showResult(message: any): Promise<void> {
     const a = await this.alertController.create({
       header: "Result",
       message: JSON.stringify(message),

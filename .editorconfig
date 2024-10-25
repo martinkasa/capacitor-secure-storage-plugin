@@ -14,6 +14,9 @@ ij_java_imports_layout = $*, |, javax.**, java.**, |, *
 [*.gradle]
 indent_size = 4
 
+[*.swift]
+indent_size = 4
+
 [{*.json,*.jschema}]
 indent_size = 4
 
