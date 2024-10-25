@@ -1,19 +1,14 @@
-<p align="center">
-  <h1 align="center">Capacitor Secure Storage Plugin</h1>
-</p>
+# Capacitor Secure Storage Plugin
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/@evva-sfw/capacitor-secure-storage-plugin">
-    <img alt="NPM Version" src="https://img.shields.io/npm/v/%40evva-sfw%2Fcapacitor-secure-storage-plugin"></a>
-  <a href="https://www.npmjs.com/package/@evva-sfw/capacitor-secure-storage-plugin">
-  <img alt="NPM Downloads" src="https://img.shields.io/npm/dy/%40evva-sfw%2Fcapacitor-secure-storage-plugin"></a>
-  <img alt="GitHub package.json dynamic" src="https://img.shields.io/github/package-json/packageManager/evva-sfw/capacitor-secure-storage-plugin">
-  <img alt="NPM Unpacked Size (with version)" src="https://img.shields.io/npm/unpacked-size/%40evva-sfw%2Fcapacitor-secure-storage-plugin/latest">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/evva-sfw/capacitor-secure-storage-plugin">
-  <a href="https://github.com/evva-sfw/capacitor-secure-storage-plugin/actions"><img alt="GitHub branch check runs" src="https://img.shields.io/github/check-runs/evva-sfw/capacitor-secure-storage-plugin/main"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-EVVA_License-yellow.svg?color=fce500&logo=data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjY0MCIgaGVpZ2h0PSIxMDI0IiB2aWV3Qm94PSIwIDAgNjQwIDEwMjQiPgo8ZyBpZD0iaWNvbW9vbi1pZ25vcmUiPgo8L2c+CjxwYXRoIGZpbGw9IiNmY2U1MDAiIGQ9Ik02MjIuNDIzIDUxMS40NDhsLTMzMS43NDYtNDY0LjU1MmgtMjg4LjE1N2wzMjkuODI1IDQ2NC41NTItMzI5LjgyNSA0NjYuNjY0aDI3NS42MTJ6Ij48L3BhdGg+Cjwvc3ZnPgo=" alt="EVVA License"></a>
+[![NPM Version](https://img.shields.io/npm/v/%40evva%2Fcapacitor-secure-storage-plugin)](https://www.npmjs.com/package/@evva/capacitor-secure-storage-plugin)
+[![NPM Downloads](https://img.shields.io/npm/dy/%40evva%2Fcapacitor-secure-storage-plugin)](https://www.npmjs.com/package/@evva/capacitor-secure-storage-plugin)
+![NPM Unpacked Size (with version)](https://img.shields.io/npm/unpacked-size/%40evva%2Fcapacitor-secure-storage-plugin/latest)
+![GitHub last commit](https://img.shields.io/github/last-commit/evva-sfw/capacitor-secure-storage-plugin)
+[![GitHub branch check runs](https://img.shields.io/github/check-runs/evva-sfw/capacitor-secure-storage-plugin/main)]([URL](https://github.com/evva-sfw/capacitor-secure-storage-plugin/actions))
+[![EVVA License](https://img.shields.io/badge/license-EVVA_License-yellow.svg?color=fce500&logo=data:image/svg+xml;base64,PCEtLSBHZW5lcmF0ZWQgYnkgSWNvTW9vbi5pbyAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjY0MCIgaGVpZ2h0PSIxMDI0IiB2aWV3Qm94PSIwIDAgNjQwIDEwMjQiPgo8ZyBpZD0iaWNvbW9vbi1pZ25vcmUiPgo8L2c+CjxwYXRoIGZpbGw9IiNmY2U1MDAiIGQ9Ik02MjIuNDIzIDUxMS40NDhsLTMzMS43NDYtNDY0LjU1MmgtMjg4LjE1N2wzMjkuODI1IDQ2NC41NTItMzI5LjgyNSA0NjYuNjY0aDI3NS42MTJ6Ij48L3BhdGg+Cjwvc3ZnPgo=)](LICENSE)
 
-</p>
+> [!IMPORTANT]
+> This package was renamed please use the new package name! __@evva/capacitor-secure-storage-plugin__
 
 Capacitor plugin for storing string values securly on iOS and Android.
 
@@ -22,13 +17,13 @@ Capacitor plugin for storing string values securly on iOS and Android.
 ### Capacitor 6
 
 ```
-npm install @evva-sfw/capacitor-secure-storage-plugin
+npm install @evva/capacitor-secure-storage-plugin
 ```
 
 ### Capacitor 5
 
 ```
-npm install @evva-sfw/capacitor-secure-storage-plugin@1.0.2
+npm install @evva/capacitor-secure-storage-plugin@1.0.2
 ```
 
 ### Older versions
@@ -43,7 +38,7 @@ For version lower than 5 please refer to https://github.com/martinkasa/capacitor
 ## Usage
 
 ```typescript
-import { SecureStoragePlugin } from '@evva-sfw/capacitor-secure-storage-plugin';
+import { SecureStoragePlugin } from '@evva/capacitor-secure-storage-plugin';
 ```
 
 ## Methods

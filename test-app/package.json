@@ -27,7 +27,7 @@
         "@capacitor/keyboard": "^6.0.2",
         "@capacitor/status-bar": "^6.0.1",
         "@ionic/angular": "^7.8.6",
-        "@evva-sfw/capacitor-secure-storage-plugin": "file:..",
+        "@evva/capacitor-secure-storage-plugin": "file:..",
         "rxjs": "~7.8.1",
         "tslib": "^2.7.0",
         "zone.js": "~0.13.3"
