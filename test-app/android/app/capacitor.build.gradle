@@ -13,7 +13,7 @@ dependencies {
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
     implementation project(':capacitor-status-bar')
-    implementation project(':evva-sfw-capacitor-secure-storage-plugin')
+    implementation project(':evva-capacitor-secure-storage-plugin')
 
 }
 
