@@ -40,68 +40,6 @@ For version lower than 5 please refer to https://github.com/martinkasa/capacitor
 ```typescript
 import { SecureStoragePlugin } from '@evva/capacitor-secure-storage-plugin';
 ```
-
-## Methods
-
-  ```ts
-
-  get(options: { key: string }): Promise<{ value: string }>
-
-  ```
-
-  > **Note**
-  > if item with specified key does not exist, throws an Error
-
-  ---
-
-  ```ts
-
-  set(options: { key: string; value: string }): Promise<{ value: boolean }>
-
-  ```
-
-  > **Note**
-  > return true in case of success otherwise throws an error
-
-  ---
-
-  ```ts
-
-  remove(options: { key: string }): Promise<{ value: boolean }>
-
-  ```
-
-  > **Note**
-  > return true in case of success otherwise throws an error
-
-  ---
-
-```ts
-keys(): Promise<{ value: string[] }>
-```
-
----
-
-```ts
-
-  clear(): Promise<{ value: boolean }>
-
-  ```
-
-  > **Note**
-  > return true in case of success otherwise throws an error
-
-  ---
-
-  ```ts
-
-  getPlatform(): Promise<{ value: string }>
-
-  ```
-
-  > **Note**
-  > return returns which implementation is used - one of 'web', 'ios' or 'android'
-
 ## Example
 
 ```ts
@@ -128,6 +66,33 @@ async getUsername(key: string) {
   return await SecureStoragePlugin.get({ key });
 }
 ```
+
+## API
+
+<docgen-index>
+
+* [Interfaces](#interfaces)
+
+</docgen-index>
+
+<docgen-api>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### Interfaces
+
+
+#### SecureStoragePluginInterface
+
+| Prop              | Type                                                                                                                                                                 |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`get`**         | <code>(options: { key: string; accessibility?: string; group?: string; isSynchronizable?: boolean; }) =&gt; Promise&lt;{ value: string; }&gt;</code>                 |
+| **`set`**         | <code>(options: { key: string; value: string; accessibility?: string; group?: string; isSynchronizable?: boolean; }) =&gt; Promise&lt;{ value: boolean; }&gt;</code> |
+| **`remove`**      | <code>(options: { key: string; accessibility?: string; group?: string; isSynchronizable?: boolean; }) =&gt; Promise&lt;{ value: boolean; }&gt;</code>                |
+| **`clear`**       | <code>(options?: { accessibility?: string; group?: string; isSynchronizable?: boolean; }) =&gt; Promise&lt;{ value: boolean; }&gt;</code>                            |
+| **`keys`**        | <code>(options?: { accessibility?: string; group?: string; }) =&gt; Promise&lt;{ value: string[]; }&gt;</code>                                                       |
+| **`getPlatform`** | <code>() =&gt; Promise&lt;{ value: string; }&gt;</code>                                                                                                              |
+
+</docgen-api>
 
 ## Platform specific information
 

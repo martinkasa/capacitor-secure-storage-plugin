@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "rootDir": "src",
         "allowUnreachableCode": false,
         "declaration": true,
         "esModuleInterop": true,

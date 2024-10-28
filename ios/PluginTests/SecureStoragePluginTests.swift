@@ -21,6 +21,7 @@ class PluginTests: XCTestCase {
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key,
             "value": value,
+            "accessibility": "afterFirstUnlock",
         ], success: { result, _ in
             let resultValue = result!.data?["value"] as? Bool
             XCTAssertEqual(resultValue, true)
@@ -42,6 +43,7 @@ class PluginTests: XCTestCase {
 
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key,
+            "accessibility": "afterFirstUnlock",
         ], success: { result, _ in
             let resultValue = result!.data?["value"] as? String
             XCTAssertEqual(value, resultValue)
@@ -129,6 +131,7 @@ class PluginTests: XCTestCase {
         // Remove key after setting
         var call = CAPPluginCall(callbackId: "test", options: [
             "key": key,
+            "accessibility": "afterFirstUnlock",
         ], success: { result, _ in
             XCTAssertNotNil(result)
         }, error: { _ in
@@ -140,6 +143,7 @@ class PluginTests: XCTestCase {
         // Remove already removed key
         call = CAPPluginCall(callbackId: "test", options: [
             "key": key,
+            "accessibility": "afterFirstUnlock",
         ], success: { _, _ in
             XCTFail("Error shouldn't have been called")
         }, error: { err in
@@ -161,6 +165,7 @@ class PluginTests: XCTestCase {
 
         let call = CAPPluginCall(callbackId: "test", options: [
             "key": key,
+            "accessibility": "afterFirstUnlock",
         ], success: { _, _ in
             let dedicatedValue = try? keychain.string(forKey: key)
             XCTAssertNil(dedicatedValue)
