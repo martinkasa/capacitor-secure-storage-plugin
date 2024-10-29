@@ -10,10 +10,10 @@ PODS:
     - Capacitor
   - CapacitorStatusBar (6.0.1):
     - Capacitor
-  - EvvaSfwCapacitorSecureStoragePlugin (1.0.2):
+  - EvvaCapacitorSecureStoragePlugin (3.0.0):
     - Capacitor
     - SimpleKeychain
-  - SimpleKeychain (1.1.0)
+  - SimpleKeychain (1.2.0)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -22,7 +22,7 @@ DEPENDENCIES:
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
-  - EvvaSfwCapacitorSecureStoragePlugin (from `../../..`)
+  - EvvaCapacitorSecureStoragePlugin (from `../../..`)
 
 SPEC REPOS:
   trunk:
@@ -41,7 +41,7 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/keyboard"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
-  EvvaSfwCapacitorSecureStoragePlugin:
+  EvvaCapacitorSecureStoragePlugin:
     :path: "../../.."
 
 SPEC CHECKSUMS:
@@ -51,9 +51,9 @@ SPEC CHECKSUMS:
   CapacitorHaptics: fe689ade56ef20ec9b041a753c6da70c5d8ec9a9
   CapacitorKeyboard: 2700f9b18687be021e28b5a09b59eb151a46d5e0
   CapacitorStatusBar: b81d4fb5d4e0064c712018071b3ab4b810b39a63
-  EvvaSfwCapacitorSecureStoragePlugin: a03103b6447399c38c57750851ce5fc877814d7c
-  SimpleKeychain: f8707c8e97b38c6a6e687b17732afc9bcef06439
+  EvvaCapacitorSecureStoragePlugin: 097b7b14acf335a1db961ebe532790527ffc4c0f
+  SimpleKeychain: 768cf43ae778b1c21816e94dddf01bb8ee96a075
 
-PODFILE CHECKSUM: d799b97a1682457908b180ad71026b4c210a08aa
+PODFILE CHECKSUM: 98d2c61ca6500ddf0da3caeac1446063fe6bb0ff
 
 COCOAPODS: 1.15.2
