@@ -13,7 +13,7 @@ def capacitor_pods
   pod 'CapacitorHaptics', :path => '../../node_modules/@capacitor/haptics'
   pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
-  pod 'EvvaSfwCapacitorSecureStoragePlugin', :path => '../../..'
+  pod 'EvvaCapacitorSecureStoragePlugin', :path => '../../..'
 end
 
 target 'App' do

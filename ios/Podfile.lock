@@ -3,7 +3,7 @@ PODS:
     - CapacitorCordova
   - CapacitorCordova (6.1.2)
   - SimpleKeychain (1.1.0)
-  - SwiftFormat/CLI (0.54.3)
+  - SwiftFormat/CLI (0.54.5)
   - SwiftLint (0.54.0)
 
 DEPENDENCIES:
@@ -29,7 +29,7 @@ SPEC CHECKSUMS:
   Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
   CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
   SimpleKeychain: f8707c8e97b38c6a6e687b17732afc9bcef06439
-  SwiftFormat: 0e575b1d412d27cd5906c59fab64a806ba8f2b8e
+  SwiftFormat: 543a7b1ab4a6ce2d88bd5616a17903446ca3dc5c
   SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
 
 PODFILE CHECKSUM: 8499120bad6cc7ee651b9222220365bc0d3a400a

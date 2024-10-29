@@ -65,7 +65,7 @@
         "android/variables.gradle",
         "dist/",
         "ios/Plugin/",
-        "EvvaSfwCapacitorSecureStoragePlugin.podspec",
+        "EvvaCapacitorSecureStoragePlugin.podspec",
         "LICENSE"
     ],
     "keywords": [
