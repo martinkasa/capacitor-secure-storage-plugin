@@ -242,7 +242,6 @@ public class PasswordStorageHelper {
             Map<String, ?> entries = oldPrefs.getAll();
             for (Map.Entry<String, ?> entry : entries.entrySet()) {
               String key = entry.getKey();
-              String encryptedData = (String) entry.getValue();
               byte[] decryptedData = getData(key);
               if (decryptedData != null) {
                 String decryptedString = new String(decryptedData, StandardCharsets.UTF_8);
