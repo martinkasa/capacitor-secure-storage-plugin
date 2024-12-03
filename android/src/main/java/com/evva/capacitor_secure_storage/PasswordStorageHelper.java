@@ -357,7 +357,7 @@ public class PasswordStorageHelper {
 
       if (isAndroidMOrHigher()) {
         try {
-          String value = new String(data);  // Suponiendo que data es texto plano
+          String value = new String(data, StandardCharsets.UTF_8);
           Editor editor = preferences.edit();
           editor.putString(key, value);
           editor.commit();
