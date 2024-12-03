@@ -274,33 +274,81 @@ public class PasswordStorageHelper {
       KeyStore ks;
       try {
         ks = KeyStore.getInstance(KEYSTORE_PROVIDER_ANDROID_KEYSTORE);
+
+        // Use null to load Keystore with default parameters.
         ks.load(null);
 
+        // Check if Private and Public already keys exists. If so we don't need to generate them again
         PrivateKey privateKey = (PrivateKey) ks.getKey(alias, null);
         if (privateKey != null && ks.getCertificate(alias) != null) {
           PublicKey publicKey = ks.getCertificate(alias).getPublicKey();
           if (publicKey != null) {
+            // All keys are available.
             return true;
           }
         }
-
-        KeyPairGenerator kpGenerator = KeyPairGenerator.getInstance(KEY_ALGORITHM_RSA, KEYSTORE_PROVIDER_ANDROID_KEYSTORE);
-        KeyGenParameterSpec spec = new KeyGenParameterSpec.Builder(alias, KeyProperties.PURPOSE_DECRYPT)
-          .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
-          .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
-          .build();
-        kpGenerator.initialize(spec);
-        kpGenerator.generateKeyPair();
-
-        KeyFactory keyFactory = KeyFactory.getInstance(privateKey.getAlgorithm(), "AndroidKeyStore");
-        KeyInfo keyInfo = keyFactory.getKeySpec(privateKey, KeyInfo.class);
-        boolean isHardwareBacked = keyInfo.isInsideSecureHardware();
-        Log.d(LOG_TAG, "Hardware-backed keystore supported: " + isHardwareBacked);
-
       } catch (Exception e) {
-        Log.e(LOG_TAG, "init(): failed to initialize KeyStore", e);
+        Log.e(LOG_TAG, "init(): failed to get keystore keys");
         return false;
       }
+
+      // Specify the parameters object which will be passed to KeyPairGenerator
+      AlgorithmParameterSpec spec;
+      spec = new KeyGenParameterSpec.Builder(
+        alias,
+        KeyProperties.PURPOSE_DECRYPT
+      )
+        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
+        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+        .build();
+
+      // Initialize a KeyPair generator using the the intended algorithm (in this example, RSA
+      // and the KeyStore. This example uses the AndroidKeyStore.
+      KeyPairGenerator kpGenerator;
+      try {
+        kpGenerator = KeyPairGenerator.getInstance(
+          KEY_ALGORITHM_RSA,
+          KEYSTORE_PROVIDER_ANDROID_KEYSTORE
+        );
+        kpGenerator.initialize(spec);
+        // Generate private/public keys
+        kpGenerator.generateKeyPair();
+      } catch (
+        NoSuchAlgorithmException
+        | InvalidAlgorithmParameterException
+        | NoSuchProviderException e
+      ) {
+        Log.e(LOG_TAG, "init(): failed to generate key pair");
+        return false;
+      }
+
+      // Check if device support Hardware-backed keystore
+      try {
+        boolean isHardwareBackedKeystoreSupported;
+        PrivateKey privateKey = (PrivateKey) ks.getKey(alias, null);
+        KeyChain.isBoundKeyAlgorithm(KeyProperties.KEY_ALGORITHM_RSA);
+        KeyFactory keyFactory = KeyFactory.getInstance(
+          privateKey.getAlgorithm(),
+          "AndroidKeyStore"
+        );
+        KeyInfo keyInfo = keyFactory.getKeySpec(privateKey, KeyInfo.class);
+        isHardwareBackedKeystoreSupported = keyInfo.isInsideSecureHardware();
+        Log.d(
+          LOG_TAG,
+          "init(): hardware-backed keystore supported: " +
+            isHardwareBackedKeystoreSupported
+        );
+      } catch (
+        KeyStoreException
+        | NoSuchAlgorithmException
+        | UnrecoverableKeyException
+        | InvalidKeySpecException
+        | NoSuchProviderException e
+      ) {
+        Log.e(LOG_TAG, "init(): hardware-backed keystore not supported");
+        return false;
+      }
+
       return true;
     }
 
