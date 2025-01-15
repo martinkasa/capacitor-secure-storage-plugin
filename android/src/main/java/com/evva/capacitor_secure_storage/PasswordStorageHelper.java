@@ -113,49 +113,11 @@ public class PasswordStorageHelper {
 
     @Override
     public boolean init(Context context) {
-      SharedPreferences oldPrefs = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-
-      if (isAndroidMOrHigher()) {
-        try {
-          String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-          preferences = EncryptedSharedPreferences.create(
-            PREFERENCES_FILE,
-            masterKeyAlias,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-          );
-
-          if (needsMigration(oldPrefs)) {
-            SharedPreferences.Editor editor = preferences.edit();
-            Map<String, ?> entries = oldPrefs.getAll();
-            for (Map.Entry<String, ?> entry : entries.entrySet()) {
-              String key = entry.getKey();
-              Object value = entry.getValue();
-              if (value instanceof String) {
-                editor.putString(key, (String) value);
-              }
-            }
-            editor.apply();
-            oldPrefs.edit().clear().apply();
-          }
-          return true;
-        } catch (GeneralSecurityException | IOException e) {
-          Log.e(LOG_TAG, "Failed to initialize encrypted shared preferences", e);
-          return false;
-        }
-      } else {
-        preferences = oldPrefs;
-        return true;
-      }
-    }
-
-    private boolean needsMigration(SharedPreferences oldPrefs) {
-      return oldPrefs != null && oldPrefs.getAll().size() > 0;
-    }
-
-    private boolean isAndroidMOrHigher() {
-      return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+      preferences = context.getSharedPreferences(
+        PREFERENCES_FILE,
+        Context.MODE_PRIVATE
+      );
+      return true;
     }
 
     @Override
@@ -239,6 +201,7 @@ public class PasswordStorageHelper {
           );
           Log.d(LOG_TAG, "EncryptedSharedPreferences created successfully");
 
+          /*
           if (needsMigration(oldPrefs)) {
             Log.d(LOG_TAG, "Data migration needed");
             if (!isKeyStoreSupported()) {
@@ -268,6 +231,7 @@ public class PasswordStorageHelper {
             oldPrefs.edit().clear().apply();
             Log.d(LOG_TAG, "Old preferences cleared after migration");
           }
+          */
 
           return true;
         } catch (GeneralSecurityException | IOException e) {
