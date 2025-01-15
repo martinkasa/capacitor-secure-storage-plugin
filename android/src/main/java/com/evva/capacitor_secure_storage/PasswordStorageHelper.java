@@ -32,6 +32,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.Map;
 import javax.crypto.BadPaddingException;
@@ -168,6 +169,11 @@ public class PasswordStorageHelper {
       "AndroidKeyStore";
     private static final String RSA_ECB_PKCS1_PADDING = "RSA/ECB/PKCS1Padding";
 
+    public static final String[] RESERVED_KEYS = new String[] {
+      "__androidx_security_crypto_encrypted_prefs_key_keyset__",
+      "__androidx_security_crypto_encrypted_prefs_value_keyset__"
+    };
+
     private SharedPreferences preferences;
     private String alias = null;
 
@@ -213,6 +219,13 @@ public class PasswordStorageHelper {
           Map<String, ?> entries = oldPrefs.getAll();
           for (Map.Entry<String, ?> entry : entries.entrySet()) {
             String key = entry.getKey();
+
+            // Check if the key is reserved and skip it
+            if (Arrays.asList(RESERVED_KEYS).contains(key)) {
+              Log.d(LOG_TAG, "Skipping migration for reserved key: " + key);
+              continue;
+            }
+
             try {
               // Attempt to get the data for the current key
               byte[] decryptedData = getData(key);
