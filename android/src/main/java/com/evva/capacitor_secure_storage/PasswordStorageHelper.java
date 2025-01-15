@@ -186,62 +186,59 @@ public class PasswordStorageHelper {
           return false;
         }
         preferences = oldPrefs;
-      } else {
-        try {
-          Log.d(LOG_TAG, "Android version is Marshmallow or higher, using EncryptedSharedPreferences");
-          String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-          Log.d(LOG_TAG, "Master key alias obtained or created: " + masterKeyAlias);
-
-          preferences = EncryptedSharedPreferences.create(
-            PREFERENCES_FILE,
-            masterKeyAlias,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-          );
-          Log.d(LOG_TAG, "EncryptedSharedPreferences created successfully");
-
-          if (needsMigration(oldPrefs)) {
-            Log.d(LOG_TAG, "Data migration needed");
-            if (!isKeyStoreSupported()) {
-              Log.e(LOG_TAG, "Keystore not supported, cannot migrate data securely, initialization failed");
-              return false;
-            }
-            SharedPreferences.Editor editor = preferences.edit();
-            Map<String, ?> entries = oldPrefs.getAll();
-            for (Map.Entry<String, ?> entry : entries.entrySet()) {
-              String key = entry.getKey();
-              try {
-                // Attempt to get the data for the current key
-                byte[] decryptedData = getData(key);
-                if (decryptedData != null) {
-                  // Convert the decrypted data to a string and store it in the new preferences
-                  String decryptedString = new String(decryptedData, StandardCharsets.UTF_8);
-                  editor.putString(key, decryptedString);
-                  Log.d(LOG_TAG, "Migrated data for key: " + key);
-                }
-              } catch (Exception e) {
-                // Handle any exceptions during migration (e.g., SecurityException for reserved keys)
-                Log.e(LOG_TAG, "Error migrating key: " + key, e);
-              }
-            }
-
-            editor.apply();
-            oldPrefs.edit().clear().apply();
-            Log.d(LOG_TAG, "Old preferences cleared after migration");
-          }
-
-          return true;
-        } catch (GeneralSecurityException | IOException e) {
-          Log.e(LOG_TAG, "Failed to initialize encrypted shared preferences", e);
-          return false;
-        }
+        return true;
       }
 
-      Log.d(LOG_TAG, "Initialization completed successfully");
-      return true;
-    }
+      try {
+        Log.d(LOG_TAG, "Android version is Marshmallow or higher, using EncryptedSharedPreferences");
+        String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
+        Log.d(LOG_TAG, "Master key alias obtained or created: " + masterKeyAlias);
 
+        preferences = EncryptedSharedPreferences.create(
+          PREFERENCES_FILE,
+          masterKeyAlias,
+          context,
+          EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+          EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        );
+        Log.d(LOG_TAG, "EncryptedSharedPreferences created successfully");
+
+        if (needsMigration(oldPrefs)) {
+          Log.d(LOG_TAG, "Data migration needed");
+          if (!isKeyStoreSupported()) {
+            Log.e(LOG_TAG, "Keystore not supported, cannot migrate data securely, initialization failed");
+            return false;
+          }
+          SharedPreferences.Editor editor = preferences.edit();
+          Map<String, ?> entries = oldPrefs.getAll();
+          for (Map.Entry<String, ?> entry : entries.entrySet()) {
+            String key = entry.getKey();
+            try {
+              // Attempt to get the data for the current key
+              byte[] decryptedData = getData(key);
+              if (decryptedData != null) {
+                // Convert the decrypted data to a string and store it in the new preferences
+                String decryptedString = new String(decryptedData, StandardCharsets.UTF_8);
+                editor.putString(key, decryptedString);
+                Log.d(LOG_TAG, "Migrated data for key: " + key);
+              }
+            } catch (Exception e) {
+              // Handle any exceptions during migration (e.g., SecurityException for reserved keys)
+              Log.e(LOG_TAG, "Error migrating key: " + key, e);
+            }
+          }
+
+          editor.apply();
+          oldPrefs.edit().clear().apply();
+          Log.d(LOG_TAG, "Old preferences cleared after migration");
+        }
+
+        return true;
+      } catch (GeneralSecurityException | IOException e) {
+        Log.e(LOG_TAG, "Failed to initialize encrypted shared preferences", e);
+        return false;
+      }
+    }
 
     private boolean isAndroidMOrHigher() {
       return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M;
