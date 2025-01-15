@@ -201,7 +201,6 @@ public class PasswordStorageHelper {
           );
           Log.d(LOG_TAG, "EncryptedSharedPreferences created successfully");
 
-          /*
           if (needsMigration(oldPrefs)) {
             Log.d(LOG_TAG, "Data migration needed");
             if (!isKeyStoreSupported()) {
@@ -231,7 +230,6 @@ public class PasswordStorageHelper {
             oldPrefs.edit().clear().apply();
             Log.d(LOG_TAG, "Old preferences cleared after migration");
           }
-          */
 
           return true;
         } catch (GeneralSecurityException | IOException e) {
