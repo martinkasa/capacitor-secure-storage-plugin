@@ -10,6 +10,7 @@ import android.security.keystore.KeyInfo;
 import android.security.keystore.KeyProperties;
 import android.os.Build;
 import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 import androidx.security.crypto.MasterKeys;
 import android.util.Base64;
 import android.util.Log;
@@ -177,7 +178,6 @@ public class PasswordStorageHelper {
     private SharedPreferences preferences;
     private String alias = null;
 
-    @SuppressWarnings("deprecation")
     @SuppressLint({ "NewApi", "TrulyRandom" })
     @Override
     public boolean init(Context context) {
@@ -197,13 +197,16 @@ public class PasswordStorageHelper {
 
       try {
         Log.d(LOG_TAG, "Android version is Marshmallow or higher, using EncryptedSharedPreferences");
-        String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
-        Log.d(LOG_TAG, "Master key alias obtained or created: " + masterKeyAlias);
+
+        MasterKey masterKey = new MasterKey.Builder(context)
+          .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+          .build();
+        Log.d(LOG_TAG, "Master key alias obtained or created: ");
 
         preferences = EncryptedSharedPreferences.create(
-          PREFERENCES_FILE,
-          masterKeyAlias,
           context,
+          PREFERENCES_FILE,
+          masterKey,
           EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
           EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         );
