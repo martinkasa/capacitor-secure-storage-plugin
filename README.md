@@ -4,7 +4,13 @@ Capacitor plugin for storing string values securly on iOS and Android.
 
 ## How to install
 
-For Capacitor v6
+For Capacitor v7
+
+```bash
+npm install capacitor-secure-storage-plugin
+```
+
+For Capacitor v6 - install with fixed version 0.10.0
 
 ```bash
 npm install capacitor-secure-storage-plugin
