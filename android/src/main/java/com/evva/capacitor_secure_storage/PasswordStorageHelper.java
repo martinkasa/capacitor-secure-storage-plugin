@@ -46,6 +46,7 @@ public class PasswordStorageHelper {
   private static final String LOG_TAG =
     PasswordStorageHelper.class.getSimpleName();
   private static final String PREFERENCES_FILE = "cap_sec";
+  private static final String ESP_PREFERENCES_FILE = "cap_sec_esp";
 
   private PasswordStorageImpl passwordStorage;
 
@@ -205,7 +206,7 @@ public class PasswordStorageHelper {
 
         preferences = EncryptedSharedPreferences.create(
           context,
-          PREFERENCES_FILE,
+          ESP_PREFERENCES_FILE,
           masterKey,
           EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
           EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
