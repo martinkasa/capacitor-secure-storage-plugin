@@ -4,19 +4,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.security.KeyChain;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyInfo;
 import android.security.keystore.KeyProperties;
-import android.os.Build;
+import android.util.Base64;
+import android.util.Log;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 import androidx.security.crypto.MasterKeys;
-import android.util.Base64;
-import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -28,14 +29,13 @@ import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.UnrecoverableEntryException;
-import java.security.GeneralSecurityException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.Map;
+import java.util.Set;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -173,7 +173,7 @@ public class PasswordStorageHelper {
 
     public static final String[] RESERVED_KEYS = new String[] {
       "__androidx_security_crypto_encrypted_prefs_key_keyset__",
-      "__androidx_security_crypto_encrypted_prefs_value_keyset__"
+      "__androidx_security_crypto_encrypted_prefs_value_keyset__",
     };
 
     private SharedPreferences preferences;
@@ -182,14 +182,20 @@ public class PasswordStorageHelper {
     @SuppressLint({ "NewApi", "TrulyRandom" })
     @Override
     public boolean init(Context context) {
-      SharedPreferences oldPrefs = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+      SharedPreferences oldPrefs = context.getSharedPreferences(
+        PREFERENCES_FILE,
+        Context.MODE_PRIVATE
+      );
       alias = context.getPackageName() + "_unique_secure_storage_key";
       Log.d(LOG_TAG, "Initializing with alias: " + alias);
 
-      if (!isAndroidMOrHigher()){
+      if (!isAndroidMOrHigher()) {
         Log.d(LOG_TAG, "Android version is lower than Marshmallow");
         if (!isKeyStoreSupported()) {
-          Log.e(LOG_TAG, "Keystore is not supported on this device, initialization failed");
+          Log.e(
+            LOG_TAG,
+            "Keystore is not supported on this device, initialization failed"
+          );
           return false;
         }
         preferences = oldPrefs;
@@ -197,7 +203,10 @@ public class PasswordStorageHelper {
       }
 
       try {
-        Log.d(LOG_TAG, "Android version is Marshmallow or higher, using EncryptedSharedPreferences");
+        Log.d(
+          LOG_TAG,
+          "Android version is Marshmallow or higher, using EncryptedSharedPreferences"
+        );
 
         MasterKey masterKey = new MasterKey.Builder(context)
           .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -216,7 +225,10 @@ public class PasswordStorageHelper {
         if (needsMigration(oldPrefs)) {
           Log.d(LOG_TAG, "Data migration needed");
           if (!isKeyStoreSupported()) {
-            Log.e(LOG_TAG, "Keystore not supported, cannot migrate data securely, initialization failed");
+            Log.e(
+              LOG_TAG,
+              "Keystore not supported, cannot migrate data securely, initialization failed"
+            );
             return false;
           }
           SharedPreferences.Editor editor = preferences.edit();
@@ -235,7 +247,10 @@ public class PasswordStorageHelper {
               byte[] decryptedData = getData(key);
               if (decryptedData != null) {
                 // Convert the decrypted data to a string and store it in the new preferences
-                String decryptedString = new String(decryptedData, StandardCharsets.UTF_8);
+                String decryptedString = new String(
+                  decryptedData,
+                  StandardCharsets.UTF_8
+                );
                 editor.putString(key, decryptedString);
                 Log.d(LOG_TAG, "Migrated data for key: " + key);
               }
@@ -258,7 +273,9 @@ public class PasswordStorageHelper {
     }
 
     private boolean isAndroidMOrHigher() {
-      return android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M;
+      return (
+        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M
+      );
     }
 
     private boolean needsMigration(SharedPreferences oldPrefs) {
@@ -331,7 +348,7 @@ public class PasswordStorageHelper {
         Log.d(
           LOG_TAG,
           "init(): hardware-backed keystore supported: " +
-            isHardwareBackedKeystoreSupported
+          isHardwareBackedKeystoreSupported
         );
       } catch (
         KeyStoreException
@@ -350,7 +367,6 @@ public class PasswordStorageHelper {
     @Override
     @SuppressLint("ApplySharedPref")
     public void setData(String key, byte[] data) {
-
       if (isAndroidMOrHigher()) {
         try {
           String value = new String(data, StandardCharsets.UTF_8);
@@ -362,7 +378,9 @@ public class PasswordStorageHelper {
         }
       } else {
         try {
-          KeyStore ks = KeyStore.getInstance(KEYSTORE_PROVIDER_ANDROID_KEYSTORE);
+          KeyStore ks = KeyStore.getInstance(
+            KEYSTORE_PROVIDER_ANDROID_KEYSTORE
+          );
 
           ks.load(null);
           if (ks.getCertificate(alias) == null) return;
@@ -403,7 +421,9 @@ public class PasswordStorageHelper {
         return data != null ? data.getBytes() : null;
       } else {
         try {
-          KeyStore ks = KeyStore.getInstance(KEYSTORE_PROVIDER_ANDROID_KEYSTORE);
+          KeyStore ks = KeyStore.getInstance(
+            KEYSTORE_PROVIDER_ANDROID_KEYSTORE
+          );
           ks.load(null);
           PrivateKey privateKey = (PrivateKey) ks.getKey(alias, null);
           return decrypt(privateKey, preferences.getString(key, null));
