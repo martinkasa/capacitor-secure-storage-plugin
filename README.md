@@ -102,7 +102,7 @@ This plugin uses the SimpleKeychain Swift library for iOS.
 
 ### Android
 
-On Android it is implemented by AndroidKeyStore and SharedPreferences. Source: [Apriorit](https://www.apriorit.com/dev-blog/432-using-androidkeystore)
+On Android, it is implemented using AndroidKeyStore, SharedPreferences, and EncryptedSharedPreferences for enhanced security. This approach uses modern encryption standards to ensure data security on devices with Android Marshmallow and above.
 
 ### Web
 

@@ -4,14 +4,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.security.KeyChain;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyInfo;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
+import androidx.security.crypto.MasterKeys;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -27,6 +33,8 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.Set;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -38,6 +46,7 @@ public class PasswordStorageHelper {
   private static final String LOG_TAG =
     PasswordStorageHelper.class.getSimpleName();
   private static final String PREFERENCES_FILE = "cap_sec";
+  private static final String ESP_PREFERENCES_FILE = "cap_sec_esp";
 
   private PasswordStorageImpl passwordStorage;
 
@@ -162,21 +171,119 @@ public class PasswordStorageHelper {
       "AndroidKeyStore";
     private static final String RSA_ECB_PKCS1_PADDING = "RSA/ECB/PKCS1Padding";
 
+    public static final String[] RESERVED_KEYS = new String[] {
+      "__androidx_security_crypto_encrypted_prefs_key_keyset__",
+      "__androidx_security_crypto_encrypted_prefs_value_keyset__",
+    };
+
     private SharedPreferences preferences;
     private String alias = null;
 
-    @SuppressWarnings("deprecation")
     @SuppressLint({ "NewApi", "TrulyRandom" })
     @Override
     public boolean init(Context context) {
-      preferences = context.getSharedPreferences(
+      SharedPreferences oldPrefs = context.getSharedPreferences(
         PREFERENCES_FILE,
         Context.MODE_PRIVATE
       );
-      alias = context.getPackageName() + "_cap_sec";
+      alias = context.getPackageName() + "_unique_secure_storage_key";
+      Log.d(LOG_TAG, "Initializing with alias: " + alias);
 
+      if (!isAndroidMOrHigher()) {
+        Log.d(LOG_TAG, "Android version is lower than Marshmallow");
+        if (!isKeyStoreSupported()) {
+          Log.e(
+            LOG_TAG,
+            "Keystore is not supported on this device, initialization failed"
+          );
+          return false;
+        }
+        preferences = oldPrefs;
+        return true;
+      }
+
+      try {
+        Log.d(
+          LOG_TAG,
+          "Android version is Marshmallow or higher, using EncryptedSharedPreferences"
+        );
+
+        MasterKey masterKey = new MasterKey.Builder(context)
+          .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+          .build();
+        Log.d(LOG_TAG, "Master key alias obtained or created: ");
+
+        preferences = EncryptedSharedPreferences.create(
+          context,
+          ESP_PREFERENCES_FILE,
+          masterKey,
+          EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+          EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        );
+        Log.d(LOG_TAG, "EncryptedSharedPreferences created successfully");
+
+        if (needsMigration(oldPrefs)) {
+          Log.d(LOG_TAG, "Data migration needed");
+          if (!isKeyStoreSupported()) {
+            Log.e(
+              LOG_TAG,
+              "Keystore not supported, cannot migrate data securely, initialization failed"
+            );
+            return false;
+          }
+          SharedPreferences.Editor editor = preferences.edit();
+          Map<String, ?> entries = oldPrefs.getAll();
+          for (Map.Entry<String, ?> entry : entries.entrySet()) {
+            String key = entry.getKey();
+
+            // Check if the key is reserved and skip it
+            if (Arrays.asList(RESERVED_KEYS).contains(key)) {
+              Log.d(LOG_TAG, "Skipping migration for reserved key: " + key);
+              continue;
+            }
+
+            try {
+              // Attempt to get the data for the current key
+              byte[] decryptedData = getData(key);
+              if (decryptedData != null) {
+                // Convert the decrypted data to a string and store it in the new preferences
+                String decryptedString = new String(
+                  decryptedData,
+                  StandardCharsets.UTF_8
+                );
+                editor.putString(key, decryptedString);
+                Log.d(LOG_TAG, "Migrated data for key: " + key);
+              }
+            } catch (Exception e) {
+              // Handle any exceptions during migration (e.g., SecurityException for reserved keys)
+              Log.e(LOG_TAG, "Error migrating key: " + key, e);
+            }
+          }
+
+          editor.apply();
+          oldPrefs.edit().clear().apply();
+          Log.d(LOG_TAG, "Old preferences cleared after migration");
+        }
+
+        return true;
+      } catch (GeneralSecurityException | IOException e) {
+        Log.e(LOG_TAG, "Failed to initialize encrypted shared preferences", e);
+        return false;
+      }
+    }
+
+    private boolean isAndroidMOrHigher() {
+      return (
+        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M
+      );
+    }
+
+    private boolean needsMigration(SharedPreferences oldPrefs) {
+      return oldPrefs != null && oldPrefs.getAll().size() > 0;
+    }
+
+    private boolean isKeyStoreSupported() {
       KeyStore ks;
-
       try {
         ks = KeyStore.getInstance(KEYSTORE_PROVIDER_ANDROID_KEYSTORE);
 
@@ -224,6 +331,7 @@ public class PasswordStorageHelper {
         | NoSuchProviderException e
       ) {
         Log.e(LOG_TAG, "init(): failed to generate key pair");
+        return false;
       }
 
       // Check if device support Hardware-backed keystore
@@ -250,6 +358,7 @@ public class PasswordStorageHelper {
         | NoSuchProviderException e
       ) {
         Log.e(LOG_TAG, "init(): hardware-backed keystore not supported");
+        return false;
       }
 
       return true;
@@ -258,62 +367,82 @@ public class PasswordStorageHelper {
     @Override
     @SuppressLint("ApplySharedPref")
     public void setData(String key, byte[] data) {
-      try {
-        KeyStore ks = KeyStore.getInstance(KEYSTORE_PROVIDER_ANDROID_KEYSTORE);
-
-        ks.load(null);
-        if (ks.getCertificate(alias) == null) return;
-
-        PublicKey publicKey = ks.getCertificate(alias).getPublicKey();
-
-        if (publicKey == null) {
-          Log.d(LOG_TAG, "Error: Public key was not found in Keystore");
-          return;
+      if (isAndroidMOrHigher()) {
+        try {
+          String value = new String(data, StandardCharsets.UTF_8);
+          Editor editor = preferences.edit();
+          editor.putString(key, value);
+          editor.commit();
+        } catch (Exception e) {
+          Log.e(LOG_TAG, "setData(): failed to set data for key: " + key, e);
         }
+      } else {
+        try {
+          KeyStore ks = KeyStore.getInstance(
+            KEYSTORE_PROVIDER_ANDROID_KEYSTORE
+          );
 
-        String value = encrypt(publicKey, data);
+          ks.load(null);
+          if (ks.getCertificate(alias) == null) return;
 
-        Editor editor = preferences.edit();
-        editor.putString(key, value);
-        editor.commit();
-      } catch (
-        NoSuchAlgorithmException
-        | InvalidKeyException
-        | NoSuchPaddingException
-        | IllegalBlockSizeException
-        | BadPaddingException
-        | NoSuchProviderException
-        | InvalidKeySpecException
-        | KeyStoreException
-        | CertificateException
-        | IOException e
-      ) {
-        Log.e(LOG_TAG, "setData(): failed to set data for key: " + key);
+          PublicKey publicKey = ks.getCertificate(alias).getPublicKey();
+
+          if (publicKey == null) {
+            Log.d(LOG_TAG, "Error: Public key was not found in Keystore");
+            return;
+          }
+
+          String value = encrypt(publicKey, data);
+
+          Editor editor = preferences.edit();
+          editor.putString(key, value);
+          editor.commit();
+        } catch (
+          NoSuchAlgorithmException
+          | InvalidKeyException
+          | NoSuchPaddingException
+          | IllegalBlockSizeException
+          | BadPaddingException
+          | NoSuchProviderException
+          | InvalidKeySpecException
+          | KeyStoreException
+          | CertificateException
+          | IOException e
+        ) {
+          Log.e(LOG_TAG, "setData(): failed to set data for key: " + key);
+        }
       }
     }
 
     @Override
     public byte[] getData(String key) {
-      try {
-        KeyStore ks = KeyStore.getInstance(KEYSTORE_PROVIDER_ANDROID_KEYSTORE);
-        ks.load(null);
-        PrivateKey privateKey = (PrivateKey) ks.getKey(alias, null);
-        return decrypt(privateKey, preferences.getString(key, null));
-      } catch (
-        KeyStoreException
-        | NoSuchAlgorithmException
-        | CertificateException
-        | IOException
-        | UnrecoverableEntryException
-        | InvalidKeyException
-        | NoSuchPaddingException
-        | IllegalBlockSizeException
-        | BadPaddingException
-        | NoSuchProviderException e
-      ) {
-        Log.e(LOG_TAG, "getData(): failed to get data for key: " + key);
+      if (isAndroidMOrHigher()) {
+        String data = preferences.getString(key, null);
+        return data != null ? data.getBytes() : null;
+      } else {
+        try {
+          KeyStore ks = KeyStore.getInstance(
+            KEYSTORE_PROVIDER_ANDROID_KEYSTORE
+          );
+          ks.load(null);
+          PrivateKey privateKey = (PrivateKey) ks.getKey(alias, null);
+          return decrypt(privateKey, preferences.getString(key, null));
+        } catch (
+          KeyStoreException
+          | NoSuchAlgorithmException
+          | CertificateException
+          | IOException
+          | UnrecoverableEntryException
+          | InvalidKeyException
+          | NoSuchPaddingException
+          | IllegalBlockSizeException
+          | BadPaddingException
+          | NoSuchProviderException e
+        ) {
+          Log.e(LOG_TAG, "getData(): failed to get data for key: " + key);
+        }
+        return null;
       }
-      return null;
     }
 
     @Override

@@ -59,6 +59,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation 'androidx.test:monitor:1.7.2'
     implementation project(':capacitor-android')
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
 
     testImplementation "junit:junit:$junitVersion"
 
