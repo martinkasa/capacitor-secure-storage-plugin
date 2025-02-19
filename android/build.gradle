@@ -55,7 +55,6 @@ android {
 repositories {
     google()
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {
