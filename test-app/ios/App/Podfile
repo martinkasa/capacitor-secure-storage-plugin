@@ -1,4 +1,5 @@
 platform :ios, '15.0'
+inhibit_all_warnings!
 use_frameworks!
 
 # workaround to avoid Xcode caching of Pods that requires
