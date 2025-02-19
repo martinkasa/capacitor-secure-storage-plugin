@@ -1,3 +1,11 @@
+## v0.11.0
+
+- migrate to capacitor 7.0
+
+## v0.10.0
+
+- migrate to capacitor 6.0
+
 ## v0.9.0
 
 - migrate to capacitor 5.0
@@ -38,7 +46,8 @@
 
   - `npm install capacitor-secure-storage-plugin@0.5.1`
 
-- import plugin in web project in Capacitor v3 is `import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';` directly, instead of import of Plugins from capacitor/core
+- import plugin in web project in Capacitor v3 is `import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';` directly, instead of import of Plugins from capacitor/cor
+  e
 
 ## v0.5.1
 
