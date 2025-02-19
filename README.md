@@ -10,7 +10,7 @@
 > [!IMPORTANT]
 > This package was renamed please use the new package name! __@evva/capacitor-secure-storage-plugin__
 
-Capacitor plugin for storing string values securly on iOS and Android.
+Capacitor plugin for storing string values securely on iOS and Android.
 
 ## How to install
 
