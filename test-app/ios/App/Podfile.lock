@@ -1,16 +1,16 @@
 PODS:
-  - Capacitor (6.1.2):
+  - Capacitor (7.0.1):
     - CapacitorCordova
-  - CapacitorApp (6.0.1):
+  - CapacitorApp (7.0.0):
     - Capacitor
-  - CapacitorCordova (6.1.2)
-  - CapacitorHaptics (6.0.1):
+  - CapacitorCordova (7.0.1)
+  - CapacitorHaptics (7.0.0):
     - Capacitor
-  - CapacitorKeyboard (6.0.2):
+  - CapacitorKeyboard (7.0.0):
     - Capacitor
-  - CapacitorStatusBar (6.0.1):
+  - CapacitorStatusBar (7.0.0):
     - Capacitor
-  - EvvaCapacitorSecureStoragePlugin (3.0.0):
+  - EvvaCapacitorSecureStoragePlugin (3.1.0):
     - Capacitor
     - SimpleKeychain
   - SimpleKeychain (1.2.0)
@@ -45,15 +45,15 @@ EXTERNAL SOURCES:
     :path: "../../.."
 
 SPEC CHECKSUMS:
-  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
-  CapacitorApp: 0bc633b4eae40a1f32cd2834788fad3bc42da6a1
-  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
-  CapacitorHaptics: fe689ade56ef20ec9b041a753c6da70c5d8ec9a9
-  CapacitorKeyboard: 2700f9b18687be021e28b5a09b59eb151a46d5e0
-  CapacitorStatusBar: b81d4fb5d4e0064c712018071b3ab4b810b39a63
-  EvvaCapacitorSecureStoragePlugin: 097b7b14acf335a1db961ebe532790527ffc4c0f
+  Capacitor: 23fff43571a4d1e3ee7d67b5a3588c6e757c2913
+  CapacitorApp: 45cb7cbef4aa380b9236fd6980033eb5cde6fcd2
+  CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
+  CapacitorHaptics: 1fba3e460e7614349c6d5f868b1fccdc5c87b66d
+  CapacitorKeyboard: 2c26c6fccde35023c579fc37d4cae6326d5e6343
+  CapacitorStatusBar: 438e90beeeefa8276b24e6c5991cb02dd13e51bf
+  EvvaCapacitorSecureStoragePlugin: 0d5ce72e8d8cc62255b7151733ed8c2e0fdc1eed
   SimpleKeychain: 768cf43ae778b1c21816e94dddf01bb8ee96a075
 
-PODFILE CHECKSUM: 98d2c61ca6500ddf0da3caeac1446063fe6bb0ff
+PODFILE CHECKSUM: e58ad481a3ac537e8933a9446e71d817d28c46ac
 
 COCOAPODS: 1.15.2

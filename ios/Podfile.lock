@@ -1,9 +1,9 @@
 PODS:
-  - Capacitor (6.1.2):
+  - Capacitor (7.0.1):
     - CapacitorCordova
-  - CapacitorCordova (6.1.2)
+  - CapacitorCordova (7.0.1)
   - SimpleKeychain (1.1.0)
-  - SwiftFormat/CLI (0.54.5)
+  - SwiftFormat/CLI (0.55.5)
   - SwiftLint (0.54.0)
 
 DEPENDENCIES:
@@ -26,12 +26,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@capacitor/ios"
 
 SPEC CHECKSUMS:
-  Capacitor: 679f9673fdf30597493a6362a5d5bf233d46abc2
-  CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
+  Capacitor: 23fff43571a4d1e3ee7d67b5a3588c6e757c2913
+  CapacitorCordova: 63d476958d5022d76f197031e8b7ea3519988c64
   SimpleKeychain: f8707c8e97b38c6a6e687b17732afc9bcef06439
-  SwiftFormat: 543a7b1ab4a6ce2d88bd5616a17903446ca3dc5c
+  SwiftFormat: 548c7b221429101546d3caeeeb672f11578df0ad
   SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
 
-PODFILE CHECKSUM: 8499120bad6cc7ee651b9222220365bc0d3a400a
+PODFILE CHECKSUM: 4be6db190c063817f4c55d72e7b844f2ecfaa501
 
 COCOAPODS: 1.15.2

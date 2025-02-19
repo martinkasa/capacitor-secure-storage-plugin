@@ -18,7 +18,7 @@ class PluginTests: XCTestCase {
 
         let plugin = SecureStoragePlugin()
 
-        let call = CAPPluginCall(callbackId: "test", options: [
+        let call = CAPPluginCall(callbackId: "test", methodName: "set", options: [
             "key": key,
             "value": value,
             "accessibility": "afterFirstUnlock",
@@ -41,7 +41,7 @@ class PluginTests: XCTestCase {
 
         let plugin = SecureStoragePlugin()
 
-        let call = CAPPluginCall(callbackId: "test", options: [
+        let call = CAPPluginCall(callbackId: "test", methodName: "get", options: [
             "key": key,
             "accessibility": "afterFirstUnlock",
         ], success: { result, _ in
@@ -67,6 +67,7 @@ class PluginTests: XCTestCase {
 
         let callOne = CAPPluginCall(
             callbackId: "test",
+            methodName: "keys",
             options: [:],
             success: { result, _ in
                 let resultValue = result!.data?["value"] as? [String]
@@ -89,7 +90,7 @@ class PluginTests: XCTestCase {
 
         let plugin = SecureStoragePlugin()
 
-        let call = CAPPluginCall(callbackId: "test", options: [
+        let call = CAPPluginCall(callbackId: "test", methodName: "get", options: [
             "key": key,
         ], success: { _, _ in
             XCTFail("Error shouldn't have been called")
@@ -108,7 +109,7 @@ class PluginTests: XCTestCase {
 
         let plugin = SecureStoragePlugin()
 
-        let call = CAPPluginCall(callbackId: "test", options: [
+        let call = CAPPluginCall(callbackId: "test", methodName: "remove", options: [
             "key": key,
         ], success: { _, _ in
             XCTFail("Error shouldn't have been called")
@@ -129,7 +130,7 @@ class PluginTests: XCTestCase {
         let plugin = SecureStoragePlugin()
 
         // Remove key after setting
-        var call = CAPPluginCall(callbackId: "test", options: [
+        var call = CAPPluginCall(callbackId: "test", methodName: "remove", options: [
             "key": key,
             "accessibility": "afterFirstUnlock",
         ], success: { result, _ in
@@ -141,7 +142,7 @@ class PluginTests: XCTestCase {
         plugin.remove(call!)
 
         // Remove already removed key
-        call = CAPPluginCall(callbackId: "test", options: [
+        call = CAPPluginCall(callbackId: "test", methodName: "remove", options: [
             "key": key,
             "accessibility": "afterFirstUnlock",
         ], success: { _, _ in
@@ -163,7 +164,7 @@ class PluginTests: XCTestCase {
 
         let plugin = SecureStoragePlugin()
 
-        let call = CAPPluginCall(callbackId: "test", options: [
+        let call = CAPPluginCall(callbackId: "test", methodName: "clear", options: [
             "key": key,
             "accessibility": "afterFirstUnlock",
         ], success: { _, _ in
@@ -183,6 +184,7 @@ class PluginTests: XCTestCase {
         let plugin = SecureStoragePlugin()
         let call = CAPPluginCall(
             callbackId: "test",
+            methodName: "getPlatform",
             success: { result, _ in
                 let resultValue = result!.data?["value"] as? String
                 XCTAssertEqual("ios", resultValue)
