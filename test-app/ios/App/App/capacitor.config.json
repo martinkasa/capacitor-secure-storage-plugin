@@ -8,7 +8,6 @@
 		"HapticsPlugin",
 		"KeyboardPlugin",
 		"StatusBarPlugin",
-		"SecureStoragePlugin",
 		"SecureStoragePlugin"
 	]
 }
