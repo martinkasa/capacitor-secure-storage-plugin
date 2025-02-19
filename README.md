@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/capacitor-secure-storage-plugin.svg)](https://badge.fury.io/js/capacitor-secure-storage-plugin)
+
 # capacitor-secure-storage-plugin
 
 Capacitor plugin for storing string values securly on iOS and Android.
