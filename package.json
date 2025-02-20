@@ -26,11 +26,11 @@
     },
     "license": "MIT",
     "devDependencies": {
-        "@capacitor/android": "^7.0.0",
-        "@capacitor/cli": "^7.0.0",
-        "@capacitor/core": "^7.0.0",
+        "@capacitor/android": "^7.0.1",
+        "@capacitor/cli": "^7.0.1",
+        "@capacitor/core": "^7.0.1",
         "@capacitor/docgen": "^0.3.0",
-        "@capacitor/ios": "^7.0.0",
+        "@capacitor/ios": "^7.0.1",
         "@ionic/swiftlint-config": "^1.1.2",
         "@release-it/conventional-changelog": "^10.0.0",
         "@types/node": "^20.3.2",
@@ -57,7 +57,7 @@
         "typescript": "5.3.3"
     },
     "peerDependencies": {
-        "@capacitor/core": "^6.1.2"
+        "@capacitor/core": "^7.0.1"
     },
     "files": [
         "android/src/main/",
