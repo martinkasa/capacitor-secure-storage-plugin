@@ -8,14 +8,14 @@ jobs:
   Web:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: lts/*
       - name: Cache node_modules
         id: node-modules
-        uses: actions/cache@v4
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
         with:
           path: |
             node_modules
@@ -28,12 +28,12 @@ jobs:
   iOS:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: ruby/setup-ruby@32110d4e311bd8996b2a82bf2a43b714ccc91777 # v1.221.0
         with:
           ruby-version: '3.3'
           bundler-cache: true
-      - uses: SwiftyLab/setup-swift@latest
+      - uses: SwiftyLab/setup-swift@5825efd16e0e9f41c4e9b94658b7973e16410d5b # v1.9.1
         with:
           swift-version: '5.10.0'
       - name: Get Swift Version
@@ -44,23 +44,23 @@ jobs:
         run: xcodebuild -version
       - name: Cache Pods
         id: pods
-        uses: actions/cache@v4
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
         with:
           path: |
             ios/Pods
           key: pods
       - name: Cache Xcode DerivedData
-        uses: irgaly/xcode-cache@v1.7.2
+        uses: irgaly/xcode-cache@fd644652c5d3fd1f794edcdf839eb1dc03a9021f # v1.8.1
         with:
           key: xcode-deriveddata
           restore-keys: xcode-deriveddata
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: lts/*
       - name: Cache node_modules
         id: node-modules
-        uses: actions/cache@v4
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
         with:
           path: |
             node_modules
@@ -84,16 +84,16 @@ jobs:
   Android:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Set up JDK 21
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
         with:
           java-version: '21'
           distribution: 'temurin'
       - name: Install Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
       - name: Cache Gradle
-        uses: actions/cache@v4
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
         with:
           path: |
             android/.gradle
@@ -106,7 +106,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Cache AVD
-        uses: actions/cache@v4
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
         id: avd-cache
         with:
           path: |
@@ -114,12 +114,12 @@ jobs:
             ~/.android/adb*
           key: avd-29
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4.2.0
         with:
           node-version: lts/*
       - name: Cache node_modules
         id: node-modules
-        uses: actions/cache@v4
+        uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
         with:
           path: |
             node_modules
@@ -127,7 +127,7 @@ jobs:
       - name: NPM Install
         run: npm i
       - name: Test Android
-        uses: reactivecircus/android-emulator-runner@v2
+        uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
           api-level: 29
           working-directory: android/
