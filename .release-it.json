@@ -1,5 +1,5 @@
 {
-    "$schema": "https://unpkg.com/release-it@17/schema/release-it.json",
+    "$schema": "https://unpkg.com/release-it@18/schema/release-it.json",
     "hooks": {
         "after:bump": [
             "rm -f *.tgz",
@@ -74,6 +74,14 @@
                     {
                         "type": "ci",
                         "section": "🚀 Continuous Integration"
+                    },
+                    {
+                        "type": "sec",
+                        "section": "🛡️ Security Fix"
+                    },
+                    {
+                        "type": "chore",
+                        "section": "🧹 Chore"
                     }
                 ]
             },
