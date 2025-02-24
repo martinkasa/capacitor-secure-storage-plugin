@@ -1,5 +1,6 @@
 package com.evva.capacitor_secure_storage;
 
+import android.content.Context;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -17,6 +18,10 @@ public class SecureStoragePlugin extends Plugin {
   public void load() {
     super.load();
     this.passwordStorageHelper = new PasswordStorageHelper(getContext());
+  }
+
+  public void loadTextContext(Context context) {
+    this.passwordStorageHelper = new PasswordStorageHelper(context);
   }
 
   @PluginMethod
