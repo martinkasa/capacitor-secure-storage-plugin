@@ -193,7 +193,7 @@ public class PasswordStorageHelper {
       needsMigration = needsMigration(oldPreferences);
 
       if (!isAndroidMOrHigher()) {
-        Log.d(LOG_TAG, "init(): android version is lower than 23");
+        Log.d(LOG_TAG, "init(): android api-version is lower than 23");
         if (!isKeyStoreSupported()) {
           Log.e(LOG_TAG, "init(): keystore is not supported on this device");
           return false;
