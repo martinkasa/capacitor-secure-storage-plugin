@@ -21,10 +21,24 @@ export interface SetDataOptions {
   value: string
   accessibility: Accessibility
 }
+
+export enum WebStorageAdapter {
+  LocalStorage = 'LocalStorage',
+  SessionStorage = 'SessionStorage'
+}
+
 /**
  * The SecureStoragePlugin plugin interface
  */
 export interface SecureStoragePlugin {
+  /**
+   * gets the value for the given key
+   * 
+   * @param options key to get value for
+   * @returns value for the given key
+   */
+  setStorageAdapter(options: { web: {adapter: WebStorageAdapter} }): Promise<{ value: boolean }>;
+
   /**
    * gets the value for the given key
    * 

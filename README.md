@@ -36,6 +36,7 @@ You can set it using the following options:
 
 <docgen-index>
 
+* [`setStorageAdapter(...)`](#setstorageadapter)
 * [`get(...)`](#get)
 * [`getAccessibility(...)`](#getaccessibility)
 * [`set(...)`](#set)
@@ -45,6 +46,7 @@ You can set it using the following options:
 * [`getPlatform()`](#getplatform)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -52,6 +54,23 @@ You can set it using the following options:
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
 The SecureStoragePlugin plugin interface
+
+### setStorageAdapter(...)
+
+```typescript
+setStorageAdapter(options: { web: { adapter: WebStorageAdapter; }; }) => Promise<{ value: boolean; }>
+```
+
+gets the value for the given key
+
+| Param         | Type                                                                                    | Description          |
+| ------------- | --------------------------------------------------------------------------------------- | -------------------- |
+| **`options`** | <code>{ web: { adapter: <a href="#webstorageadapter">WebStorageAdapter</a>; }; }</code> | key to get value for |
+
+**Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
+
+--------------------
+
 
 ### get(...)
 
@@ -182,5 +201,16 @@ allows to define how properties can be accessed on iOS
 allows to define how properties can be accessed on iOS
 
 <code>'afterFirstUnlock' | 'afterFirstUnlockThisDeviceOnly' | 'whenUnlocked' | 'whenUnlockedThisDeviceOnly' | 'always' | 'alwaysThisDeviceOnly' | 'whenPasscodeSetThisDeviceOnly'</code>
+
+
+### Enums
+
+
+#### WebStorageAdapter
+
+| Members              | Value                         |
+| -------------------- | ----------------------------- |
+| **`LocalStorage`**   | <code>'LocalStorage'</code>   |
+| **`SessionStorage`** | <code>'SessionStorage'</code> |
 
 </docgen-api>
