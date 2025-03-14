@@ -19,7 +19,7 @@ export const accessibilityOptions: Accessibility[] = [
 export interface SetDataOptions {
   key: string
   value: string
-  accessibility: Accessibility
+  accessibility?: Accessibility
 }
 
 export enum WebStorageAdapter {

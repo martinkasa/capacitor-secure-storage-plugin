@@ -34,7 +34,7 @@ public class SecureStoragePlugin: CAPPlugin {
                 "value": true
             ])
         } catch {
-            call.reject("error")
+            call.reject("error: \(error)")
         }
     }
         
@@ -52,7 +52,7 @@ public class SecureStoragePlugin: CAPPlugin {
                 "value": value ?? ""
             ])
         } catch {
-            call.reject("error")
+            call.reject("error: \(error)")
         }
     }
     
@@ -85,7 +85,7 @@ public class SecureStoragePlugin: CAPPlugin {
             ])
         }
         catch {
-            call.reject("error")
+            call.reject("error: \(error)")
         }
     }
     
@@ -97,7 +97,7 @@ public class SecureStoragePlugin: CAPPlugin {
             ])
         }
         catch {
-            call.reject("error")
+            call.reject("error: \(error)")
         }
     }
     
