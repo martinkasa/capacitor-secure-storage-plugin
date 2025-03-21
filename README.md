@@ -37,6 +37,7 @@ You can set it using the following options:
 <docgen-index>
 
 * [`setStorageAdapter(...)`](#setstorageadapter)
+* [`getStorageAdapter()`](#getstorageadapter)
 * [`get(...)`](#get)
 * [`getAccessibility(...)`](#getaccessibility)
 * [`set(...)`](#set)
@@ -68,6 +69,19 @@ gets the value for the given key
 | **`options`** | <code>{ web: { adapter: <a href="#webstorageadapter">WebStorageAdapter</a>; }; }</code> | key to get value for |
 
 **Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
+
+--------------------
+
+
+### getStorageAdapter()
+
+```typescript
+getStorageAdapter() => Promise<{ adapter: WebStorageAdapter; }>
+```
+
+gets the current storage adapter or null
+
+**Returns:** <code>Promise&lt;{ adapter: <a href="#webstorageadapter">WebStorageAdapter</a>; }&gt;</code>
 
 --------------------
 
@@ -212,5 +226,6 @@ allows to define how properties can be accessed on iOS
 | -------------------- | ----------------------------- |
 | **`LocalStorage`**   | <code>'LocalStorage'</code>   |
 | **`SessionStorage`** | <code>'SessionStorage'</code> |
+| **`SessionCookie`**  | <code>'SessionCookie'</code>  |
 
 </docgen-api>

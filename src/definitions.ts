@@ -24,7 +24,8 @@ export interface SetDataOptions {
 
 export enum WebStorageAdapter {
   LocalStorage = 'LocalStorage',
-  SessionStorage = 'SessionStorage'
+  SessionStorage = 'SessionStorage',
+  SessionCookie = 'SessionCookie'
 }
 
 /**
@@ -38,6 +39,13 @@ export interface SecureStoragePlugin {
    * @returns value for the given key
    */
   setStorageAdapter(options: { web: {adapter: WebStorageAdapter} }): Promise<{ value: boolean }>;
+
+  /**
+   * gets the current storage adapter or null
+   * 
+   * @returns adapter or null
+   */
+  getStorageAdapter(): Promise<{ adapter: WebStorageAdapter }>;
 
   /**
    * gets the value for the given key

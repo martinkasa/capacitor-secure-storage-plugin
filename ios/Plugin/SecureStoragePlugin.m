@@ -12,4 +12,5 @@ CAP_PLUGIN(SecureStoragePlugin, "SecureStoragePlugin",
            CAP_PLUGIN_METHOD(clear, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getPlatform, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setStorageAdapter, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getStorageAdapter, CAPPluginReturnPromise);
 )

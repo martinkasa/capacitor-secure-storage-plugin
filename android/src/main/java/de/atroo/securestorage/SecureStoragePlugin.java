@@ -106,4 +106,9 @@ public class SecureStoragePlugin extends Plugin {
     public void setStorageAdapter(PluginCall call) {
         call.unimplemented("Not implemented on Android.");
     }
+
+    @PluginMethod
+    public void getStorageAdapter(PluginCall call) {
+        call.unimplemented("Not implemented on Android.");
+    }
 }

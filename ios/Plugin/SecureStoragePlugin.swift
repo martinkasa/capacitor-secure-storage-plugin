@@ -110,4 +110,8 @@ public class SecureStoragePlugin: CAPPlugin {
     @objc func setStorageAdapter(_ call: CAPPluginCall) {
         call.unimplemented("Not implemented on iOS.")
     }
+
+    @objc func getStorageAdapter(_ call: CAPPluginCall) {
+        call.unimplemented("Not implemented on iOS.")
+    }
 }
