@@ -19,12 +19,34 @@ export const accessibilityOptions: Accessibility[] = [
 export interface SetDataOptions {
   key: string
   value: string
-  accessibility: Accessibility
+  accessibility?: Accessibility
 }
+
+export enum WebStorageAdapter {
+  LocalStorage = 'LocalStorage',
+  SessionStorage = 'SessionStorage',
+  SessionCookie = 'SessionCookie'
+}
+
 /**
  * The SecureStoragePlugin plugin interface
  */
 export interface SecureStoragePlugin {
+  /**
+   * gets the value for the given key
+   * 
+   * @param options key to get value for
+   * @returns value for the given key
+   */
+  setStorageAdapter(options: { web: {adapter: WebStorageAdapter} }): Promise<{ value: boolean }>;
+
+  /**
+   * gets the current storage adapter or null
+   * 
+   * @returns adapter or null
+   */
+  getStorageAdapter(): Promise<{ adapter: WebStorageAdapter }>;
+
   /**
    * gets the value for the given key
    * 

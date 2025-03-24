@@ -97,9 +97,18 @@ public class SecureStoragePlugin extends Plugin {
 
     @PluginMethod
     public void getPlatform(PluginCall call) {
-        secureStorageImpl.clear();
         JSObject ret = new JSObject();
         ret.put("value", "android");
         call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void setStorageAdapter(PluginCall call) {
+        call.unimplemented("Not implemented on Android.");
+    }
+
+    @PluginMethod
+    public void getStorageAdapter(PluginCall call) {
+        call.unimplemented("Not implemented on Android.");
     }
 }

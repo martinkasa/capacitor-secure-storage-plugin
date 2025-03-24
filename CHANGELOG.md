@@ -1,3 +1,9 @@
+## v6.1.0
+- allow to switch between localStorage and sessionStorage in web
+
+## v6.0.0
+- make compatible with Capacitor 6
+
 ## v1.1.0
 - rewrite using KeychainAccess for iOS
 - migrate to capacitor v5
