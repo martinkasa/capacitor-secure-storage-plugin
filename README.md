@@ -2,7 +2,7 @@
 
 # capacitor-secure-storage-plugin
 
-Capacitor plugin for storing string values securly on iOS and Android.
+Capacitor plugin for storing string values securely on iOS and Android.
 
 ## How to install
 
@@ -93,60 +93,62 @@ public class MainActivity extends BridgeActivity {
 
 ## Methods
 
+### get
+
 ```ts
-
-get(options: { key: string }): Promise<{ value: string }>
-
+get(options: { key: string; accessibility?: string }): Promise<{ value: string }>
 ```
 
 > **Note**
-> if item with specified key does not exist, throws an Error
+> - If item with specified key does not exist, throws an Error.
+> - On iOS, `accessibility` is used only if key needs to be migrated from the standard keychain.
+> - Default accessibility level (if not specified): `"afterFirstUnlock"`
 
----
+### set
 
 ```ts
-
-set(options: { key: string; value: string }): Promise<{ value: boolean }>
-
+set(options: { key: string; value: string; accessibility?: string }): Promise<{ value: boolean }>
 ```
 
 > **Note**
-> return true in case of success otherwise throws an error
+> - Returns true in case of success, otherwise throws an error.
+> - On iOS, optional `accessibility` controls keychain access level.
+> - Default value: `"afterFirstUnlock"`.
 
----
+> **Supported iOS accessibility levels:**
+> - `"afterFirstUnlock"`
+> - `"afterFirstUnlockThisDeviceOnly"`
+> - `"whenUnlocked"`
+> - `"whenUnlockedThisDeviceOnly"`
+
+### remove
 
 ```ts
-
 remove(options: { key: string }): Promise<{ value: boolean }>
-
 ```
 
 > **Note**
 > return true in case of success otherwise throws an error
 
----
+### keys
 
 ```ts
 keys(): Promise<{ value: string[] }>
 ```
 
----
+### clear
 
 ```ts
-
-  clear(): Promise<{ value: boolean }>
-
+clear(): Promise<{ value: boolean }>
 ```
 
 > **Note**
 > return true in case of success otherwise throws an error
 
----
+### getPlatform
 
 ```ts
-
 getPlatform(): Promise<{ value: string }>
-
 ```
 
 > **Note**
@@ -155,21 +157,18 @@ getPlatform(): Promise<{ value: string }>
 ## Example
 
 ```ts
-const key = 'username';
-const value = 'hellokitty2';
+// Set a value with explicit accessibility level (iOS)
+await SecureStoragePlugin.set({
+  key: 'authToken',
+  value: 'abc123',
+  accessibility: 'whenUnlockedThisDeviceOnly'
+});
 
-SecureStoragePlugin.set({ key, value }).then((success) => console.log(success));
-```
-
-```ts
-const key = 'username';
-SecureStoragePlugin.get({ key })
-  .then((value) => {
-    console.log(value);
-  })
-  .catch((error) => {
-    console.log('Item with specified key does not exist.');
-  });
+// Get a value and apply accessibility level in case migration is needed (iOS)
+const result = await SecureStoragePlugin.get({
+  key: 'authToken',
+  accessibility: 'whenUnlockedThisDeviceOnly'
+});
 ```
 
 ```ts
@@ -183,6 +182,11 @@ async getUsername(key: string) {
 ### iOS
 
 This plugin uses SwiftKeychainWrapper under the hood for iOS.
+
+> **Note**
+> Since v0.5.0, a dedicated keychain wrapper is used.
+> Optional `accessibility` parameter (on iOS only) allows control over the security level of stored keys.
+> Default value: `afterFirstUnlock`.
 
 > **Warning**
 > Up to version v0.4.0 there was standard keychain used. Since v0.5.0 there is separate keychain wrapper, so keys() method returns only keys set in v0.5.0 or higher version.
