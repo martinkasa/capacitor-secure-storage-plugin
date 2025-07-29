@@ -3,6 +3,7 @@
 Securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information (strings) on iOS & Android
 
 ## Compatibility
+
 Since v5 we follow the versioning of Capacitor, which means v5 of this plugin can be used with Capacitor 5, while v6 can be used with Capacitor 6.
 
 ## Install
@@ -13,41 +14,62 @@ npx cap sync
 ```
 
 ## Features
+
 ### Android
+
 This plugin uses EncryptedSharedPreferences to store sensitive information securely on any Android device. It will automigrate data from older versions after update.
 
 ### iOS
+
 When using `set()` you can specify a different accessibility modifier of the keychain to control, when access to a key should be allowed. Providing a different accessibility modifier on consecutive calls of `set()` for the same key, will remove the old key and create it new under the hood to prevent keychain errors.
 
 ## Notes
+
 ### Android
+
 #### AutoBackup
+
 To stay secure you need to handle the Auto Backup rules in Android.
 Please refer to [this document](https://developer.android.com/guide/topics/data/autobackup#IncludingFiles).
-#### Java 17
-The plugin requires Java 17 to run.
+
+#### Java 21
+
+The plugin requires Java 21 to run.
 You can set it using the following options:
+
 - changing the IDE settings.
 - changing the JAVA_HOME environment variable.
 - changing `org.gradle.java.home` in `gradle.properties`.
 
+##### upgrading gralde
+
+go to android run
+`./gradlew --version`
+and check the Android Gradle Plugin version in android/build.gradle.
+
+Edit gradle/wrapper/gradle-wrapper.properties:
+`distributionUrl=https\://services.gradle.org/distributions/gradle-8.7-all.zip`
+
+Then update the wrapper:
+
+`./gradlew wrapper --gradle-version 8.7`
 
 ## API
 
 <docgen-index>
 
-* [`setStorageAdapter(...)`](#setstorageadapter)
-* [`getStorageAdapter()`](#getstorageadapter)
-* [`get(...)`](#get)
-* [`getAccessibility(...)`](#getaccessibility)
-* [`set(...)`](#set)
-* [`remove(...)`](#remove)
-* [`clear()`](#clear)
-* [`keys()`](#keys)
-* [`getPlatform()`](#getplatform)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [`setStorageAdapter(...)`](#setstorageadapter)
+- [`getStorageAdapter()`](#getstorageadapter)
+- [`get(...)`](#get)
+- [`getAccessibility(...)`](#getaccessibility)
+- [`set(...)`](#set)
+- [`remove(...)`](#remove)
+- [`clear()`](#clear)
+- [`keys()`](#keys)
+- [`getPlatform()`](#getplatform)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
+- [Enums](#enums)
 
 </docgen-index>
 
@@ -70,8 +92,7 @@ gets the value for the given key
 
 **Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
 
---------------------
-
+---
 
 ### getStorageAdapter()
 
@@ -83,8 +104,7 @@ gets the current storage adapter or null
 
 **Returns:** <code>Promise&lt;{ adapter: <a href="#webstorageadapter">WebStorageAdapter</a>; }&gt;</code>
 
---------------------
-
+---
 
 ### get(...)
 
@@ -100,8 +120,7 @@ gets the value for the given key
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 
---------------------
-
+---
 
 ### getAccessibility(...)
 
@@ -117,8 +136,7 @@ gets the accessibility for the given key
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 
---------------------
-
+---
 
 ### set(...)
 
@@ -134,8 +152,7 @@ sets the value for the given key
 
 **Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
 
---------------------
-
+---
 
 ### remove(...)
 
@@ -151,8 +168,7 @@ removes the value for the given key
 
 **Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
 
---------------------
-
+---
 
 ### clear()
 
@@ -164,8 +180,7 @@ clears all values
 
 **Returns:** <code>Promise&lt;{ value: boolean; }&gt;</code>
 
---------------------
-
+---
 
 ### keys()
 
@@ -177,8 +192,7 @@ gets all keys
 
 **Returns:** <code>Promise&lt;{ value: string[]; }&gt;</code>
 
---------------------
-
+---
 
 ### getPlatform()
 
@@ -190,11 +204,9 @@ gets the platform
 
 **Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### SetDataOptions
 
@@ -206,9 +218,7 @@ allows to define how properties can be accessed on iOS
 | **`value`**         | <code>string</code>                                     |
 | **`accessibility`** | <code><a href="#accessibility">Accessibility</a></code> |
 
-
 ### Type Aliases
-
 
 #### Accessibility
 
@@ -216,9 +226,7 @@ allows to define how properties can be accessed on iOS
 
 <code>'afterFirstUnlock' | 'afterFirstUnlockThisDeviceOnly' | 'whenUnlocked' | 'whenUnlockedThisDeviceOnly' | 'always' | 'alwaysThisDeviceOnly' | 'whenPasscodeSetThisDeviceOnly'</code>
 
-
 ### Enums
-
 
 #### WebStorageAdapter
 
