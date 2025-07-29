@@ -1,6 +1,6 @@
 {
   "name": "@atroo/capacitor-secure-storage-plugin",
-  "version": "6.1.0",
+  "version": "7.0.0",
   "description": "Securely store secrets such as usernames, passwords, tokens, certificates or other sensitive information (strings) on iOS & Android",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -61,7 +61,7 @@
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "^6.0.0"
+    "@capacitor/core": "^7.0.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
