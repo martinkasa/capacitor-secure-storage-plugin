@@ -7,7 +7,17 @@ import SwiftKeychainWrapper
  * here: https://capacitor.ionicframework.com/docs/plugins/ios
  */
 @objc(SecureStoragePlugin)
-public class SecureStoragePlugin: CAPPlugin {
+public class SecureStoragePlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "SecureStoragePlugin" 
+    public let jsName = "SecureStoragePlugin" 
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "set", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "get", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "keys", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "remove", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clear", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getPlatform", returnType: CAPPluginReturnPromise),
+    ] 
     var keychainwrapper: KeychainWrapper = KeychainWrapper.init(serviceName: "cap_sec")
     
     @objc func set(_ call: CAPPluginCall) {
