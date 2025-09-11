@@ -36,3 +36,14 @@ UserInterfaceState.xcuserstate
 
 # Firebase hosting directory
 .firebase/
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/configuration/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+Pods
+Podfile.lock
+Package.resolved
+Build
+/.build
