@@ -184,6 +184,20 @@ async getUsername(key: string) {
 
 This plugin uses SwiftKeychainWrapper under the hood for iOS.
 
+After reinstalling an app, the data stored in the keychain are not deleted automatically. To clear the data the following code has to be added to AppDelegate.swift. This is just an example, there are multiple ways how it can be achieved.
+
+```swift
+import SwiftKeychainWrapper
+
+
+if !UserDefaults.standard.bool(forKey: "firstTimeLaunchOccurred") {
+    let keychainWrapper = KeychainWrapper(serviceName: "cap_sec")
+    keychainWrapper.removeAllKeys()
+
+    UserDefaults.standard.set(true, forKey: "firstTimeLaunchOccurred")
+}
+```
+
 > **Warning**
 > Up to version v0.4.0 there was standard keychain used. Since v0.5.0 there is separate keychain wrapper, so keys() method returns only keys set in v0.5.0 or higher version.
 
