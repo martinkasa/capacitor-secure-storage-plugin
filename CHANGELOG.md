@@ -1,3 +1,13 @@
+## v0.14.0
+
+- update to capacitor 8.6
+- iOS: remove SwiftKeychainWrapper dependency, stored data stays readable
+- iOS: fix `set` failing for some items saved by older versions
+- iOS: keychain errors (e.g. device not unlocked since reboot) reject with the real error instead of "Item with given key does not exist"; `code` is the OSStatus, e.g. `-25308`
+- iOS: values saved by v0.4.0 or older are no longer read; to keep them, update to v0.13.0 first and call `get` for each key
+- iOS: if your AppDelegate uses SwiftKeychainWrapper to clear data after reinstall (README snippet), switch to the updated README snippet or add SwiftKeychainWrapper to your app
+- update TestApp and iOS tests
+
 ## v0.13.0
 
 - migrate to capacitor 8.0

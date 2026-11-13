@@ -1,3 +1,5 @@
+require_relative '../../node_modules/@capacitor/ios/scripts/pods_helpers'
+
 platform :ios, '15.0'
 use_frameworks!
 
@@ -19,4 +21,12 @@ end
 target 'App' do
   capacitor_pods
   # Add your Pods here
+
+  target 'AppTests' do
+    inherit! :search_paths
+  end
+end
+
+post_install do |installer|
+  assertDeploymentTarget(installer)
 end

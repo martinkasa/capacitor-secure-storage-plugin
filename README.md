@@ -188,24 +188,29 @@ async getUsername(key: string) {
 
 ### iOS
 
-This plugin uses SwiftKeychainWrapper under the hood for iOS.
+Values are stored in the iOS Keychain as generic passwords under the `cap_sec` service and are not synced to iCloud.
+
+Values are accessible only after the device has been unlocked for the first time after a reboot. Any keychain failure other than a missing key (e.g. reading while the app runs in the background before the first unlock) rejects with message `Keychain error <OSStatus>: <description>` and `code` set to the OSStatus, e.g. `-25308` (`errSecInteractionNotAllowed`). Only a really missing key rejects with `Item with given key does not exist`.
 
 After reinstalling an app, the data stored in the keychain are not deleted automatically. To clear the data the following code has to be added to AppDelegate.swift. This is just an example, there are multiple ways how it can be achieved.
 
 ```swift
-import SwiftKeychainWrapper
+import Security
 
 
 if !UserDefaults.standard.bool(forKey: "firstTimeLaunchOccurred") {
-    let keychainWrapper = KeychainWrapper(serviceName: "cap_sec")
-    keychainWrapper.removeAllKeys()
+    let query: [String: Any] = [
+        kSecClass as String: kSecClassGenericPassword,
+        kSecAttrService as String: "cap_sec"
+    ]
+    SecItemDelete(query as CFDictionary)
 
     UserDefaults.standard.set(true, forKey: "firstTimeLaunchOccurred")
 }
 ```
 
 > **Warning**
-> Up to version v0.4.0 there was standard keychain used. Since v0.5.0 there is separate keychain wrapper, so keys() method returns only keys set in v0.5.0 or higher version.
+> Since v0.14.0 values saved by v0.4.0 or older (stored in the standard keychain) are no longer read. Upgrade through v0.13.0 first and read the values to migrate them.
 
 ### Android
 

@@ -1,4 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
+
 import type { SecureStoragePluginPlugin } from './definitions';
 
 export class SecureStoragePluginWeb

@@ -1,85 +1,56 @@
-import { Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { Component, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { AlertController, IonButton, IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular';
 import { SecureStoragePlugin } from 'capacitor-secure-storage-plugin';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: 'home.page.html',
-    styleUrls: ['home.page.scss'],
-    standalone: false
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
+  imports: [FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonButton],
 })
 export class HomePage {
-  constructor(private alertController: AlertController) {}
+  private readonly alertController = inject(AlertController);
 
-  async showPlatform() {
+  readonly getKey = signal('');
+  readonly setKey = signal('');
+  readonly setValue = signal('');
+  readonly removeKey = signal('');
+
+  showPlatform() {
+    return this.run(() => SecureStoragePlugin.getPlatform());
+  }
+
+  get() {
+    return this.run(() => SecureStoragePlugin.get({ key: this.getKey() }));
+  }
+
+  set() {
+    return this.run(() => SecureStoragePlugin.set({ key: this.setKey(), value: this.setValue() }));
+  }
+
+  remove() {
+    return this.run(() => SecureStoragePlugin.remove({ key: this.removeKey() }));
+  }
+
+  keys() {
+    return this.run(() => SecureStoragePlugin.keys());
+  }
+
+  clear() {
+    return this.run(() => SecureStoragePlugin.clear());
+  }
+
+  private async run(action: () => Promise<unknown>) {
     try {
-      const result = await SecureStoragePlugin.getPlatform();
-      await this.showResult(result);
-    } catch (err) {
-      this.showError(err);
+      await this.showAlert('Result', JSON.stringify(await action()));
+    } catch (error) {
+      await this.showAlert('Error', String(error));
     }
   }
 
-  async get(key: string) {
-    try {
-      const result = await SecureStoragePlugin.get({ key });
-      await this.showResult(result);
-    } catch (err) {
-      this.showError(err);
-    }
-  }
-
-  async set(key: string, value: string) {
-    try {
-      const result = await SecureStoragePlugin.set({ key, value });
-      await this.showResult(result);
-    } catch (err) {
-      this.showError(err);
-    }
-  }
-
-  async showResult(message) {
-    const a = await this.alertController.create({
-      header: 'Result',
-      message: JSON.stringify(message),
-      buttons: ['OK'],
-    });
-    a.present();
-  }
-
-  async remove(key: string) {
-    try {
-      const result = await SecureStoragePlugin.remove({ key });
-      await this.showResult(result);
-    } catch (err) {
-      this.showError(err);
-    }
-  }
-
-  async keys() {
-    try {
-      const result = await SecureStoragePlugin.keys();
-      await this.showResult(result);
-    } catch (err) {
-      this.showError(err);
-    }
-  }
-
-  async clear() {
-    try {
-      const result = await SecureStoragePlugin.clear();
-      await this.showResult(result);
-    } catch (err) {
-      this.showError(err);
-    }
-  }
-
-  async showError(error) {
-    const a = await this.alertController.create({
-      header: 'Error',
-      message: error,
-      buttons: ['OK'],
-    });
-    a.present();
+  private async showAlert(header: string, message: string) {
+    const alert = await this.alertController.create({ header, message, buttons: ['OK'] });
+    await alert.present();
   }
 }

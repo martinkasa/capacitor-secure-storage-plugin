@@ -17,17 +17,17 @@
     <ion-button (click)="showPlatform()">Show platform</ion-button>
   </div>
   <div class="row">
-    Key: <input type="text" #getKey>
-    <ion-button (click)="get(getKey.value)">Get</ion-button>
+    Key: <input type="text" [(ngModel)]="getKey" />
+    <ion-button (click)="get()">Get</ion-button>
   </div>
   <div class="row">
-    Key: <input type="text" #setKey>
-    Value: <input type="text" #setValue>
-    <ion-button (click)="set(setKey.value, setValue.value)">Set</ion-button>
+    Key: <input type="text" [(ngModel)]="setKey" />
+    Value: <input type="text" [(ngModel)]="setValue" />
+    <ion-button (click)="set()">Set</ion-button>
   </div>
   <div class="row">
-    Key: <input type="text" #removeKey>
-    <ion-button (click)="remove(removeKey.value)">Remove</ion-button>
+    Key: <input type="text" [(ngModel)]="removeKey" />
+    <ion-button (click)="remove()">Remove</ion-button>
   </div>
   <div class="row">
     <ion-button (click)="keys()">All keys</ion-button>
