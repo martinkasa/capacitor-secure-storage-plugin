@@ -8,7 +8,7 @@ PODS:
     - Capacitor
   - CapacitorKeyboard (8.0.6):
     - Capacitor
-  - CapacitorSecureStoragePlugin (0.13.0):
+  - CapacitorSecureStoragePlugin (0.14.0):
     - Capacitor
   - CapacitorStatusBar (8.0.4):
     - Capacitor
@@ -44,7 +44,7 @@ SPEC CHECKSUMS:
   CapacitorCordova: 8e68a712e47128cf5b97e88b9c2b406b9b956b22
   CapacitorHaptics: 296f771ecd89c7a1bd92a7b6826a7d268e2e70f5
   CapacitorKeyboard: f9e85e685082e9f63404de15db4a4291448b0912
-  CapacitorSecureStoragePlugin: a6afb20e9a79b069abb384d52611985c4d15d89f
+  CapacitorSecureStoragePlugin: 5e35fc3b9a844ee9c31d1ed7783d179936987b82
   CapacitorStatusBar: ff844df1f126da6c4fbc4028272425fa3a91e7e3
 
 PODFILE CHECKSUM: 844be32f195738596944621aa99917ad1d3051af
