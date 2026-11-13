@@ -1,3 +1,7 @@
+## v0.14.1
+
+- Android: fix build failure with AGP 9 (`proguard-android.txt` is no longer supported), still compatible with AGP 8
+
 ## v0.14.0
 
 - update to capacitor 8.6
