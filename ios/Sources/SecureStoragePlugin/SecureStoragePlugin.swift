@@ -17,85 +17,68 @@ public class SecureStoragePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "clear", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getPlatform", returnType: CAPPluginReturnPromise)
     ]
-    // `var` so tests can point the plugin at test-only keychain services.
+    // `var` so tests can point the plugin at a test-only keychain service.
     var keychain = Keychain(service: "cap_sec")
-    var legacyKeychain = Keychain.legacyStandard
 
     @objc func set(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
         let value = call.getString("value") ?? ""
-        if keychain.set(value, forKey: key) {
+        run(call) {
+            try keychain.set(value, forKey: key)
             call.resolve(["value": true])
-        } else {
-            call.reject("error")
         }
     }
 
     @objc func get(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
-        let hasValueDedicated = keychain.hasValue(forKey: key)
-        let hasValueLegacy = legacyKeychain.hasValue(forKey: key)
-
-        if hasValueLegacy && !hasValueDedicated {
-            let migrated = keychain.set(legacyKeychain.string(forKey: key) ?? "", forKey: key)
-            let removed = legacyKeychain.remove(forKey: key)
-            if !migrated || !removed {
-                call.reject("error")
-                return
+        run(call) {
+            if let value = try keychain.string(forKey: key) {
+                call.resolve(["value": value])
+            } else {
+                call.reject(Self.notFoundMessage)
             }
-        }
-
-        if hasValueDedicated || hasValueLegacy {
-            call.resolve(["value": keychain.string(forKey: key) ?? ""])
-        } else {
-            call.reject("Item with given key does not exist")
         }
     }
 
     @objc func keys(_ call: CAPPluginCall) {
-        call.resolve(["value": keychain.allKeys()])
+        run(call) {
+            call.resolve(["value": try keychain.allKeys()])
+        }
     }
 
     @objc func remove(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
-        let hasValueDedicated = keychain.hasValue(forKey: key)
-        let hasValueLegacy = legacyKeychain.hasValue(forKey: key)
-
-        guard hasValueDedicated || hasValueLegacy else {
-            call.reject("Item with given key does not exist")
-            return
-        }
-
-        _ = legacyKeychain.remove(forKey: key)
-        if keychain.remove(forKey: key) {
-            call.resolve(["value": true])
-        } else {
-            call.reject("Remove failed")
+        run(call) {
+            if try keychain.remove(forKey: key) {
+                call.resolve(["value": true])
+            } else {
+                call.reject(Self.notFoundMessage)
+            }
         }
     }
 
     @objc func clear(_ call: CAPPluginCall) {
-        let keys = keychain.allKeys()
-        if keys.isEmpty {
+        run(call) {
+            try keychain.removeAll()
             call.resolve(["value": true])
-            return
-        }
-
-        for key in keys where legacyKeychain.hasValue(forKey: key) {
-            if !legacyKeychain.remove(forKey: key) {
-                call.reject("error")
-                return
-            }
-        }
-
-        if keychain.removeAll() {
-            call.resolve(["value": true])
-        } else {
-            call.reject("error")
         }
     }
 
     @objc func getPlatform(_ call: CAPPluginCall) {
         call.resolve(["value": "ios"])
+    }
+
+    static let notFoundMessage = "Item with given key does not exist"
+
+    /// Rejects with the keychain's message and OSStatus as code, so JS can tell
+    /// e.g. a locked device (-25308) from a missing key.
+    private func run(_ call: CAPPluginCall, _ body: () throws -> Void) {
+        do {
+            try body()
+        } catch let error as KeychainError {
+            call.reject(error.message, String(error.status), error)
+        } catch {
+            call.reject(error.localizedDescription, nil, error)
+        }
     }
 }

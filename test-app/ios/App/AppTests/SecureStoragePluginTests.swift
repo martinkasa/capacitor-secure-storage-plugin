@@ -2,27 +2,23 @@ import XCTest
 import Capacitor
 @testable import CapacitorSecureStoragePlugin
 
-/// Plugin methods tested with hand-built calls. Uses test-only keychain services,
-/// so the app's real data ("cap_sec" and the bundle-id legacy service) is never touched.
+/// Plugin methods tested with hand-built calls. Uses a test-only keychain service,
+/// so the app's real data ("cap_sec") is never touched.
 final class SecureStoragePluginTests: XCTestCase {
     private let keychain = Keychain(service: "cap_sec_plugin_tests")
-    private let legacyKeychain = Keychain(service: "cap_sec_plugin_tests_legacy")
     private var plugin: SecureStoragePlugin!
 
-    override func setUp() {
-        super.setUp()
-        _ = keychain.removeAll()
-        _ = legacyKeychain.removeAll()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        try keychain.removeAll()
         plugin = SecureStoragePlugin()
         plugin.keychain = keychain
-        plugin.legacyKeychain = legacyKeychain
     }
 
-    override func tearDown() {
-        _ = keychain.removeAll()
-        _ = legacyKeychain.removeAll()
+    override func tearDownWithError() throws {
+        try keychain.removeAll()
         plugin = nil
-        super.tearDown()
+        try super.tearDownWithError()
     }
 
     func testSetThenGet() {
@@ -31,56 +27,54 @@ final class SecureStoragePluginTests: XCTestCase {
     }
 
     func testGetMissingKeyRejects() {
-        XCTAssertEqual(rejected(plugin.get, ["key": "missing"]), "Item with given key does not exist")
+        XCTAssertEqual(rejected(plugin.get, ["key": "missing"])?.message, SecureStoragePlugin.notFoundMessage)
     }
 
-    func testGetMigratesLegacyItem() {
-        XCTAssertTrue(legacyKeychain.set("old", forKey: "token"))
+    /// A keychain failure must reach JS as the real error, not as "does not exist".
+    func testGetKeychainFailureRejectsWithStatus() {
+        let encodedKey = Data("binary".utf8)
+        let item: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: keychain.service,
+            kSecAttrAccount as String: encodedKey,
+            kSecAttrGeneric as String: encodedKey,
+            kSecAttrSynchronizable as String: false,
+            kSecValueData as String: Data([0xFF, 0xFE])
+        ]
+        XCTAssertEqual(SecItemAdd(item as CFDictionary, nil), errSecSuccess)
 
-        XCTAssertEqual(resolved(plugin.get, ["key": "token"]) as? String, "old")
-
-        XCTAssertEqual(keychain.string(forKey: "token"), "old")
-        XCTAssertFalse(legacyKeychain.hasValue(forKey: "token"))
+        let error = rejected(plugin.get, ["key": "binary"])
+        XCTAssertEqual(error?.code, String(errSecDecode))
+        XCTAssertEqual(error?.message, KeychainError(status: errSecDecode).message)
     }
 
-    func testGetPrefersDedicatedOverLegacy() {
-        XCTAssertTrue(keychain.set("new", forKey: "token"))
-        XCTAssertTrue(legacyKeychain.set("old", forKey: "token"))
-
-        XCTAssertEqual(resolved(plugin.get, ["key": "token"]) as? String, "new")
-    }
-
-    func testKeys() {
-        XCTAssertTrue(keychain.set("1", forKey: "a"))
-        XCTAssertTrue(keychain.set("2", forKey: "b"))
+    func testKeys() throws {
+        try keychain.set("1", forKey: "a")
+        try keychain.set("2", forKey: "b")
 
         let keys = resolved(plugin.keys, [:]) as? [String]
         XCTAssertEqual(Set(keys ?? []), ["a", "b"])
     }
 
-    func testRemoveDeletesDedicatedAndLegacy() {
-        XCTAssertTrue(keychain.set("new", forKey: "token"))
-        XCTAssertTrue(legacyKeychain.set("old", forKey: "token"))
+    func testRemove() throws {
+        try keychain.set("value", forKey: "token")
 
         XCTAssertEqual(resolved(plugin.remove, ["key": "token"]) as? Bool, true)
 
-        XCTAssertFalse(keychain.hasValue(forKey: "token"))
-        XCTAssertFalse(legacyKeychain.hasValue(forKey: "token"))
+        XCTAssertNil(try keychain.string(forKey: "token"))
     }
 
     func testRemoveMissingKeyRejects() {
-        XCTAssertEqual(rejected(plugin.remove, ["key": "missing"]), "Item with given key does not exist")
+        XCTAssertEqual(rejected(plugin.remove, ["key": "missing"])?.message, SecureStoragePlugin.notFoundMessage)
     }
 
-    func testClearRemovesEverythingIncludingLegacyDuplicates() {
-        XCTAssertTrue(keychain.set("1", forKey: "a"))
-        XCTAssertTrue(keychain.set("2", forKey: "b"))
-        XCTAssertTrue(legacyKeychain.set("old", forKey: "a"))
+    func testClearRemovesEverything() throws {
+        try keychain.set("1", forKey: "a")
+        try keychain.set("2", forKey: "b")
 
         XCTAssertEqual(resolved(plugin.clear, [:]) as? Bool, true)
 
-        XCTAssertEqual(keychain.allKeys(), [])
-        XCTAssertFalse(legacyKeychain.hasValue(forKey: "a"))
+        XCTAssertEqual(try keychain.allKeys(), [])
     }
 
     func testClearWhenEmptyResolves() {
@@ -93,31 +87,33 @@ final class SecureStoragePluginTests: XCTestCase {
 
     // MARK: - Helpers
 
+    private typealias Rejection = (message: String, code: String?)
+
     /// Runs a plugin method and returns the resolved `value`; fails the test if the call rejects.
     private func resolved(_ method: (CAPPluginCall) -> Void, _ options: [String: Any],
                           file: StaticString = #filePath, line: UInt = #line) -> Any? {
         let (value, error) = run(method, options)
-        if let error { XCTFail("Rejected: \(error)", file: file, line: line) }
+        if let error { XCTFail("Rejected: \(error.message)", file: file, line: line) }
         return value
     }
 
-    /// Runs a plugin method and returns the rejection message; fails the test if the call resolves.
+    /// Runs a plugin method and returns the rejection; fails the test if the call resolves.
     private func rejected(_ method: (CAPPluginCall) -> Void, _ options: [String: Any],
-                          file: StaticString = #filePath, line: UInt = #line) -> String? {
+                          file: StaticString = #filePath, line: UInt = #line) -> Rejection? {
         let (value, error) = run(method, options)
         if error == nil { XCTFail("Resolved unexpectedly with \(String(describing: value))", file: file, line: line) }
         return error
     }
 
-    private func run(_ method: (CAPPluginCall) -> Void, _ options: [String: Any]) -> (Any?, String?) {
+    private func run(_ method: (CAPPluginCall) -> Void, _ options: [String: Any]) -> (Any?, Rejection?) {
         var value: Any?
-        var error: String?
+        var error: Rejection?
         let call = CAPPluginCall(
             callbackId: "test",
             methodName: "test",
             options: options,
             success: { result, _ in value = result?.data?["value"] },
-            error: { error = $0?.message ?? "" }
+            error: { error = ($0?.message ?? "", $0?.code) }
         )
         method(call!)
         return (value, error)

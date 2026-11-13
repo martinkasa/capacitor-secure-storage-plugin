@@ -4,104 +4,141 @@ import XCTest
 final class KeychainTests: XCTestCase {
     private let keychain = Keychain(service: "cap_sec_tests")
 
-    override func setUp() {
-        super.setUp()
-        _ = keychain.removeAll()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        try keychain.removeAll()
     }
 
-    override func tearDown() {
-        _ = keychain.removeAll()
-        super.tearDown()
+    override func tearDownWithError() throws {
+        try keychain.removeAll()
+        try super.tearDownWithError()
     }
 
-    func testSetAndGet() {
-        XCTAssertTrue(keychain.set("Hello, World!", forKey: "key"))
-        XCTAssertEqual(keychain.string(forKey: "key"), "Hello, World!")
-        XCTAssertTrue(keychain.hasValue(forKey: "key"))
+    func testSetAndGet() throws {
+        try keychain.set("Hello, World!", forKey: "key")
+        XCTAssertEqual(try keychain.string(forKey: "key"), "Hello, World!")
     }
 
-    func testSetOverwritesExistingValue() {
-        XCTAssertTrue(keychain.set("first", forKey: "key"))
-        XCTAssertTrue(keychain.set("second", forKey: "key"))
-        XCTAssertEqual(keychain.string(forKey: "key"), "second")
-        XCTAssertEqual(keychain.allKeys(), ["key"])
+    func testSetOverwritesExistingValue() throws {
+        try keychain.set("first", forKey: "key")
+        try keychain.set("second", forKey: "key")
+        XCTAssertEqual(try keychain.string(forKey: "key"), "second")
+        XCTAssertEqual(try keychain.allKeys(), ["key"])
     }
 
-    func testUnicodeAndEmptyValues() {
-        XCTAssertTrue(keychain.set("žluťoučký kůň 🐴", forKey: "klíč"))
-        XCTAssertTrue(keychain.set("", forKey: "empty"))
-        XCTAssertEqual(keychain.string(forKey: "klíč"), "žluťoučký kůň 🐴")
-        XCTAssertEqual(keychain.string(forKey: "empty"), "")
-        XCTAssertEqual(Set(keychain.allKeys()), ["klíč", "empty"])
+    func testUnicodeAndEmptyValues() throws {
+        try keychain.set("žluťoučký kůň 🐴", forKey: "klíč")
+        try keychain.set("", forKey: "empty")
+        XCTAssertEqual(try keychain.string(forKey: "klíč"), "žluťoučký kůň 🐴")
+        XCTAssertEqual(try keychain.string(forKey: "empty"), "")
+        XCTAssertEqual(Set(try keychain.allKeys()), ["klíč", "empty"])
     }
 
-    func testMissingKey() {
-        XCTAssertNil(keychain.string(forKey: "missing"))
-        XCTAssertFalse(keychain.hasValue(forKey: "missing"))
-        XCTAssertFalse(keychain.remove(forKey: "missing"))
+    func testMissingKey() throws {
+        XCTAssertNil(try keychain.string(forKey: "missing"))
+        XCTAssertFalse(try keychain.remove(forKey: "missing"))
+        XCTAssertEqual(try keychain.allKeys(), [])
+        XCTAssertNoThrow(try keychain.removeAll(), "removeAll on an empty service is not a failure")
     }
 
-    func testRemove() {
-        XCTAssertTrue(keychain.set("value", forKey: "key"))
-        XCTAssertTrue(keychain.remove(forKey: "key"))
-        XCTAssertNil(keychain.string(forKey: "key"))
+    func testRemove() throws {
+        try keychain.set("value", forKey: "key")
+        XCTAssertTrue(try keychain.remove(forKey: "key"))
+        XCTAssertNil(try keychain.string(forKey: "key"))
     }
 
-    func testRemoveAllOnlyTouchesOwnService() {
+    func testRemoveAllOnlyTouchesOwnService() throws {
         let other = Keychain(service: "cap_sec_tests_other")
-        defer { _ = other.removeAll() }
-        XCTAssertTrue(other.set("keep", forKey: "key"))
-        XCTAssertTrue(keychain.set("a", forKey: "a"))
-        XCTAssertTrue(keychain.set("b", forKey: "b"))
+        defer { try? other.removeAll() }
+        try other.set("keep", forKey: "key")
+        try keychain.set("a", forKey: "a")
+        try keychain.set("b", forKey: "b")
 
-        XCTAssertTrue(keychain.removeAll())
+        try keychain.removeAll()
 
-        XCTAssertEqual(keychain.allKeys(), [])
-        XCTAssertEqual(other.string(forKey: "key"), "keep")
+        XCTAssertEqual(try keychain.allKeys(), [])
+        XCTAssertEqual(try other.string(forKey: "key"), "keep")
+    }
+
+    func testUndecodableValueThrowsInsteadOfReportingMissing() throws {
+        try addRawItem(forKey: "binary", value: Data([0xFF, 0xFE]))
+
+        XCTAssertThrowsError(try keychain.string(forKey: "binary")) { error in
+            XCTAssertEqual((error as? KeychainError)?.status, errSecDecode)
+        }
+    }
+
+    func testErrorMessageContainsStatus() {
+        let message = KeychainError(status: errSecInteractionNotAllowed).message
+        XCTAssertTrue(message.hasPrefix("Keychain error -25308: "), message)
     }
 
     /// Items written by plugin versions <= 0.13 (via SwiftKeychainWrapper) must stay readable.
     /// If this fails, existing users lose their stored values after upgrading.
-    func testReadsItemsInSwiftKeychainWrapperFormat() {
-        let encodedKey = Data("token".utf8)
-        let legacyItem: [String: Any] = [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: "cap_sec_tests",
-            kSecAttrAccount as String: encodedKey,
-            kSecAttrGeneric as String: encodedKey,
-            kSecAttrSynchronizable as String: false,
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
-            kSecValueData as String: Data("s3cret".utf8)
-        ]
-        XCTAssertEqual(SecItemAdd(legacyItem as CFDictionary, nil), errSecSuccess)
+    func testReadsItemsInSwiftKeychainWrapperFormat() throws {
+        try addRawItem(forKey: "token", value: Data("s3cret".utf8))
 
-        XCTAssertEqual(keychain.string(forKey: "token"), "s3cret")
-        XCTAssertEqual(keychain.allKeys(), ["token"])
-        XCTAssertTrue(keychain.set("updated", forKey: "token"))
-        XCTAssertEqual(keychain.string(forKey: "token"), "updated")
-        XCTAssertEqual(keychain.allKeys(), ["token"])
-        XCTAssertTrue(keychain.remove(forKey: "token"))
+        XCTAssertEqual(try keychain.string(forKey: "token"), "s3cret")
+        XCTAssertEqual(try keychain.allKeys(), ["token"])
+        try keychain.set("updated", forKey: "token")
+        XCTAssertEqual(try keychain.string(forKey: "token"), "updated")
+        XCTAssertEqual(try keychain.allKeys(), ["token"])
+        XCTAssertTrue(try keychain.remove(forKey: "token"))
     }
 
     /// New items must keep the SwiftKeychainWrapper shape (account as UTF-8 `Data`), otherwise
     /// `allKeys()` and plugin versions <= 0.13 (after a downgrade) would not list them.
     func testWritesItemsInSwiftKeychainWrapperFormat() throws {
-        XCTAssertTrue(keychain.set("s3cret", forKey: "token"))
+        try keychain.set("s3cret", forKey: "token")
 
+        let item = try storedItem()
+        XCTAssertEqual(item[kSecAttrAccount as String] as? Data, Data("token".utf8))
+        XCTAssertEqual(item[kSecAttrGeneric as String] as? Data, Data("token".utf8))
+        XCTAssertEqual(item[kSecValueData as String] as? Data, Data("s3cret".utf8))
+        XCTAssertEqual(item[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlock as String)
+    }
+
+    /// Items stored with another accessibility (e.g. by old plugin versions) must still be
+    /// overwritable, and get upgraded to the current accessibility on write.
+    func testOverwritesItemWithDifferentAccessibility() throws {
+        try addRawItem(forKey: "token", value: Data("old".utf8), accessible: kSecAttrAccessibleWhenUnlocked)
+
+        try keychain.set("new", forKey: "token")
+
+        XCTAssertEqual(try keychain.string(forKey: "token"), "new")
+        XCTAssertEqual(try keychain.allKeys(), ["token"])
+        let item = try storedItem()
+        XCTAssertEqual(item[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlock as String)
+    }
+
+    // MARK: - Helpers
+
+    /// Adds an item in SwiftKeychainWrapper's shape directly via Security APIs.
+    private func addRawItem(forKey key: String, value: Data,
+                            accessible: CFString = kSecAttrAccessibleAfterFirstUnlock) throws {
+        let encodedKey = Data(key.utf8)
+        let item: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: keychain.service,
+            kSecAttrAccount as String: encodedKey,
+            kSecAttrGeneric as String: encodedKey,
+            kSecAttrSynchronizable as String: false,
+            kSecAttrAccessible as String: accessible,
+            kSecValueData as String: value
+        ]
+        XCTAssertEqual(SecItemAdd(item as CFDictionary, nil), errSecSuccess)
+    }
+
+    private func storedItem() throws -> [String: Any] {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: "cap_sec_tests",
+            kSecAttrService as String: keychain.service,
             kSecMatchLimit as String: kSecMatchLimitOne,
             kSecReturnAttributes as String: true,
             kSecReturnData as String: true
         ]
         var result: AnyObject?
         XCTAssertEqual(SecItemCopyMatching(query as CFDictionary, &result), errSecSuccess)
-        let item = try XCTUnwrap(result as? [String: Any])
-
-        XCTAssertEqual(item[kSecAttrAccount as String] as? Data, Data("token".utf8))
-        XCTAssertEqual(item[kSecAttrGeneric as String] as? Data, Data("token".utf8))
-        XCTAssertEqual(item[kSecValueData as String] as? Data, Data("s3cret".utf8))
-        XCTAssertEqual(item[kSecAttrAccessible as String] as? String, kSecAttrAccessibleAfterFirstUnlock as String)
+        return try XCTUnwrap(result as? [String: Any])
     }
 }
