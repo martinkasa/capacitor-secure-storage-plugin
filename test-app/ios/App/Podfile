@@ -21,6 +21,10 @@ end
 target 'App' do
   capacitor_pods
   # Add your Pods here
+
+  target 'AppTests' do
+    inherit! :search_paths
+  end
 end
 
 post_install do |installer|

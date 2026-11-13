@@ -10,10 +10,8 @@ PODS:
     - Capacitor
   - CapacitorSecureStoragePlugin (0.13.0):
     - Capacitor
-    - SwiftKeychainWrapper
   - CapacitorStatusBar (8.0.4):
     - Capacitor
-  - SwiftKeychainWrapper (4.0.1)
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
@@ -23,10 +21,6 @@ DEPENDENCIES:
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - CapacitorSecureStoragePlugin (from `../../..`)
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
-
-SPEC REPOS:
-  trunk:
-    - SwiftKeychainWrapper
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -50,10 +44,9 @@ SPEC CHECKSUMS:
   CapacitorCordova: 8e68a712e47128cf5b97e88b9c2b406b9b956b22
   CapacitorHaptics: 296f771ecd89c7a1bd92a7b6826a7d268e2e70f5
   CapacitorKeyboard: f9e85e685082e9f63404de15db4a4291448b0912
-  CapacitorSecureStoragePlugin: d083ff28d9ba5bc74924b9bcf9754ea605016b63
+  CapacitorSecureStoragePlugin: a6afb20e9a79b069abb384d52611985c4d15d89f
   CapacitorStatusBar: ff844df1f126da6c4fbc4028272425fa3a91e7e3
-  SwiftKeychainWrapper: 807ba1d63c33a7d0613288512399cd1eda1e470c
 
-PODFILE CHECKSUM: 803e2b8f64a5b766d3e3e4463779a5b221cc2b0f
+PODFILE CHECKSUM: 844be32f195738596944621aa99917ad1d3051af
 
 COCOAPODS: 1.16.2
