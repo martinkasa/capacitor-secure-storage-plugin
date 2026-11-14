@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/capacitor-secure-storage-plugin.svg)](https://badge.fury.io/js/capacitor-secure-storage-plugin)
+[![npm version](https://badge.fury.io/js/capacitor-secure-storage-plugin.svg?v=0.14.2)](https://badge.fury.io/js/capacitor-secure-storage-plugin)
 
 # capacitor-secure-storage-plugin
 
