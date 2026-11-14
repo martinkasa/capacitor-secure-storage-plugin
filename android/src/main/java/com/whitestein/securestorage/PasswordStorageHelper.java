@@ -278,9 +278,14 @@ public class PasswordStorageHelper {
                 ks.load(null);
                 PrivateKey privateKey = (PrivateKey) ks.getKey(alias, null);
                 return decrypt(privateKey, preferences.getString(key, null));
+            } catch (IllegalBlockSizeException | BadPaddingException e) {
+                // Value was encrypted with a different key (e.g. restored by Android Auto Backup
+                // after reinstall), so it can never be decrypted. Remove it.
+                Log.w(LOG_TAG, "Removing value that cannot be decrypted: " + key, e);
+                remove(key);
             } catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException
                     | UnrecoverableEntryException | InvalidKeyException | NoSuchPaddingException
-                    | IllegalBlockSizeException | BadPaddingException | NoSuchProviderException e) {
+                    | NoSuchProviderException e) {
                e.printStackTrace();
             }
             return null;
