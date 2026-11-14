@@ -1,3 +1,8 @@
+## v0.14.2
+
+- Android: values that cannot be decrypted (e.g. restored by Auto Backup after reinstall) are removed when read, so they no longer stay in `keys()` and can't block `remove()`
+- README: document Android Auto Backup and how to exclude `cap_sec.xml`
+
 ## v0.14.1
 
 - Android: fix build failure with AGP 9 (`proguard-android.txt` is no longer supported), still compatible with AGP 8

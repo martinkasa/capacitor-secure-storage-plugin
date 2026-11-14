@@ -219,6 +219,57 @@ On Android it is implemented by AndroidKeyStore and SharedPreferences. Source: [
 > **Warning**
 > For Android API < 18 values are stored as simple base64 encoded strings.
 
+#### Auto Backup
+
+Encrypted values are stored in the `cap_sec.xml` SharedPreferences file. If Android [Auto Backup](https://developer.android.com/identity/data/autobackup) is enabled (`android:allowBackup` defaults to `true`), this file is backed up to Google Drive and restored after a reinstall. The AndroidKeyStore key used to encrypt the values is never backed up, so the restored values cannot be decrypted (`javax.crypto.IllegalBlockSizeException` in logcat). Since v0.14.2 the plugin removes such values when they are read and `get` rejects with `Item with given key does not exist`.
+
+Symptoms:
+
+- Old values reappear after uninstall + reinstall, while recently added ones are gone.
+- Values removed by `clear()` / `remove()` or overwritten by `set()` come back after a reinstall.
+
+This happens because the restore uses the last backup snapshot, and Android creates backups at most once a day (when the device is idle, charging and on Wi-Fi).
+
+To prevent it, either disable backups completely in your app's `AndroidManifest.xml`:
+
+```xml
+<application android:allowBackup="false" ...>
+```
+
+or exclude only the plugin's file:
+
+```xml
+<application
+    android:fullBackupContent="@xml/backup_rules"
+    android:dataExtractionRules="@xml/data_extraction_rules"
+    ...>
+```
+
+`res/xml/backup_rules.xml` (Android 11 and lower):
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <exclude domain="sharedpref" path="cap_sec.xml" />
+</full-backup-content>
+```
+
+`res/xml/data_extraction_rules.xml` (Android 12 and higher):
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="cap_sec.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="cap_sec.xml" />
+    </device-transfer>
+</data-extraction-rules>
+```
+
+Already existing backups are not removed by this change. To replace the existing backup during development, run `adb shell bmgr backupnow <your.package.name>`.
+
 ### Web
 
 There is no secure storage in browser (not because it is not implemented by this plugin, but it does not exist at all). Values are stored in LocalStorage, but they are at least base64 encoded. Plugin adds 'cap_sec' prefix to keys to avoid conflicts with other data stored in LocalStorage.
